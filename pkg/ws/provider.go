@@ -22,5 +22,5 @@ var Module = fx.Options(
 
 func InitWebSocket(engine *gin.Engine, h *Handler) {
 	engine.Any("/ws/chat", h.ChatHandler)
-	engine.Any("/test/ws/chat", h.TestChatHandler)
+	//engine.Any("/test/ws/chat", h.TestChatHandler)
 }

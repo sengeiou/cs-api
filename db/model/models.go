@@ -69,12 +69,31 @@ type Notice struct {
 	ID int64 `db:"id" json:"id"`
 	// 公告標題
 	Title string `db:"title" json:"title"`
-	// 角色名稱
+	// 公告內容
 	Content string `db:"content" json:"content"`
 	// 開始時間
 	StartAt time.Time `db:"start_at" json:"start_at"`
 	// 結束時間
 	EndAt time.Time `db:"end_at" json:"end_at"`
+	// 狀態 1開啟 2關閉
+	Status types.Status `db:"status" json:"status"`
+	// 創建管理員
+	CreatedBy int64 `db:"created_by" json:"created_by"`
+	// 創建時間
+	CreatedAt time.Time `db:"created_at" json:"created_at"`
+	// 更新管理員
+	UpdatedBy int64 `db:"updated_by" json:"updated_by"`
+	// 更新時間
+	UpdatedAt time.Time `db:"updated_at" json:"updated_at"`
+}
+
+// 後台提醒事項資料表
+type Remind struct {
+	ID int64 `db:"id" json:"id"`
+	// 標題
+	Title string `db:"title" json:"title"`
+	// 內容
+	Content string `db:"content" json:"content"`
 	// 狀態 1開啟 2關閉
 	Status types.Status `db:"status" json:"status"`
 	// 創建管理員

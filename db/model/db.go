@@ -45,6 +45,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.countListNoticeStmt, err = db.PrepareContext(ctx, countListNotice); err != nil {
 		return nil, fmt.Errorf("error preparing query CountListNotice: %w", err)
 	}
+	if q.countListRemindStmt, err = db.PrepareContext(ctx, countListRemind); err != nil {
+		return nil, fmt.Errorf("error preparing query CountListRemind: %w", err)
+	}
 	if q.countListRoleStmt, err = db.PrepareContext(ctx, countListRole); err != nil {
 		return nil, fmt.Errorf("error preparing query CountListRole: %w", err)
 	}
@@ -72,6 +75,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.createNoticeStmt, err = db.PrepareContext(ctx, createNotice); err != nil {
 		return nil, fmt.Errorf("error preparing query CreateNotice: %w", err)
 	}
+	if q.createRemindStmt, err = db.PrepareContext(ctx, createRemind); err != nil {
+		return nil, fmt.Errorf("error preparing query CreateRemind: %w", err)
+	}
 	if q.createReportDailyGuestStmt, err = db.PrepareContext(ctx, createReportDailyGuest); err != nil {
 		return nil, fmt.Errorf("error preparing query CreateReportDailyGuest: %w", err)
 	}
@@ -95,6 +101,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	}
 	if q.deleteNoticeStmt, err = db.PrepareContext(ctx, deleteNotice); err != nil {
 		return nil, fmt.Errorf("error preparing query DeleteNotice: %w", err)
+	}
+	if q.deleteRemindStmt, err = db.PrepareContext(ctx, deleteRemind); err != nil {
+		return nil, fmt.Errorf("error preparing query DeleteRemind: %w", err)
 	}
 	if q.deleteReportDailyGuestStmt, err = db.PrepareContext(ctx, deleteReportDailyGuest); err != nil {
 		return nil, fmt.Errorf("error preparing query DeleteReportDailyGuest: %w", err)
@@ -138,6 +147,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.getNoticeStmt, err = db.PrepareContext(ctx, getNotice); err != nil {
 		return nil, fmt.Errorf("error preparing query GetNotice: %w", err)
 	}
+	if q.getRemindStmt, err = db.PrepareContext(ctx, getRemind); err != nil {
+		return nil, fmt.Errorf("error preparing query GetRemind: %w", err)
+	}
 	if q.getRoleStmt, err = db.PrepareContext(ctx, getRole); err != nil {
 		return nil, fmt.Errorf("error preparing query GetRole: %w", err)
 	}
@@ -167,6 +179,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	}
 	if q.listNoticeStmt, err = db.PrepareContext(ctx, listNotice); err != nil {
 		return nil, fmt.Errorf("error preparing query ListNotice: %w", err)
+	}
+	if q.listRemindStmt, err = db.PrepareContext(ctx, listRemind); err != nil {
+		return nil, fmt.Errorf("error preparing query ListRemind: %w", err)
 	}
 	if q.listReportDailyGuestStmt, err = db.PrepareContext(ctx, listReportDailyGuest); err != nil {
 		return nil, fmt.Errorf("error preparing query ListReportDailyGuest: %w", err)
@@ -209,6 +224,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	}
 	if q.updateNoticeStmt, err = db.PrepareContext(ctx, updateNotice); err != nil {
 		return nil, fmt.Errorf("error preparing query UpdateNotice: %w", err)
+	}
+	if q.updateRemindStmt, err = db.PrepareContext(ctx, updateRemind); err != nil {
+		return nil, fmt.Errorf("error preparing query UpdateRemind: %w", err)
 	}
 	if q.updateRoleStmt, err = db.PrepareContext(ctx, updateRole); err != nil {
 		return nil, fmt.Errorf("error preparing query UpdateRole: %w", err)
@@ -277,6 +295,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing countListNoticeStmt: %w", cerr)
 		}
 	}
+	if q.countListRemindStmt != nil {
+		if cerr := q.countListRemindStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing countListRemindStmt: %w", cerr)
+		}
+	}
 	if q.countListRoleStmt != nil {
 		if cerr := q.countListRoleStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing countListRoleStmt: %w", cerr)
@@ -322,6 +345,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing createNoticeStmt: %w", cerr)
 		}
 	}
+	if q.createRemindStmt != nil {
+		if cerr := q.createRemindStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing createRemindStmt: %w", cerr)
+		}
+	}
 	if q.createReportDailyGuestStmt != nil {
 		if cerr := q.createReportDailyGuestStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing createReportDailyGuestStmt: %w", cerr)
@@ -360,6 +388,11 @@ func (q *Queries) Close() error {
 	if q.deleteNoticeStmt != nil {
 		if cerr := q.deleteNoticeStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing deleteNoticeStmt: %w", cerr)
+		}
+	}
+	if q.deleteRemindStmt != nil {
+		if cerr := q.deleteRemindStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deleteRemindStmt: %w", cerr)
 		}
 	}
 	if q.deleteReportDailyGuestStmt != nil {
@@ -432,6 +465,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing getNoticeStmt: %w", cerr)
 		}
 	}
+	if q.getRemindStmt != nil {
+		if cerr := q.getRemindStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getRemindStmt: %w", cerr)
+		}
+	}
 	if q.getRoleStmt != nil {
 		if cerr := q.getRoleStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getRoleStmt: %w", cerr)
@@ -480,6 +518,11 @@ func (q *Queries) Close() error {
 	if q.listNoticeStmt != nil {
 		if cerr := q.listNoticeStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing listNoticeStmt: %w", cerr)
+		}
+	}
+	if q.listRemindStmt != nil {
+		if cerr := q.listRemindStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing listRemindStmt: %w", cerr)
 		}
 	}
 	if q.listReportDailyGuestStmt != nil {
@@ -550,6 +593,11 @@ func (q *Queries) Close() error {
 	if q.updateNoticeStmt != nil {
 		if cerr := q.updateNoticeStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing updateNoticeStmt: %w", cerr)
+		}
+	}
+	if q.updateRemindStmt != nil {
+		if cerr := q.updateRemindStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing updateRemindStmt: %w", cerr)
 		}
 	}
 	if q.updateRoleStmt != nil {
@@ -643,6 +691,7 @@ type Queries struct {
 	countDailyRoomByMemberStmt     *sql.Stmt
 	countListFastMessageStmt       *sql.Stmt
 	countListNoticeStmt            *sql.Stmt
+	countListRemindStmt            *sql.Stmt
 	countListRoleStmt              *sql.Stmt
 	countListRoomStmt              *sql.Stmt
 	countListStaffStmt             *sql.Stmt
@@ -652,6 +701,7 @@ type Queries struct {
 	createFastMessageCategoryStmt  *sql.Stmt
 	createMemberStmt               *sql.Stmt
 	createNoticeStmt               *sql.Stmt
+	createRemindStmt               *sql.Stmt
 	createReportDailyGuestStmt     *sql.Stmt
 	createReportDailyTagStmt       *sql.Stmt
 	createRoleStmt                 *sql.Stmt
@@ -660,6 +710,7 @@ type Queries struct {
 	createTagStmt                  *sql.Stmt
 	deleteFastMessageStmt          *sql.Stmt
 	deleteNoticeStmt               *sql.Stmt
+	deleteRemindStmt               *sql.Stmt
 	deleteReportDailyGuestStmt     *sql.Stmt
 	deleteReportDailyTagStmt       *sql.Stmt
 	deleteRoleStmt                 *sql.Stmt
@@ -674,6 +725,7 @@ type Queries struct {
 	getMemberAvailableRoomStmt     *sql.Stmt
 	getNormalMemberStmt            *sql.Stmt
 	getNoticeStmt                  *sql.Stmt
+	getRemindStmt                  *sql.Stmt
 	getRoleStmt                    *sql.Stmt
 	getRoomStmt                    *sql.Stmt
 	getStaffStmt                   *sql.Stmt
@@ -684,6 +736,7 @@ type Queries struct {
 	listFastMessageStmt            *sql.Stmt
 	listFastMessageCategoryStmt    *sql.Stmt
 	listNoticeStmt                 *sql.Stmt
+	listRemindStmt                 *sql.Stmt
 	listReportDailyGuestStmt       *sql.Stmt
 	listReportDailyTagStmt         *sql.Stmt
 	listRoleStmt                   *sql.Stmt
@@ -698,6 +751,7 @@ type Queries struct {
 	updateCsConfigStmt             *sql.Stmt
 	updateFastMessageStmt          *sql.Stmt
 	updateNoticeStmt               *sql.Stmt
+	updateRemindStmt               *sql.Stmt
 	updateRoleStmt                 *sql.Stmt
 	updateRoomScoreStmt            *sql.Stmt
 	updateRoomStaffStmt            *sql.Stmt
@@ -720,6 +774,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		countDailyRoomByMemberStmt:     q.countDailyRoomByMemberStmt,
 		countListFastMessageStmt:       q.countListFastMessageStmt,
 		countListNoticeStmt:            q.countListNoticeStmt,
+		countListRemindStmt:            q.countListRemindStmt,
 		countListRoleStmt:              q.countListRoleStmt,
 		countListRoomStmt:              q.countListRoomStmt,
 		countListStaffStmt:             q.countListStaffStmt,
@@ -729,6 +784,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		createFastMessageCategoryStmt:  q.createFastMessageCategoryStmt,
 		createMemberStmt:               q.createMemberStmt,
 		createNoticeStmt:               q.createNoticeStmt,
+		createRemindStmt:               q.createRemindStmt,
 		createReportDailyGuestStmt:     q.createReportDailyGuestStmt,
 		createReportDailyTagStmt:       q.createReportDailyTagStmt,
 		createRoleStmt:                 q.createRoleStmt,
@@ -737,6 +793,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		createTagStmt:                  q.createTagStmt,
 		deleteFastMessageStmt:          q.deleteFastMessageStmt,
 		deleteNoticeStmt:               q.deleteNoticeStmt,
+		deleteRemindStmt:               q.deleteRemindStmt,
 		deleteReportDailyGuestStmt:     q.deleteReportDailyGuestStmt,
 		deleteReportDailyTagStmt:       q.deleteReportDailyTagStmt,
 		deleteRoleStmt:                 q.deleteRoleStmt,
@@ -751,6 +808,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		getMemberAvailableRoomStmt:     q.getMemberAvailableRoomStmt,
 		getNormalMemberStmt:            q.getNormalMemberStmt,
 		getNoticeStmt:                  q.getNoticeStmt,
+		getRemindStmt:                  q.getRemindStmt,
 		getRoleStmt:                    q.getRoleStmt,
 		getRoomStmt:                    q.getRoomStmt,
 		getStaffStmt:                   q.getStaffStmt,
@@ -761,6 +819,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		listFastMessageStmt:            q.listFastMessageStmt,
 		listFastMessageCategoryStmt:    q.listFastMessageCategoryStmt,
 		listNoticeStmt:                 q.listNoticeStmt,
+		listRemindStmt:                 q.listRemindStmt,
 		listReportDailyGuestStmt:       q.listReportDailyGuestStmt,
 		listReportDailyTagStmt:         q.listReportDailyTagStmt,
 		listRoleStmt:                   q.listRoleStmt,
@@ -775,6 +834,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		updateCsConfigStmt:             q.updateCsConfigStmt,
 		updateFastMessageStmt:          q.updateFastMessageStmt,
 		updateNoticeStmt:               q.updateNoticeStmt,
+		updateRemindStmt:               q.updateRemindStmt,
 		updateRoleStmt:                 q.updateRoleStmt,
 		updateRoomScoreStmt:            q.updateRoomScoreStmt,
 		updateRoomStaffStmt:            q.updateRoomStaffStmt,

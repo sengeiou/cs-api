@@ -31,6 +31,7 @@ type Resolver struct {
 	csConfigSvc    iface.ICsConfigService
 	roleSvc        iface.IRoleService
 	noticeSvc      iface.INoticeService
+	remindSvc      iface.IRemindService
 	redis          ifaceTool.IRedis
 	storage        iface.IStorage
 	config         *config.Config
@@ -59,6 +60,7 @@ type Params struct {
 	CsConfigSvc    iface.ICsConfigService
 	RoleSvc        iface.IRoleService
 	NoticeSvc      iface.INoticeService
+	RemindSvc      iface.IRemindService
 	Redis          ifaceTool.IRedis
 	Storage        iface.IStorage
 	Config         *config.Config
@@ -76,6 +78,7 @@ func NewResolver(p Params) *Resolver {
 		csConfigSvc:    p.CsConfigSvc,
 		roleSvc:        p.RoleSvc,
 		noticeSvc:      p.NoticeSvc,
+		remindSvc:      p.RemindSvc,
 		redis:          p.Redis,
 		storage:        p.Storage,
 		config:         p.Config,

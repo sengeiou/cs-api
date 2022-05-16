@@ -92,3 +92,11 @@ type INoticeService interface {
 	DeleteNotice(ctx context.Context, noticeId int64) error
 	GetAvailableNotice(ctx context.Context) (model.Notice, error)
 }
+
+type IRemindService interface {
+	ListRemind(ctx context.Context, params model.ListRemindParams, filterParams types.FilterRemindParams) ([]model.Remind, int64, error)
+	GetRemind(ctx context.Context, remindId int64) (model.Remind, error)
+	CreateRemind(ctx context.Context, params model.CreateRemindParams) error
+	UpdateRemind(ctx context.Context, params model.UpdateRemindParams) error
+	DeleteRemind(ctx context.Context, remindId int64) error
+}

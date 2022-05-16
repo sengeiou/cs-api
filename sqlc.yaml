@@ -30,3 +30,5 @@ overrides:
     go_type: "cs-api/pkg/types.RoomStatus"
   - column: "notice.status"
     go_type: "cs-api/pkg/types.Status"
+  - column: "remind.status"
+    go_type: "cs-api/pkg/types.Status"

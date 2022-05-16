@@ -22,6 +22,7 @@ type Querier interface {
 	CountDailyRoomByMember(ctx context.Context, arg CountDailyRoomByMemberParams) (int64, error)
 	CountListFastMessage(ctx context.Context) (int64, error)
 	CountListNotice(ctx context.Context) (int64, error)
+	CountListRemind(ctx context.Context) (int64, error)
 	CountListRole(ctx context.Context) (int64, error)
 	CountListRoom(ctx context.Context) (int64, error)
 	CountListStaff(ctx context.Context) (int64, error)
@@ -31,6 +32,7 @@ type Querier interface {
 	CreateFastMessageCategory(ctx context.Context, arg CreateFastMessageCategoryParams) error
 	CreateMember(ctx context.Context, arg CreateMemberParams) (sql.Result, error)
 	CreateNotice(ctx context.Context, arg CreateNoticeParams) error
+	CreateRemind(ctx context.Context, arg CreateRemindParams) error
 	CreateReportDailyGuest(ctx context.Context, arg CreateReportDailyGuestParams) error
 	CreateReportDailyTag(ctx context.Context, arg CreateReportDailyTagParams) error
 	CreateRole(ctx context.Context, arg CreateRoleParams) error
@@ -39,6 +41,7 @@ type Querier interface {
 	CreateTag(ctx context.Context, arg CreateTagParams) error
 	DeleteFastMessage(ctx context.Context, id int64) error
 	DeleteNotice(ctx context.Context, id int64) error
+	DeleteRemind(ctx context.Context, id int64) error
 	DeleteReportDailyGuest(ctx context.Context, date time.Time) error
 	DeleteReportDailyTag(ctx context.Context, date time.Time) error
 	DeleteRole(ctx context.Context, id int64) error
@@ -54,6 +57,7 @@ type Querier interface {
 	GetMemberAvailableRoom(ctx context.Context, memberID int64) (Room, error)
 	GetNormalMember(ctx context.Context, name string) (Member, error)
 	GetNotice(ctx context.Context, id int64) (Notice, error)
+	GetRemind(ctx context.Context, id int64) (Remind, error)
 	GetRole(ctx context.Context, id int64) (Role, error)
 	GetRoom(ctx context.Context, id int64) (GetRoomRow, error)
 	GetStaff(ctx context.Context, id int64) (GetStaffRow, error)
@@ -64,6 +68,7 @@ type Querier interface {
 	ListFastMessage(ctx context.Context, arg ListFastMessageParams) ([]ListFastMessageRow, error)
 	ListFastMessageCategory(ctx context.Context) ([]Constant, error)
 	ListNotice(ctx context.Context, arg ListNoticeParams) ([]Notice, error)
+	ListRemind(ctx context.Context, arg ListRemindParams) ([]Remind, error)
 	ListReportDailyGuest(ctx context.Context, arg ListReportDailyGuestParams) ([]ReportDailyGuest, error)
 	ListReportDailyTag(ctx context.Context, arg ListReportDailyTagParams) ([]ReportDailyTag, error)
 	ListRole(ctx context.Context, arg ListRoleParams) ([]Role, error)
@@ -78,6 +83,7 @@ type Querier interface {
 	UpdateCsConfig(ctx context.Context, arg UpdateCsConfigParams) error
 	UpdateFastMessage(ctx context.Context, arg UpdateFastMessageParams) error
 	UpdateNotice(ctx context.Context, arg UpdateNoticeParams) error
+	UpdateRemind(ctx context.Context, arg UpdateRemindParams) error
 	UpdateRole(ctx context.Context, arg UpdateRoleParams) error
 	UpdateRoomScore(ctx context.Context, arg UpdateRoomScoreParams) error
 	UpdateRoomStaff(ctx context.Context, arg UpdateRoomStaffParams) error

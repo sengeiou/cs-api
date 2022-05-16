@@ -1018,3 +1018,99 @@ func (mr *MockINoticeServiceMockRecorder) UpdateNotice(ctx, params interface{}) 
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateNotice", reflect.TypeOf((*MockINoticeService)(nil).UpdateNotice), ctx, params)
 }
+
+// MockIRemindService is a mock of IRemindService interface.
+type MockIRemindService struct {
+	ctrl     *gomock.Controller
+	recorder *MockIRemindServiceMockRecorder
+}
+
+// MockIRemindServiceMockRecorder is the mock recorder for MockIRemindService.
+type MockIRemindServiceMockRecorder struct {
+	mock *MockIRemindService
+}
+
+// NewMockIRemindService creates a new mock instance.
+func NewMockIRemindService(ctrl *gomock.Controller) *MockIRemindService {
+	mock := &MockIRemindService{ctrl: ctrl}
+	mock.recorder = &MockIRemindServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockIRemindService) EXPECT() *MockIRemindServiceMockRecorder {
+	return m.recorder
+}
+
+// CreateRemind mocks base method.
+func (m *MockIRemindService) CreateRemind(ctx context.Context, params model.CreateRemindParams) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateRemind", ctx, params)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateRemind indicates an expected call of CreateRemind.
+func (mr *MockIRemindServiceMockRecorder) CreateRemind(ctx, params interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateRemind", reflect.TypeOf((*MockIRemindService)(nil).CreateRemind), ctx, params)
+}
+
+// DeleteRemind mocks base method.
+func (m *MockIRemindService) DeleteRemind(ctx context.Context, remindId int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteRemind", ctx, remindId)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteRemind indicates an expected call of DeleteRemind.
+func (mr *MockIRemindServiceMockRecorder) DeleteRemind(ctx, remindId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteRemind", reflect.TypeOf((*MockIRemindService)(nil).DeleteRemind), ctx, remindId)
+}
+
+// GetRemind mocks base method.
+func (m *MockIRemindService) GetRemind(ctx context.Context, remindId int64) (model.Remind, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetRemind", ctx, remindId)
+	ret0, _ := ret[0].(model.Remind)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetRemind indicates an expected call of GetRemind.
+func (mr *MockIRemindServiceMockRecorder) GetRemind(ctx, remindId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetRemind", reflect.TypeOf((*MockIRemindService)(nil).GetRemind), ctx, remindId)
+}
+
+// ListRemind mocks base method.
+func (m *MockIRemindService) ListRemind(ctx context.Context, params model.ListRemindParams, filterParams types.FilterRemindParams) ([]model.Remind, int64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListRemind", ctx, params, filterParams)
+	ret0, _ := ret[0].([]model.Remind)
+	ret1, _ := ret[1].(int64)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
+}
+
+// ListRemind indicates an expected call of ListRemind.
+func (mr *MockIRemindServiceMockRecorder) ListRemind(ctx, params, filterParams interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListRemind", reflect.TypeOf((*MockIRemindService)(nil).ListRemind), ctx, params, filterParams)
+}
+
+// UpdateRemind mocks base method.
+func (m *MockIRemindService) UpdateRemind(ctx context.Context, params model.UpdateRemindParams) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateRemind", ctx, params)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateRemind indicates an expected call of UpdateRemind.
+func (mr *MockIRemindServiceMockRecorder) UpdateRemind(ctx, params interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateRemind", reflect.TypeOf((*MockIRemindService)(nil).UpdateRemind), ctx, params)
+}

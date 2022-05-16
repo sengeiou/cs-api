@@ -141,6 +141,21 @@ func (mr *MockIRepositoryMockRecorder) CountListNotice(ctx interface{}) *gomock.
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountListNotice", reflect.TypeOf((*MockIRepository)(nil).CountListNotice), ctx)
 }
 
+// CountListRemind mocks base method.
+func (m *MockIRepository) CountListRemind(ctx context.Context) (int64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CountListRemind", ctx)
+	ret0, _ := ret[0].(int64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CountListRemind indicates an expected call of CountListRemind.
+func (mr *MockIRepositoryMockRecorder) CountListRemind(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountListRemind", reflect.TypeOf((*MockIRepository)(nil).CountListRemind), ctx)
+}
+
 // CountListRole mocks base method.
 func (m *MockIRepository) CountListRole(ctx context.Context) (int64, error) {
 	m.ctrl.T.Helper()
@@ -273,6 +288,20 @@ func (mr *MockIRepositoryMockRecorder) CreateNotice(ctx, arg interface{}) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNotice", reflect.TypeOf((*MockIRepository)(nil).CreateNotice), ctx, arg)
 }
 
+// CreateRemind mocks base method.
+func (m *MockIRepository) CreateRemind(ctx context.Context, arg model.CreateRemindParams) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateRemind", ctx, arg)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateRemind indicates an expected call of CreateRemind.
+func (mr *MockIRepositoryMockRecorder) CreateRemind(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateRemind", reflect.TypeOf((*MockIRepository)(nil).CreateRemind), ctx, arg)
+}
+
 // CreateReportDailyGuest mocks base method.
 func (m *MockIRepository) CreateReportDailyGuest(ctx context.Context, arg model.CreateReportDailyGuestParams) error {
 	m.ctrl.T.Helper()
@@ -384,6 +413,20 @@ func (m *MockIRepository) DeleteNotice(ctx context.Context, id int64) error {
 func (mr *MockIRepositoryMockRecorder) DeleteNotice(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteNotice", reflect.TypeOf((*MockIRepository)(nil).DeleteNotice), ctx, id)
+}
+
+// DeleteRemind mocks base method.
+func (m *MockIRepository) DeleteRemind(ctx context.Context, id int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteRemind", ctx, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteRemind indicates an expected call of DeleteRemind.
+func (mr *MockIRepositoryMockRecorder) DeleteRemind(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteRemind", reflect.TypeOf((*MockIRepository)(nil).DeleteRemind), ctx, id)
 }
 
 // DeleteReportDailyGuest mocks base method.
@@ -591,6 +634,21 @@ func (mr *MockIRepositoryMockRecorder) GetNotice(ctx, id interface{}) *gomock.Ca
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetNotice", reflect.TypeOf((*MockIRepository)(nil).GetNotice), ctx, id)
 }
 
+// GetRemind mocks base method.
+func (m *MockIRepository) GetRemind(ctx context.Context, id int64) (model.Remind, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetRemind", ctx, id)
+	ret0, _ := ret[0].(model.Remind)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetRemind indicates an expected call of GetRemind.
+func (mr *MockIRepositoryMockRecorder) GetRemind(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetRemind", reflect.TypeOf((*MockIRepository)(nil).GetRemind), ctx, id)
+}
+
 // GetRole mocks base method.
 func (m *MockIRepository) GetRole(ctx context.Context, id int64) (model.Role, error) {
 	m.ctrl.T.Helper()
@@ -739,6 +797,21 @@ func (m *MockIRepository) ListNotice(ctx context.Context, arg model.ListNoticePa
 func (mr *MockIRepositoryMockRecorder) ListNotice(ctx, arg interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListNotice", reflect.TypeOf((*MockIRepository)(nil).ListNotice), ctx, arg)
+}
+
+// ListRemind mocks base method.
+func (m *MockIRepository) ListRemind(ctx context.Context, arg model.ListRemindParams) ([]model.Remind, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListRemind", ctx, arg)
+	ret0, _ := ret[0].([]model.Remind)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListRemind indicates an expected call of ListRemind.
+func (mr *MockIRepositoryMockRecorder) ListRemind(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListRemind", reflect.TypeOf((*MockIRepository)(nil).ListRemind), ctx, arg)
 }
 
 // ListReportDailyGuest mocks base method.
@@ -957,6 +1030,20 @@ func (m *MockIRepository) UpdateNotice(ctx context.Context, arg model.UpdateNoti
 func (mr *MockIRepositoryMockRecorder) UpdateNotice(ctx, arg interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateNotice", reflect.TypeOf((*MockIRepository)(nil).UpdateNotice), ctx, arg)
+}
+
+// UpdateRemind mocks base method.
+func (m *MockIRepository) UpdateRemind(ctx context.Context, arg model.UpdateRemindParams) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateRemind", ctx, arg)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateRemind indicates an expected call of UpdateRemind.
+func (mr *MockIRepositoryMockRecorder) UpdateRemind(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateRemind", reflect.TypeOf((*MockIRepository)(nil).UpdateRemind), ctx, arg)
 }
 
 // UpdateRole mocks base method.

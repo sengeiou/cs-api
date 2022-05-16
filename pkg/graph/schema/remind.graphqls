@@ -1,0 +1,44 @@
+type Remind {
+    id: Int64!
+    title: String!
+    content: String!
+    status: Status!
+}
+
+input ListRemindInput {
+    content: String!
+    status: Status!
+}
+
+type ListRemindResp {
+    pagination: Pagination!
+    reminds: [Remind]!
+}
+
+type GetRemindResp {
+    remind: Remind!
+}
+
+extend type Query {
+    listRemind(filter: ListRemindInput!, pagination: PaginationInput!): ListRemindResp!
+    getRemind(id: Int64!): GetRemindResp!
+}
+
+input CreateRemindInput {
+    title: String!
+    content: String!
+    status: Status!
+}
+
+input UpdateRemindInput {
+    id: Int64!
+    title: String!
+    content: String!
+    status: Status!
+}
+
+extend type Mutation {
+    createRemind(input: CreateRemindInput!): Boolean!
+    updateRemind(input: UpdateRemindInput!): Boolean!
+    deleteRemind(id: Int64!): Boolean!
+}

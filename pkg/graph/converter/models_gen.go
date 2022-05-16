@@ -32,6 +32,12 @@ type CreateNoticeInput struct {
 	Status  Status `json:"status"`
 }
 
+type CreateRemindInput struct {
+	Title   string `json:"title"`
+	Content string `json:"content"`
+	Status  Status `json:"status"`
+}
+
 type CreateRoleInput struct {
 	Name        string   `json:"name"`
 	Permissions []string `json:"permissions"`
@@ -100,6 +106,10 @@ type GetFastMessageResp struct {
 
 type GetNoticeResp struct {
 	Notice *Notice `json:"notice"`
+}
+
+type GetRemindResp struct {
+	Remind *Remind `json:"remind"`
 }
 
 type GetRoleResp struct {
@@ -175,6 +185,16 @@ type ListNoticeInput struct {
 type ListNoticeResp struct {
 	Pagination *Pagination `json:"pagination"`
 	Notices    []*Notice   `json:"notices"`
+}
+
+type ListRemindInput struct {
+	Content string `json:"content"`
+	Status  Status `json:"status"`
+}
+
+type ListRemindResp struct {
+	Pagination *Pagination `json:"pagination"`
+	Reminds    []*Remind   `json:"reminds"`
 }
 
 type ListRoleInput struct {
@@ -277,6 +297,13 @@ type PaginationInput struct {
 	PageSize int64 `json:"pageSize"`
 }
 
+type Remind struct {
+	ID      int64  `json:"id"`
+	Title   string `json:"title"`
+	Content string `json:"content"`
+	Status  Status `json:"status"`
+}
+
 type Role struct {
 	ID          int64    `json:"id"`
 	Name        string   `json:"name"`
@@ -339,6 +366,13 @@ type UpdateNoticeInput struct {
 	Content string `json:"content"`
 	StartAt string `json:"startAt"`
 	EndAt   string `json:"endAt"`
+	Status  Status `json:"status"`
+}
+
+type UpdateRemindInput struct {
+	ID      int64  `json:"id"`
+	Title   string `json:"title"`
+	Content string `json:"content"`
 	Status  Status `json:"status"`
 }
 

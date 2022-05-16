@@ -16,5 +16,8 @@ sqlc:
 mc:
 	migrate create -ext sql -seq -digits 3 -dir ./db/migrations $(n)
 
+migrate.rollback:
+	migrate -path ./db/migrations -database "mysql://root:abcd1234@tcp(localhost:3306)/cs-api?charset=utf8mb4&multiStatements=true&parseTime=true" -verbose down $(n)
+
 test:
 	go test ./pkg/service/...

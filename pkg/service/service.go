@@ -7,6 +7,7 @@ import (
 	"cs-api/pkg/service/member"
 	"cs-api/pkg/service/message"
 	"cs-api/pkg/service/notice"
+	"cs-api/pkg/service/remind"
 	"cs-api/pkg/service/report"
 	"cs-api/pkg/service/role"
 	"cs-api/pkg/service/room"
@@ -28,5 +29,6 @@ var Module = fx.Options(
 		message.NewMessageService,
 		auth.NewAuthService,
 		notice.NewNoticeService,
+		remind.NewRemindService,
 	),
 )
