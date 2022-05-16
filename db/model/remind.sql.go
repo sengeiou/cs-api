@@ -91,7 +91,8 @@ const listRemind = `-- name: ListRemind :many
 select id, title, content, status, created_by, created_at, updated_by, updated_at
 from remind
 where IF(@content is null, 0, content) like IF(@content is null, 0, CONCAT('%', @content, '%'))
-  and IF(@status is null, 0, status) = IF(@status is null, 0, @status) limit ?
+  and IF(@status is null, 0, status) = IF(@status is null, 0, @status)
+order by updated_at desc limit ?
 offset ?
 `
 
