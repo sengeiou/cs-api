@@ -1,0 +1,52 @@
+enum MessageType {
+    System
+    Member
+    Staff
+}
+
+enum MessageContentType {
+    Typing
+    Text
+    Image
+    Score
+    Join
+    Leave
+    NoStaff
+    RoomClosed
+    RoomAccepted
+}
+
+type MessageExtraInfo {
+    clientName: String
+}
+
+type Message {
+    id: String!
+    messageType: MessageType!
+    roomID: Int64!
+    senderName: String!
+    contentType: MessageContentType!
+    content: String!
+    extraInfo: MessageExtraInfo
+    timestamp: Int64!
+}
+
+input ListMessageInput {
+    roomID: Int64!
+    staffID: Int64!
+    content: String!
+}
+
+type ListRoomMessageResp {
+    messages: [Message]!
+}
+
+type ListMessageResp {
+    pagination: Pagination!
+    messages: [Message]!
+}
+
+extend type Query {
+    listRoomMessage(roomID: Int64!): ListRoomMessageResp!
+    listMessage(filter: ListMessageInput!, pagination: PaginationInput!): ListMessageResp!
+}

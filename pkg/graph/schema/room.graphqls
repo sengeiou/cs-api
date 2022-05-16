@@ -1,0 +1,63 @@
+enum RoomStatus {
+    """全部"""
+    All
+    """等待中"""
+    Pending
+    """服務中"""
+    Serving
+    """已關閉"""
+    Closed
+}
+
+type Room {
+    id: Int64!
+    memberName: String!
+    staffName: String!
+    tagName: String!
+    startTime: String!
+    endTime: String!
+    status: RoomStatus!
+}
+
+input ListStaffRoomInput {
+    status: RoomStatus!
+}
+
+input ListRoomInput {
+    roomID: Int64!
+    staffID: Int64!
+    status: RoomStatus!
+}
+
+type ListStaffRoomResp {
+    pagination: Pagination!
+    rooms: [Room]!
+}
+
+type ListRoomResp {
+    pagination: Pagination!
+    rooms: [Room]!
+}
+
+extend type Query {
+    """查詢該客服相關的房間"""
+    listStaffRoom(filter: ListStaffRoomInput!, pagination: PaginationInput!): ListStaffRoomResp!
+    listRoom(filter: ListRoomInput!, pagination: PaginationInput!): ListRoomResp!
+}
+
+input CloseRoomInput {
+    id: Int64!
+    tagID: Int64!
+}
+
+input TransferRoomInput {
+    id: Int64!
+    staffID: Int64!
+}
+
+extend type Mutation {
+    """開始諮詢"""
+    acceptRoom(id: Int64!): Boolean!
+    closeRoom(input: CloseRoomInput!): Boolean!
+    transferRoom(input: TransferRoomInput!): Boolean!
+}

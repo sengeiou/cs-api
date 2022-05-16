@@ -1,0 +1,15 @@
+input LoginInput {
+    username: String!
+    password: String!
+}
+
+type LoginResp {
+    staffID: Int64!
+    username: String!
+    token: String!
+}
+
+extend type Mutation {
+    login(input: LoginInput!): LoginResp!
+    logout: Boolean!
+}

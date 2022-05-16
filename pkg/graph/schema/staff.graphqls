@@ -1,0 +1,68 @@
+type Staff {
+    id: Int64!
+    roleID: Int64!
+    role: String!
+    permissions: [String!]!
+    name: String!
+    username: String!
+    status: Status!
+    servingStatus: StaffServingStatus!
+    avatar: String!
+}
+
+input ListStaffInput {
+    name: String!
+    status: Status!
+    servingStatus: StaffServingStatus!
+}
+
+type ListStaffResp {
+    pagination: Pagination!
+    staffs: [Staff]!
+}
+
+type ListAvailableStaffResp {
+    staffs: [Staff]!
+}
+
+type GetStaffResp {
+    staff: Staff!
+}
+
+extend type Query {
+    listStaff(filter: ListStaffInput!, pagination: PaginationInput!): ListStaffResp!
+    """獲取可轉接的客服"""
+    listAvailableStaff: ListAvailableStaffResp!
+    getStaff(id: Int64!): GetStaffResp!
+}
+
+input CreateStaffInput {
+    roleID: Int64!
+    name: String!
+    username: String!
+    password: String!
+    status: Status!
+}
+
+input UpdateStaffInput {
+    id: Int64!
+    roleID: Int64!
+    name: String!
+    password: String
+    status: Status!
+}
+
+enum StaffServingStatus {
+    All
+    Closed
+    Serving
+    Pending
+}
+
+extend type Mutation {
+    createStaff(input: CreateStaffInput!): Boolean!
+    updateStaff(input: UpdateStaffInput!): Boolean!
+    deleteStaff(id: Int64!): Boolean!
+    updateStaffServingStatus(servingStatus: StaffServingStatus!): Boolean!
+    updateStaffAvatar(avatar: String!): Boolean!
+}

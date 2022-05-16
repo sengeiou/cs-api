@@ -1,0 +1,26 @@
+type CsConfig {
+    maxMember: Int64!
+    memberPendingExpire: Int64!
+    greetingText: String!
+}
+
+type GetCsConfigResp {
+    config: CsConfig!
+}
+
+extend type Query {
+    getCsConfig: GetCsConfigResp!
+}
+
+input UpdateCsConfigInput {
+    """每位客服最高服務客戶數"""
+    maxMember: Int64!
+    """用戶閒置自動過期時間，單位：分鐘"""
+    memberPendingExpire: Int64!
+    """問候語"""
+    greetingText: String!
+}
+
+extend type Mutation {
+    updateCsConfig(input: UpdateCsConfigInput!): Boolean!
+}

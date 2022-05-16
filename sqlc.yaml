@@ -1,0 +1,32 @@
+version: "1"
+packages:
+  - name: "model"
+    path : "./db/model/"
+    queries: "./db/queries/"
+    schema: "./db/migrations/"
+    engine: "mysql"
+    emit_db_tags: true
+    emit_prepared_queries: true
+    emit_interface: true
+    emit_exact_table_names: false
+    emit_empty_slices: true
+    emit_json_tags: true
+overrides:
+  - column: "staff.status"
+    go_type: "cs-api/pkg/types.Status"
+  - column: "staff.serving_status"
+    go_type: "cs-api/pkg/types.StaffServingStatus"
+  - column: "tag.status"
+    go_type: "cs-api/pkg/types.Status"
+  - column: "constant.type"
+    go_type: "cs-api/pkg/types.ConstantType"
+  - column: "constant.key"
+    go_type: "cs-api/pkg/types.ConstantKey"
+  - column: "fast_message.status"
+    go_type: "cs-api/pkg/types.Status"
+  - column: "member.type"
+    go_type: "cs-api/pkg/types.MemberType"
+  - column: "room.status"
+    go_type: "cs-api/pkg/types.RoomStatus"
+  - column: "notice.status"
+    go_type: "cs-api/pkg/types.Status"

@@ -1,0 +1,52 @@
+## Application
+app:
+  salt: abcde12345
+
+## Disk storage
+disk:
+  driver: local
+  base_url: http://static.local.cs.com/upload
+
+## Log
+log:
+  local: true
+  level: 0
+  environment: local
+  app_name: cs-api
+
+## HTTP
+http:
+  mode: release
+  port: 8082
+
+# Database config
+database:
+  with_color: true
+  with_caller: true
+  debug: true
+  type: mysql
+  host: localhost
+  port: 3306
+  username: root
+  password: abcd1234
+  db_name: cs-api
+  max_idle_connections: 50
+  max_open_connections: 100
+
+# Mongo Database
+mongo:
+  uri: mongodb://localhost:27017
+  database: cs-api
+  conntect_timeout_sec: 30
+  max_conn_idle_time_sec: 30
+  min_pool_size: 5
+  max_pool_size: 25
+  server_selection_timeout_sec: 30
+  debug: true
+
+# Redis config
+redis:
+  cluster_mode: false
+  addresses: "localhost:6379"
+  password:
+  db: 0

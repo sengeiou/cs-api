@@ -1,0 +1,40 @@
+type Role {
+    id: Int64!
+    name: String!
+    permissions: [String!]!
+}
+
+input ListRoleInput {
+    name: String!
+}
+
+type ListRoleResp {
+    pagination: Pagination!
+    roles: [Role]!
+}
+
+type GetRoleResp {
+    role: Role!
+}
+
+extend type Query {
+    listRole(filter: ListRoleInput!, pagination: PaginationInput!): ListRoleResp!
+    getRole(id: Int64!): GetRoleResp!
+}
+
+input CreateRoleInput {
+    name: String!
+    permissions: [String!]!
+}
+
+input UpdateRoleInput {
+    id: Int64!
+    name: String!
+    permissions: [String!]!
+}
+
+extend type Mutation {
+    createRole(input: CreateRoleInput!): Boolean!
+    updateRole(input: UpdateRoleInput!): Boolean!
+    deleteRole(id: Int64!): Boolean!
+}
