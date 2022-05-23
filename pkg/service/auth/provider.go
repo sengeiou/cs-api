@@ -4,7 +4,7 @@ import (
 	"cs-api/config"
 	iface "cs-api/pkg/interface"
 	_ "embed"
-	ifaceTool "github.com/golang/go-util/interface"
+	ifaceTool "github.com/AndySu1021/go-util/interface"
 	"go.uber.org/fx"
 )
 

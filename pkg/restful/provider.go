@@ -6,8 +6,8 @@ import (
 	iface "cs-api/pkg/interface"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
-	gin2 "github.com/golang/go-util/gin"
-	iface2 "github.com/golang/go-util/interface"
+	gin2 "github.com/AndySu1021/go-util/gin"
+	iface2 "github.com/AndySu1021/go-util/interface"
 	"go.uber.org/fx"
 )
 

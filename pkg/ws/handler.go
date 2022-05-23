@@ -4,8 +4,8 @@ import (
 	"cs-api/pkg"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
-	ginTool "github.com/golang/go-util/gin"
-	iface "github.com/golang/go-util/interface"
+	ginTool "github.com/AndySu1021/go-util/gin"
+	iface "github.com/AndySu1021/go-util/interface"
 	"github.com/gorilla/websocket"
 	"net/http"
 )

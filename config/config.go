@@ -2,10 +2,10 @@ package config
 
 import (
 	"cs-api/pkg/types"
-	"github.com/golang/go-util/db"
-	"github.com/golang/go-util/gin"
-	"github.com/golang/go-util/redis"
-	zlog "github.com/golang/go-util/zerolog"
+	"github.com/AndySu1021/go-util/db"
+	"github.com/AndySu1021/go-util/gin"
+	"github.com/AndySu1021/go-util/redis"
+	zlog "github.com/AndySu1021/go-util/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 	"go.uber.org/fx"

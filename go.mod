@@ -90,8 +90,6 @@ require (
 )
 
 require (
+	github.com/AndySu1021/go-util v1.0.2 // indirectm
 	github.com/agnivade/levenshtein v1.1.1 // indirect
-	github.com/golang/go-util v1.0.0
 )
-
-replace github.com/golang/go-util => ../go-util

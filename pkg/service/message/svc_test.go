@@ -4,8 +4,8 @@ import (
 	"context"
 	"cs-api/pkg"
 	"cs-api/pkg/model"
-	iface "github.com/golang/go-util/interface"
-	mockTool "github.com/golang/go-util/mock"
+	iface "github.com/AndySu1021/go-util/interface"
+	mockTool "github.com/AndySu1021/go-util/mock"
 	"reflect"
 	"testing"
 )

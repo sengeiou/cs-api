@@ -4,7 +4,7 @@ import (
 	iface "cs-api/pkg/interface"
 	_ "embed"
 	"github.com/go-redis/redis/v8"
-	iface2 "github.com/golang/go-util/interface"
+	iface2 "github.com/AndySu1021/go-util/interface"
 )
 
 //go:embed removeToken.lua

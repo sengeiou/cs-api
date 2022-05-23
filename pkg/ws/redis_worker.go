@@ -5,8 +5,8 @@ import (
 	"cs-api/pkg"
 	"cs-api/pkg/types"
 	"encoding/json"
-	"github.com/golang/go-util/helper"
-	iface "github.com/golang/go-util/interface"
+	"github.com/AndySu1021/go-util/helper"
+	iface "github.com/AndySu1021/go-util/interface"
 	"github.com/rs/zerolog/log"
 	"reflect"
 )

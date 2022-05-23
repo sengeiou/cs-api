@@ -2,7 +2,7 @@ package room
 
 import (
 	iface "cs-api/pkg/interface"
-	ifaceTool "github.com/golang/go-util/interface"
+	ifaceTool "github.com/AndySu1021/go-util/interface"
 	"go.uber.org/fx"
 )
 

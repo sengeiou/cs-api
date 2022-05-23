@@ -8,8 +8,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/golang/go-util/errors"
-	ginTool "github.com/golang/go-util/gin"
+	"github.com/AndySu1021/go-util/errors"
+	ginTool "github.com/AndySu1021/go-util/gin"
 	"time"
 )
 

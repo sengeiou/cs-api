@@ -7,8 +7,8 @@ import (
 	"cs-api/pkg"
 	iface "cs-api/pkg/interface"
 	"cs-api/pkg/types"
-	ifaceTool "github.com/golang/go-util/interface"
-	mockTool "github.com/golang/go-util/mock"
+	ifaceTool "github.com/AndySu1021/go-util/interface"
+	mockTool "github.com/AndySu1021/go-util/mock"
 	"reflect"
 	"testing"
 )
