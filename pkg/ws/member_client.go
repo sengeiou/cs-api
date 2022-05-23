@@ -94,13 +94,13 @@ func (mc *MemberClient) SocketWrite() {
 		message, ok := <-mc.SendChan
 		if !ok {
 			if err := mc.Socket.WriteMessage(websocket.CloseMessage, []byte{}); err != nil {
-				log.Error().Msgf("error: %s\n", err)
+				log.Error().Msgf("member write close message error: %s\n", err)
 			}
 			return
 		}
 
 		if err := mc.Socket.WriteMessage(websocket.TextMessage, message); err != nil {
-			log.Error().Msgf("error: %s\n", err)
+			log.Error().Msgf("member write message error: %s\n", err)
 			return
 		}
 	}

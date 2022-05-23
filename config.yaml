@@ -50,3 +50,11 @@ redis:
   addresses: "localhost:6379"
   password:
   db: 0
+
+# Etcd config
+etcd:
+  dial_timeout: 5
+  username: ""
+  password: ""
+  endpoints:
+    - "localhost:2379"
