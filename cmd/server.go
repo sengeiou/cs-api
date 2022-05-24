@@ -13,24 +13,22 @@ import (
 	"cs-api/pkg/ws"
 	"database/sql"
 	"errors"
-	"fmt"
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/golang-migrate/migrate"
-	"github.com/golang-migrate/migrate/database/mysql"
-	_ "github.com/golang-migrate/migrate/source/file"
 	"github.com/AndySu1021/go-util/db"
 	"github.com/AndySu1021/go-util/gin"
 	"github.com/AndySu1021/go-util/helper"
 	"github.com/AndySu1021/go-util/mongo"
 	"github.com/AndySu1021/go-util/redis"
 	zlog "github.com/AndySu1021/go-util/zerolog"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/golang-migrate/migrate"
+	"github.com/golang-migrate/migrate/database/mysql"
+	_ "github.com/golang-migrate/migrate/source/file"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"go.uber.org/fx"
 	"os"
 	"os/signal"
-	"runtime"
 	"syscall"
 	"time"
 )
@@ -82,18 +80,6 @@ func runServer(_ *cobra.Command, _ []string) {
 		os.Exit(exitCode)
 		return
 	}
-
-	go func() {
-		ticker := time.NewTicker(1 * time.Second)
-		for {
-			select {
-			case <-ticker.C:
-				var m runtime.MemStats
-				runtime.ReadMemStats(&m)
-				fmt.Printf("%v：memory = %.3f MB, GC Times = %v, Goroutine = %d\n", "Result", float64(m.Alloc)/1024/1024, m.NumGC, runtime.NumGoroutine())
-			}
-		}
-	}()
 
 	stopChan := make(chan os.Signal, 1)
 	signal.Notify(stopChan, syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
