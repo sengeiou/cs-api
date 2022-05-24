@@ -6,6 +6,7 @@ import (
 	"cs-api/pkg"
 	iface "cs-api/pkg/interface"
 	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/AndySu1021/go-util/exporter"
 	ifaceTool "github.com/AndySu1021/go-util/interface"
 	zlog "github.com/AndySu1021/go-util/zerolog"
 	"github.com/gin-gonic/gin"
@@ -128,6 +129,10 @@ func InitResolver(logCfg *zlog.Config, engine *gin.Engine, cfg generated.Config,
 	//gqlSvc.AroundResponses(auditLogSvc.RecordAuditLogForGraphql)
 	//gqlSvc.SetErrorPresenter(errors.GQLErrorPresenter)
 	//gqlSvc.SetRecoverFunc(graph.GQLRecoverFunc)
+
+	exporter.GraphQLRegister()
+	tracer := exporter.GraphQLTracer{}
+	gqlSvc.Use(tracer)
 
 	engine.Any("/graph/query/staff", authSvc.SetClientInfo(pkg.ClientTypeStaff), gin.WrapH(gqlSvc))
 	engine.Any("/graph/query/member", authSvc.SetClientInfo(pkg.ClientTypeMember), gin.WrapH(gqlSvc))
