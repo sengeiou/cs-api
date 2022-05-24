@@ -97,6 +97,6 @@ require (
 )
 
 require (
-	github.com/AndySu1021/go-util v1.0.2 // indirectm
+	github.com/AndySu1021/go-util v1.0.3 // indirectm
 	github.com/agnivade/levenshtein v1.1.1 // indirect
 )
