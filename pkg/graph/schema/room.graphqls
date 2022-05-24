@@ -60,4 +60,5 @@ extend type Mutation {
     acceptRoom(id: Int64!): Boolean!
     closeRoom(input: CloseRoomInput!): Boolean!
     transferRoom(input: TransferRoomInput!): Boolean!
+    updateRoomScore(score: Int64!): Boolean!
 }

@@ -29,7 +29,7 @@ func Test_service_Login(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    pkg.StaffInfo
+		want    pkg.ClientInfo
 		wantErr bool
 	}{
 		{
@@ -45,9 +45,9 @@ func Test_service_Login(t *testing.T) {
 				username: "user",
 				password: "user",
 			},
-			want: pkg.StaffInfo{
+			want: pkg.ClientInfo{
 				ID:            1,
-				Type:          1,
+				Type:          "staff",
 				Name:          "user",
 				Username:      "user",
 				ServingStatus: 1,
@@ -89,7 +89,7 @@ func Test_service_Logout(t *testing.T) {
 	}
 	type args struct {
 		ctx       context.Context
-		staffInfo pkg.StaffInfo
+		staffInfo pkg.ClientInfo
 	}
 	tests := []struct {
 		name    string
@@ -107,7 +107,7 @@ func Test_service_Logout(t *testing.T) {
 			},
 			args: args{
 				ctx:       context.Background(),
-				staffInfo: pkg.StaffInfo{},
+				staffInfo: pkg.ClientInfo{},
 			},
 			wantErr: false,
 		},
@@ -127,17 +127,17 @@ func Test_service_Logout(t *testing.T) {
 	}
 }
 
-func Test_service_GetStaffInfo(t *testing.T) {
+func Test_service_GetClientInfo(t *testing.T) {
 	var (
-		staffInfo = pkg.StaffInfo{
+		clientInfo = pkg.ClientInfo{
 			ID:            1,
-			Type:          1,
+			Type:          pkg.ClientTypeStaff,
 			Name:          "user",
 			Username:      "user",
 			ServingStatus: 1,
 			Token:         "token",
 		}
-		ctx = context.WithValue(context.Background(), "staff_info", staffInfo)
+		ctx = context.WithValue(context.Background(), "staff_info", clientInfo)
 	)
 	type fields struct {
 		redis  ifaceTool.IRedis
@@ -146,13 +146,14 @@ func Test_service_GetStaffInfo(t *testing.T) {
 		config *config.Config
 	}
 	type args struct {
-		ctx context.Context
+		ctx        context.Context
+		clientType pkg.ClientType
 	}
 	tests := []struct {
 		name    string
 		fields  fields
 		args    args
-		want    pkg.StaffInfo
+		want    pkg.ClientInfo
 		wantErr bool
 	}{
 		{
@@ -163,8 +164,11 @@ func Test_service_GetStaffInfo(t *testing.T) {
 				repo:   mock.NewRepository(t),
 				config: &config.Config{Salt: "salt"},
 			},
-			args:    args{ctx: ctx},
-			want:    staffInfo,
+			args: args{
+				ctx:        ctx,
+				clientType: pkg.ClientTypeStaff,
+			},
+			want:    clientInfo,
 			wantErr: false,
 		},
 		{
@@ -175,8 +179,11 @@ func Test_service_GetStaffInfo(t *testing.T) {
 				repo:   mock.NewRepository(t),
 				config: &config.Config{Salt: "salt"},
 			},
-			args:    args{ctx: context.Background()},
-			want:    pkg.StaffInfo{},
+			args: args{
+				ctx:        context.Background(),
+				clientType: "staff",
+			},
+			want:    pkg.ClientInfo{},
 			wantErr: true,
 		},
 	}
@@ -188,13 +195,13 @@ func Test_service_GetStaffInfo(t *testing.T) {
 				repo:   tt.fields.repo,
 				config: tt.fields.config,
 			}
-			got, err := s.GetStaffInfo(tt.args.ctx)
+			got, err := s.GetClientInfo(tt.args.ctx, tt.args.clientType)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("GetStaffInfo() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("GetClientInfo() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetStaffInfo() got = %v, want %v", got, tt.want)
+				t.Errorf("GetClientInfo() got = %v, want %v", got, tt.want)
 			}
 		})
 	}

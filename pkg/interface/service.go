@@ -39,7 +39,7 @@ type IRoomService interface {
 
 type IMessageService interface {
 	CreateMessage(ctx context.Context, message model2.Message) error
-	ListRoomMessage(ctx context.Context, roomId int64, clientType string) ([]model2.Message, error)
+	ListRoomMessage(ctx context.Context, roomId int64, clientType pkg.ClientType) ([]model2.Message, error)
 	ListMessage(ctx context.Context, params pkg.ListMessageParams) ([]model2.Message, int64, error)
 }
 

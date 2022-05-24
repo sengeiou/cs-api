@@ -53,7 +53,7 @@ func Test_service_ListRoomMessage(t *testing.T) {
 	type args struct {
 		ctx        context.Context
 		roomId     int64
-		clientType string
+		clientType pkg.ClientType
 	}
 	tests := []struct {
 		name    string
@@ -68,7 +68,7 @@ func Test_service_ListRoomMessage(t *testing.T) {
 			args: args{
 				ctx:        context.Background(),
 				roomId:     1,
-				clientType: "Text",
+				clientType: "Staff",
 			},
 			want:    make([]model.Message, 0),
 			wantErr: false,

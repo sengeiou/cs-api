@@ -212,6 +212,11 @@ type ListRoomInput struct {
 	Status  RoomStatus `json:"status"`
 }
 
+type ListRoomMessageInput struct {
+	RoomID     int64      `json:"roomID"`
+	ClientType ClientType `json:"clientType"`
+}
+
 type ListRoomMessageResp struct {
 	Messages []*Message `json:"messages"`
 }
@@ -383,6 +388,47 @@ type UpdateTagInput struct {
 	ID     int64  `json:"id"`
 	Name   string `json:"name"`
 	Status Status `json:"status"`
+}
+
+type ClientType string
+
+const (
+	ClientTypeStaff  ClientType = "Staff"
+	ClientTypeMember ClientType = "Member"
+)
+
+var AllClientType = []ClientType{
+	ClientTypeStaff,
+	ClientTypeMember,
+}
+
+func (e ClientType) IsValid() bool {
+	switch e {
+	case ClientTypeStaff, ClientTypeMember:
+		return true
+	}
+	return false
+}
+
+func (e ClientType) String() string {
+	return string(e)
+}
+
+func (e *ClientType) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ClientType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ClientType", str)
+	}
+	return nil
+}
+
+func (e ClientType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 type MessageContentType string

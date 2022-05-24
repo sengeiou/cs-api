@@ -246,7 +246,7 @@ func Test_service_UpdateStaffServingStatus(t *testing.T) {
 	}
 	type args struct {
 		ctx       context.Context
-		staffInfo pkg.StaffInfo
+		staffInfo pkg.ClientInfo
 		status    types.StaffServingStatus
 	}
 	tests := []struct {
@@ -263,7 +263,7 @@ func Test_service_UpdateStaffServingStatus(t *testing.T) {
 			},
 			args: args{
 				ctx:       context.Background(),
-				staffInfo: pkg.StaffInfo{},
+				staffInfo: pkg.ClientInfo{},
 				status:    types.StaffServingStatusServing,
 			},
 			wantErr: false,

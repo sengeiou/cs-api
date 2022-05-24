@@ -220,6 +220,7 @@ type ComplexityRoot struct {
 		UpdateNotice              func(childComplexity int, input converter.UpdateNoticeInput) int
 		UpdateRemind              func(childComplexity int, input converter.UpdateRemindInput) int
 		UpdateRole                func(childComplexity int, input converter.UpdateRoleInput) int
+		UpdateRoomScore           func(childComplexity int, score int64) int
 		UpdateStaff               func(childComplexity int, input converter.UpdateStaffInput) int
 		UpdateStaffAvatar         func(childComplexity int, avatar string) int
 		UpdateStaffServingStatus  func(childComplexity int, servingStatus converter.StaffServingStatus) int
@@ -261,7 +262,7 @@ type ComplexityRoot struct {
 		ListRemind              func(childComplexity int, filter converter.ListRemindInput, pagination converter.PaginationInput) int
 		ListRole                func(childComplexity int, filter converter.ListRoleInput, pagination converter.PaginationInput) int
 		ListRoom                func(childComplexity int, filter converter.ListRoomInput, pagination converter.PaginationInput) int
-		ListRoomMessage         func(childComplexity int, roomID int64) int
+		ListRoomMessage         func(childComplexity int, filter converter.ListRoomMessageInput) int
 		ListStaff               func(childComplexity int, filter converter.ListStaffInput, pagination converter.PaginationInput) int
 		ListStaffRoom           func(childComplexity int, filter converter.ListStaffRoomInput, pagination converter.PaginationInput) int
 		ListTag                 func(childComplexity int, filter converter.ListTagInput, pagination converter.PaginationInput) int
@@ -329,6 +330,7 @@ type MutationResolver interface {
 	AcceptRoom(ctx context.Context, id int64) (bool, error)
 	CloseRoom(ctx context.Context, input converter.CloseRoomInput) (bool, error)
 	TransferRoom(ctx context.Context, input converter.TransferRoomInput) (bool, error)
+	UpdateRoomScore(ctx context.Context, score int64) (bool, error)
 	CreateStaff(ctx context.Context, input converter.CreateStaffInput) (bool, error)
 	UpdateStaff(ctx context.Context, input converter.UpdateStaffInput) (bool, error)
 	DeleteStaff(ctx context.Context, id int64) (bool, error)
@@ -344,7 +346,7 @@ type QueryResolver interface {
 	ListFastMessageCategory(ctx context.Context) (*converter.ListFastMessageCategoryResp, error)
 	ListFastMessageGroup(ctx context.Context) (*converter.ListFastMessageGroupResp, error)
 	GetFastMessage(ctx context.Context, id int64) (*converter.GetFastMessageResp, error)
-	ListRoomMessage(ctx context.Context, roomID int64) (*converter.ListRoomMessageResp, error)
+	ListRoomMessage(ctx context.Context, filter converter.ListRoomMessageInput) (*converter.ListRoomMessageResp, error)
 	ListMessage(ctx context.Context, filter converter.ListMessageInput, pagination converter.PaginationInput) (*converter.ListMessageResp, error)
 	ListNotice(ctx context.Context, filter converter.ListNoticeInput, pagination converter.PaginationInput) (*converter.ListNoticeResp, error)
 	GetNotice(ctx context.Context, id int64) (*converter.GetNoticeResp, error)
@@ -1057,6 +1059,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.UpdateRole(childComplexity, args["input"].(converter.UpdateRoleInput)), true
 
+	case "Mutation.updateRoomScore":
+		if e.complexity.Mutation.UpdateRoomScore == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateRoomScore_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateRoomScore(childComplexity, args["score"].(int64)), true
+
 	case "Mutation.updateStaff":
 		if e.complexity.Mutation.UpdateStaff == nil {
 			break
@@ -1386,7 +1400,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ListRoomMessage(childComplexity, args["roomID"].(int64)), true
+		return e.complexity.Query.ListRoomMessage(childComplexity, args["filter"].(converter.ListRoomMessageInput)), true
 
 	case "Query.listStaff":
 		if e.complexity.Query.ListStaff == nil {
@@ -1810,6 +1824,16 @@ type Message {
     timestamp: Int64!
 }
 
+enum ClientType {
+    Staff
+    Member
+}
+
+input ListRoomMessageInput {
+    roomID: Int64!
+    clientType: ClientType!
+}
+
 input ListMessageInput {
     roomID: Int64!
     staffID: Int64!
@@ -1826,7 +1850,7 @@ type ListMessageResp {
 }
 
 extend type Query {
-    listRoomMessage(roomID: Int64!): ListRoomMessageResp!
+    listRoomMessage(filter: ListRoomMessageInput!): ListRoomMessageResp!
     listMessage(filter: ListMessageInput!, pagination: PaginationInput!): ListMessageResp!
 }`, BuiltIn: false},
 	{Name: "pkg/graph/schema/notice.graphqls", Input: `type Notice {
@@ -2064,6 +2088,7 @@ extend type Mutation {
     acceptRoom(id: Int64!): Boolean!
     closeRoom(input: CloseRoomInput!): Boolean!
     transferRoom(input: TransferRoomInput!): Boolean!
+    updateRoomScore(score: Int64!): Boolean!
 }`, BuiltIn: false},
 	{Name: "pkg/graph/schema/schema.graphqls", Input: `scalar Int64
 
@@ -2520,6 +2545,21 @@ func (ec *executionContext) field_Mutation_updateRole_args(ctx context.Context, 
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_updateRoomScore_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int64
+	if tmp, ok := rawArgs["score"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("score"))
+		arg0, err = ec.unmarshalNInt642int64(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["score"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_updateStaffAvatar_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -2853,15 +2893,15 @@ func (ec *executionContext) field_Query_listRole_args(ctx context.Context, rawAr
 func (ec *executionContext) field_Query_listRoomMessage_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 int64
-	if tmp, ok := rawArgs["roomID"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("roomID"))
-		arg0, err = ec.unmarshalNInt642int64(ctx, tmp)
+	var arg0 converter.ListRoomMessageInput
+	if tmp, ok := rawArgs["filter"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
+		arg0, err = ec.unmarshalNListRoomMessageInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListRoomMessageInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["roomID"] = arg0
+	args["filter"] = arg0
 	return args, nil
 }
 
@@ -5881,6 +5921,48 @@ func (ec *executionContext) _Mutation_transferRoom(ctx context.Context, field gr
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Mutation_updateRoomScore(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_updateRoomScore_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateRoomScore(rctx, args["score"].(int64))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Mutation_createStaff(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -6746,7 +6828,7 @@ func (ec *executionContext) _Query_listRoomMessage(ctx context.Context, field gr
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ListRoomMessage(rctx, args["roomID"].(int64))
+		return ec.resolvers.Query().ListRoomMessage(rctx, args["filter"].(converter.ListRoomMessageInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -10171,6 +10253,37 @@ func (ec *executionContext) unmarshalInputListRoomInput(ctx context.Context, obj
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputListRoomMessageInput(ctx context.Context, obj interface{}) (converter.ListRoomMessageInput, error) {
+	var it converter.ListRoomMessageInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	for k, v := range asMap {
+		switch k {
+		case "roomID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("roomID"))
+			it.RoomID, err = ec.unmarshalNInt642int64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "clientType":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clientType"))
+			it.ClientType, err = ec.unmarshalNClientType2csᚑapiᚋpkgᚋgraphᚋconverterᚐClientType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputListStaffInput(ctx context.Context, obj interface{}) (converter.ListStaffInput, error) {
 	var it converter.ListStaffInput
 	asMap := map[string]interface{}{}
@@ -12122,6 +12235,16 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "updateRoomScore":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateRoomScore(ctx, field)
+			}
+
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "createStaff":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createStaff(ctx, field)
@@ -13698,6 +13821,16 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
+func (ec *executionContext) unmarshalNClientType2csᚑapiᚋpkgᚋgraphᚋconverterᚐClientType(ctx context.Context, v interface{}) (converter.ClientType, error) {
+	var res converter.ClientType
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNClientType2csᚑapiᚋpkgᚋgraphᚋconverterᚐClientType(ctx context.Context, sel ast.SelectionSet, v converter.ClientType) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalNCloseRoomInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐCloseRoomInput(ctx context.Context, v interface{}) (converter.CloseRoomInput, error) {
 	res, err := ec.unmarshalInputCloseRoomInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -14276,6 +14409,11 @@ func (ec *executionContext) marshalNListRoleResp2ᚖcsᚑapiᚋpkgᚋgraphᚋcon
 
 func (ec *executionContext) unmarshalNListRoomInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListRoomInput(ctx context.Context, v interface{}) (converter.ListRoomInput, error) {
 	res, err := ec.unmarshalInputListRoomInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNListRoomMessageInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListRoomMessageInput(ctx context.Context, v interface{}) (converter.ListRoomMessageInput, error) {
+	res, err := ec.unmarshalInputListRoomMessageInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 

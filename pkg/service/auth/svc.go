@@ -89,7 +89,7 @@ func (s *service) Logout(ctx context.Context, staffInfo pkg.ClientInfo) error {
 
 func (s *service) SetClientInfo(clientType pkg.ClientType) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		ctxKey := clientType + "_info"
+		ctxKey := fmt.Sprintf("%s_info", clientType)
 		token := c.GetHeader("X-Token")
 		if token == "" {
 			ginTool.ErrorAuth(c)
@@ -97,7 +97,7 @@ func (s *service) SetClientInfo(clientType pkg.ClientType) gin.HandlerFunc {
 			return
 		}
 
-		redisKey := getRedisKey(token)
+		redisKey := getRedisKey(token, clientType)
 		result, err := s.redis.Get(c.Request.Context(), redisKey)
 		if err != nil {
 			ginTool.ErrorAuth(c)
@@ -120,17 +120,17 @@ func (s *service) SetClientInfo(clientType pkg.ClientType) gin.HandlerFunc {
 }
 
 func (s *service) GetClientInfo(ctx context.Context, clientType pkg.ClientType) (pkg.ClientInfo, error) {
-	ctxKey := clientType + "_info"
-	staffInfo, ok := ctx.Value(ctxKey).(pkg.ClientInfo)
-	if staffInfo.ID == 0 || !ok {
+	ctxKey := fmt.Sprintf("%s_info", clientType)
+	clientInfo, ok := ctx.Value(ctxKey).(pkg.ClientInfo)
+	if clientInfo.ID == 0 || !ok {
 		return pkg.ClientInfo{}, errors.ErrorAuth
 	}
 
-	return staffInfo, nil
+	return clientInfo, nil
 }
 
-func getRedisKey(token string) string {
-	return fmt.Sprintf("token:staff:%s", token)
+func getRedisKey(token string, clientType pkg.ClientType) string {
+	return fmt.Sprintf("token:%s:%s", clientType, token)
 }
 
 func genToken() string {

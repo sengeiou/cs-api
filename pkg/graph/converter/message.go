@@ -1,9 +1,15 @@
 package converter
 
 import (
+	"cs-api/pkg"
 	"cs-api/pkg/model"
 	"encoding/json"
 )
+
+var ClientTypeMapping = map[ClientType]pkg.ClientType{
+	ClientTypeStaff:  pkg.ClientTypeStaff,
+	ClientTypeMember: pkg.ClientTypeMember,
+}
 
 var MessageTypeDtoMapping = map[model.MessageType]MessageType{
 	model.MessageTypeSystem: MessageTypeSystem,

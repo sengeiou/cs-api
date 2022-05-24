@@ -130,6 +130,7 @@ func InitResolver(logCfg *zlog.Config, engine *gin.Engine, cfg generated.Config,
 	//gqlSvc.SetRecoverFunc(graph.GQLRecoverFunc)
 
 	engine.Any("/graph/query/staff", authSvc.SetClientInfo(pkg.ClientTypeStaff), gin.WrapH(gqlSvc))
+	engine.Any("/graph/query/member", authSvc.SetClientInfo(pkg.ClientTypeMember), gin.WrapH(gqlSvc))
 
 	if logCfg.Environment != "prod" {
 		gqlSvc.Use(extension.Introspection{})

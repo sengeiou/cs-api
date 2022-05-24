@@ -9,13 +9,13 @@ import (
 	"cs-api/pkg/graph/converter"
 )
 
-func (r *queryResolver) ListRoomMessage(ctx context.Context, roomID int64) (*converter.ListRoomMessageResp, error) {
+func (r *queryResolver) ListRoomMessage(ctx context.Context, filter converter.ListRoomMessageInput) (*converter.ListRoomMessageResp, error) {
 	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return nil, err
 	}
 
-	messages, err := r.messageSvc.ListRoomMessage(ctx, roomID, "staff")
+	messages, err := r.messageSvc.ListRoomMessage(ctx, filter.RoomID, converter.ClientTypeMapping[filter.ClientType])
 	if err != nil {
 		return nil, err
 	}

@@ -22,7 +22,7 @@ type ClientInfo struct {
 	RoomID        int64                    `json:"room_id"`        // member only
 	StaffID       int64                    `json:"staff_id"`       // member only
 	Token         string                   `json:"token"`
-	Conn          *websocket.Conn
+	Conn          *websocket.Conn          `json:"conn,omitempty"`
 }
 
 type StaffEvent string

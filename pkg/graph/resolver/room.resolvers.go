@@ -53,6 +53,23 @@ func (r *mutationResolver) TransferRoom(ctx context.Context, input converter.Tra
 	return true, nil
 }
 
+func (r *mutationResolver) UpdateRoomScore(ctx context.Context, score int64) (bool, error) {
+	if score < 1 || score > 5 {
+		return false, errors.New("wrong score")
+	}
+
+	memberInfo, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeMember)
+	if err != nil {
+		return false, err
+	}
+
+	if err = r.roomSvc.UpdateRoomScore(ctx, memberInfo.RoomID, int32(score)); err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
 func (r *queryResolver) ListStaffRoom(ctx context.Context, filter converter.ListStaffRoomInput, pagination converter.PaginationInput) (*converter.ListStaffRoomResp, error) {
 	staffInfo, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {

@@ -13,11 +13,11 @@ func (s *service) CreateMessage(ctx context.Context, message model.Message) erro
 	return s.repo.InsertOne(ctx, Collection, message)
 }
 
-func (s *service) ListRoomMessage(ctx context.Context, roomId int64, clientType string) (messages []model.Message, err error) {
+func (s *service) ListRoomMessage(ctx context.Context, roomId int64, clientType pkg.ClientType) (messages []model.Message, err error) {
 	messages = make([]model.Message, 0)
 
 	filter := bson.M{"room_id": roomId}
-	if clientType == "member" {
+	if clientType == pkg.ClientTypeMember {
 		filter["type"] = bson.M{"$ne": 1}
 	}
 

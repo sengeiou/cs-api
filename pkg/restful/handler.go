@@ -1,10 +1,8 @@
 package restful
 
 import (
-	"context"
 	"crypto/md5"
 	"cs-api/pkg"
-	"cs-api/pkg/graph/converter"
 	"encoding/json"
 	"fmt"
 	"github.com/AndySu1021/go-util/errors"
@@ -39,46 +37,6 @@ func (h *Handler) Login(c *gin.Context) {
 		"username": staffInfo.Username,
 		"token":    staffInfo.Token,
 	})
-}
-
-func (h *Handler) ListRoomMessage(c *gin.Context) {
-	var err error
-
-	clientInfo, err := GetClientInfo(c.Request.Context())
-	if err != nil {
-		ginTool.Error(c, err)
-		return
-	}
-
-	messages, err := h.msgSvc.ListRoomMessage(c.Request.Context(), clientInfo.RoomID, "member")
-	if err != nil {
-		ginTool.Error(c, err)
-		return
-	}
-
-	tmpResp := make([]*converter.Message, 0)
-
-	for _, message := range messages {
-		tmp := converter.Message{
-			ID:          message.ID,
-			MessageType: converter.MessageTypeDtoMapping[message.Type],
-			RoomID:      message.RoomID,
-			SenderName:  message.SenderName,
-			ContentType: converter.MessageContentTypeDtoMapping[message.ContentType],
-			Content:     message.Content,
-			Timestamp:   message.Timestamp,
-		}
-
-		if message.ExtraInfo != nil {
-			tmp.ExtraInfo = &converter.MessageExtraInfo{
-				ClientName: message.ExtraInfo.ClientName,
-			}
-		}
-
-		tmpResp = append(tmpResp, &tmp)
-	}
-
-	ginTool.SuccessWithData(c, tmpResp)
 }
 
 type CreateRoomParams struct {
@@ -126,65 +84,4 @@ func (h *Handler) CreateRoom(c *gin.Context) {
 	}
 
 	ginTool.SuccessWithData(c, fmt.Sprintf("http://127.0.0.1:8080/chat?room_id=%d&name=%s&sid=%s", room.ID, member.Name, token))
-}
-
-type UpdateRoomScoreParams struct {
-	Score int32 `json:"score" binding:"required,gte=1,lte=5"`
-}
-
-func (h *Handler) UpdateRoomScore(c *gin.Context) {
-	var err error
-
-	clientInfo, err := GetClientInfo(c.Request.Context())
-	if err != nil {
-		ginTool.ErrorAuth(c)
-		return
-	}
-
-	var params UpdateRoomScoreParams
-	if err = c.ShouldBindJSON(&params); err != nil {
-		ginTool.Error(c, errors.ErrorValidation)
-		return
-	}
-
-	if err = h.roomSvc.UpdateRoomScore(c.Request.Context(), clientInfo.RoomID, params.Score); err != nil {
-		ginTool.Error(c, err)
-		return
-	}
-
-	ginTool.Success(c)
-}
-
-// UploadFile 上傳檔案
-func (h *Handler) UploadFile(c *gin.Context) {
-	file, _ := c.FormFile("file")
-	if file == nil {
-		ginTool.Error(c, fmt.Errorf("no file uploaded"))
-		return
-	}
-
-	src, err := file.Open()
-	if err != nil {
-		ginTool.Error(c, err)
-		return
-	}
-
-	defer src.Close()
-
-	url, err := h.storage.Upload(c.Request.Context(), src, file.Filename)
-	if err != nil {
-		ginTool.Error(c, err)
-		return
-	}
-
-	ginTool.SuccessWithData(c, gin.H{"url": url})
-}
-
-func GetClientInfo(ctx context.Context) (pkg.ClientInfo, error) {
-	clientInfo := ctx.Value("client_info").(pkg.ClientInfo)
-	if clientInfo.ID == 0 {
-		return pkg.ClientInfo{}, errors.ErrorAuth
-	}
-
-	return clientInfo, nil
 }
