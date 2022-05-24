@@ -6,7 +6,6 @@ import (
 	"github.com/AndySu1021/go-util/gin"
 	"github.com/AndySu1021/go-util/redis"
 	zlog "github.com/AndySu1021/go-util/zerolog"
-	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 	"go.uber.org/fx"
 )
@@ -50,8 +49,6 @@ func NewConfig() (AppConfig, error) {
 	if err := viper.Unmarshal(&config); err != nil {
 		return AppConfig{}, err
 	}
-
-	log.Debug().Msgf("salt is %s", config.App.Salt)
 
 	return config, nil
 }
