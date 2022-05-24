@@ -5,9 +5,10 @@ import (
 	"cs-api/pkg"
 	iface "cs-api/pkg/interface"
 	"encoding/json"
-	"github.com/gin-gonic/gin"
 	gin2 "github.com/AndySu1021/go-util/gin"
 	iface2 "github.com/AndySu1021/go-util/interface"
+	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/fx"
 )
 
@@ -53,6 +54,7 @@ func InitHandler(engine *gin.Engine, h *Handler) {
 	engine.POST("/api/member/room/create", h.CreateRoom)
 	engine.POST("/api/member/room/score", CheckMemberToken(h), h.UpdateRoomScore)
 	engine.POST("/api/member/upload", CheckMemberToken(h), h.UploadFile)
+	engine.GET("/metrics", gin.WrapH(promhttp.Handler()))
 }
 
 func CheckMemberToken(h *Handler) gin.HandlerFunc {

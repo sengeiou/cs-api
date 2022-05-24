@@ -25,7 +25,7 @@ database:
   with_caller: true
   debug: true
   type: mysql
-  host: localhost
+  host: mysql
   port: 3306
   username: root
   password: abcd1234
@@ -35,7 +35,7 @@ database:
 
 # Mongo Database
 mongo:
-  uri: mongodb://localhost:27017
+  uri: mongodb://mongo:27017
   database: cs-api
   conntect_timeout_sec: 30
   max_conn_idle_time_sec: 30
@@ -47,7 +47,7 @@ mongo:
 # Redis config
 redis:
   cluster_mode: false
-  addresses: "localhost:6379"
+  addresses: "redis:6379"
   password:
   db: 0
 
@@ -57,4 +57,4 @@ etcd:
   username: ""
   password: ""
   endpoints:
-    - "localhost:2379"
+    - "etcd:2379"
