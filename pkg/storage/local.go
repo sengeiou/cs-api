@@ -2,7 +2,6 @@ package storage
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"os"
 )
@@ -15,7 +14,6 @@ type DiskLocal struct {
 
 func (d *DiskLocal) Upload(ctx context.Context, reader io.Reader, filename string) (path string, err error) {
 	fileName := getFileName(filename)
-	fmt.Println(filename)
 
 	if err = os.MkdirAll(d.RootDir, os.ModePerm); err != nil {
 		return "", err
