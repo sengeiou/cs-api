@@ -5,11 +5,12 @@ package resolver
 
 import (
 	"context"
+	"cs-api/pkg"
 	"cs-api/pkg/graph/converter"
 )
 
 func (r *queryResolver) ListDailyTagReport(ctx context.Context, filter converter.ListDailyTagReportInput) (*converter.ListDailyTagReportResp, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return nil, err
 	}
@@ -26,7 +27,7 @@ func (r *queryResolver) ListDailyTagReport(ctx context.Context, filter converter
 }
 
 func (r *queryResolver) ListDailyGuestReport(ctx context.Context, filter converter.ListDailyGuestReportInput) (*converter.ListDailyGuestReportResp, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return nil, err
 	}

@@ -5,12 +5,13 @@ package resolver
 
 import (
 	"context"
+	"cs-api/pkg"
 	"cs-api/pkg/graph/converter"
 	"encoding/json"
 )
 
 func (r *mutationResolver) CreateRole(ctx context.Context, input converter.CreateRoleInput) (bool, error) {
-	staffInfo, err := r.authSvc.GetStaffInfo(ctx)
+	staffInfo, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}
@@ -25,7 +26,7 @@ func (r *mutationResolver) CreateRole(ctx context.Context, input converter.Creat
 }
 
 func (r *mutationResolver) UpdateRole(ctx context.Context, input converter.UpdateRoleInput) (bool, error) {
-	staffInfo, err := r.authSvc.GetStaffInfo(ctx)
+	staffInfo, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}
@@ -40,7 +41,7 @@ func (r *mutationResolver) UpdateRole(ctx context.Context, input converter.Updat
 }
 
 func (r *mutationResolver) DeleteRole(ctx context.Context, id int64) (bool, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}
@@ -53,7 +54,7 @@ func (r *mutationResolver) DeleteRole(ctx context.Context, id int64) (bool, erro
 }
 
 func (r *queryResolver) ListRole(ctx context.Context, filter converter.ListRoleInput, pagination converter.PaginationInput) (*converter.ListRoleResp, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return nil, err
 	}
@@ -74,7 +75,7 @@ func (r *queryResolver) ListRole(ctx context.Context, filter converter.ListRoleI
 }
 
 func (r *queryResolver) GetRole(ctx context.Context, id int64) (*converter.GetRoleResp, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return nil, err
 	}

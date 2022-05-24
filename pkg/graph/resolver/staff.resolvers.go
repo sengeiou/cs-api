@@ -6,13 +6,14 @@ package resolver
 import (
 	"context"
 	"cs-api/db/model"
+	"cs-api/pkg"
 	"cs-api/pkg/graph/converter"
 	"encoding/json"
 	"time"
 )
 
 func (r *mutationResolver) CreateStaff(ctx context.Context, input converter.CreateStaffInput) (bool, error) {
-	staffInfo, err := r.authSvc.GetStaffInfo(ctx)
+	staffInfo, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}
@@ -28,7 +29,7 @@ func (r *mutationResolver) CreateStaff(ctx context.Context, input converter.Crea
 }
 
 func (r *mutationResolver) UpdateStaff(ctx context.Context, input converter.UpdateStaffInput) (bool, error) {
-	staffInfo, err := r.authSvc.GetStaffInfo(ctx)
+	staffInfo, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}
@@ -44,7 +45,7 @@ func (r *mutationResolver) UpdateStaff(ctx context.Context, input converter.Upda
 }
 
 func (r *mutationResolver) DeleteStaff(ctx context.Context, id int64) (bool, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}
@@ -58,7 +59,7 @@ func (r *mutationResolver) DeleteStaff(ctx context.Context, id int64) (bool, err
 }
 
 func (r *mutationResolver) UpdateStaffServingStatus(ctx context.Context, servingStatus converter.StaffServingStatus) (bool, error) {
-	staffInfo, err := r.authSvc.GetStaffInfo(ctx)
+	staffInfo, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}
@@ -72,7 +73,7 @@ func (r *mutationResolver) UpdateStaffServingStatus(ctx context.Context, serving
 }
 
 func (r *mutationResolver) UpdateStaffAvatar(ctx context.Context, avatar string) (bool, error) {
-	staffInfo, err := r.authSvc.GetStaffInfo(ctx)
+	staffInfo, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}
@@ -92,7 +93,7 @@ func (r *mutationResolver) UpdateStaffAvatar(ctx context.Context, avatar string)
 }
 
 func (r *queryResolver) ListStaff(ctx context.Context, filter converter.ListStaffInput, pagination converter.PaginationInput) (*converter.ListStaffResp, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +112,7 @@ func (r *queryResolver) ListStaff(ctx context.Context, filter converter.ListStaf
 }
 
 func (r *queryResolver) ListAvailableStaff(ctx context.Context) (*converter.ListAvailableStaffResp, error) {
-	staffInfo, err := r.authSvc.GetStaffInfo(ctx)
+	staffInfo, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return nil, err
 	}
@@ -128,7 +129,7 @@ func (r *queryResolver) ListAvailableStaff(ctx context.Context) (*converter.List
 }
 
 func (r *queryResolver) GetStaff(ctx context.Context, id int64) (*converter.GetStaffResp, error) {
-	staffInfo, err := r.authSvc.GetStaffInfo(ctx)
+	staffInfo, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return nil, err
 	}

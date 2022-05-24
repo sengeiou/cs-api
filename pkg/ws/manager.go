@@ -26,7 +26,7 @@ type ClientManager struct {
 
 func (w *ClientManager) Register(clientInfo pkg.ClientInfo) {
 	switch clientInfo.Type {
-	case pkg.WsClientTypeStaff:
+	case pkg.ClientTypeStaff:
 		staff := w.staffPool.Get().(*StaffClient)
 		if err := staff.Reset(clientInfo, w); err != nil {
 			log.Error().Msgf("reset staff error: %s", err)
@@ -35,7 +35,7 @@ func (w *ClientManager) Register(clientInfo pkg.ClientInfo) {
 		w.dispatcher.register(staff)
 		go staff.SocketRead()
 		go staff.SocketWrite()
-	case pkg.WsClientTypeMember:
+	case pkg.ClientTypeMember:
 		// prevent duplicate member client connection
 		if old := w.GetMember(clientInfo.RoomID); old != nil {
 			w.unregister <- old
@@ -126,7 +126,7 @@ func InitClientManager(manager *ClientManager) {
 			if client.GetStatus() == ClientStatusClosed {
 				continue
 			}
-			if client.GetType() == pkg.WsClientTypeStaff {
+			if client.GetType() == pkg.ClientTypeStaff {
 				staff := client.(*StaffClient)
 				staff.Status = ClientStatusClosed
 				close(staff.SendChan)
@@ -136,7 +136,7 @@ func InitClientManager(manager *ClientManager) {
 				}
 				manager.dispatcher.unregister(staff)
 				manager.staffPool.Put(staff)
-			} else if client.GetType() == pkg.WsClientTypeMember {
+			} else if client.GetType() == pkg.ClientTypeMember {
 				member := client.(*MemberClient)
 				member.Status = ClientStatusClosed
 				close(member.SendChan)

@@ -9,22 +9,22 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"github.com/AndySu1021/go-util/errors"
 	ginTool "github.com/AndySu1021/go-util/gin"
 	"github.com/AndySu1021/go-util/helper"
+	"github.com/gin-gonic/gin"
 	"github.com/rs/xid"
 	"github.com/rs/zerolog/log"
 	"time"
 )
 
-func (s *service) Login(ctx context.Context, username, password string) (pkg.StaffInfo, error) {
+func (s *service) Login(ctx context.Context, username, password string) (pkg.ClientInfo, error) {
 	staff, err := s.repo.StaffLogin(ctx, model.StaffLoginParams{
 		Username: username,
 		Password: helper.EncryptPassword(password, s.config.Salt),
 	})
 	if err != nil {
-		return pkg.StaffInfo{}, err
+		return pkg.ClientInfo{}, err
 	}
 
 	now := time.Now().UTC()
@@ -34,14 +34,14 @@ func (s *service) Login(ctx context.Context, username, password string) (pkg.Sta
 		UpdatedAt:     now,
 		ID:            staff.ID,
 	}); err != nil {
-		return pkg.StaffInfo{}, err
+		return pkg.ClientInfo{}, err
 	}
 
 	token := genToken()
 
-	staffInfo := pkg.StaffInfo{
+	staffInfo := pkg.ClientInfo{
 		ID:            staff.ID,
-		Type:          pkg.WsClientTypeStaff,
+		Type:          pkg.ClientTypeStaff,
 		Name:          staff.Name,
 		Username:      staff.Username,
 		ServingStatus: types.StaffServingStatusClosed,
@@ -50,25 +50,25 @@ func (s *service) Login(ctx context.Context, username, password string) (pkg.Sta
 
 	result, err := json.Marshal(staffInfo)
 	if err != nil {
-		return pkg.StaffInfo{}, err
+		return pkg.ClientInfo{}, err
 	}
 
 	err = s.lua.RemoveToken(ctx, "staff", staff.Username)
 	if err != nil {
 		log.Error().Msgf("clear token error: %s\n", err)
-		return pkg.StaffInfo{}, err
+		return pkg.ClientInfo{}, err
 	}
 
 	err = s.lua.SetToken(ctx, "staff", staff.Username, token, result, 24*time.Hour)
 	if err != nil {
 		log.Error().Msgf("set token error: %s\n", err)
-		return pkg.StaffInfo{}, err
+		return pkg.ClientInfo{}, err
 	}
 
 	return staffInfo, nil
 }
 
-func (s *service) Logout(ctx context.Context, staffInfo pkg.StaffInfo) error {
+func (s *service) Logout(ctx context.Context, staffInfo pkg.ClientInfo) error {
 	params := model.UpdateStaffServingStatusParams{
 		ServingStatus: types.StaffServingStatusClosed,
 		UpdatedBy:     staffInfo.ID,
@@ -87,13 +87,13 @@ func (s *service) Logout(ctx context.Context, staffInfo pkg.StaffInfo) error {
 	return nil
 }
 
-func (s *service) SetStaffInfo() gin.HandlerFunc {
+func (s *service) SetClientInfo(clientType pkg.ClientType) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		ctxKey := clientType + "_info"
 		token := c.GetHeader("X-Token")
 		if token == "" {
-			ctx := context.WithValue(c.Request.Context(), "staff_info", pkg.StaffInfo{})
-			c.Request = c.Request.WithContext(ctx)
-			c.Next()
+			ginTool.ErrorAuth(c)
+			c.Abort()
 			return
 		}
 
@@ -105,7 +105,7 @@ func (s *service) SetStaffInfo() gin.HandlerFunc {
 			return
 		}
 
-		var tmp pkg.StaffInfo
+		var tmp pkg.ClientInfo
 		err = json.Unmarshal([]byte(result), &tmp)
 		if err != nil {
 			ginTool.Error(c, err)
@@ -113,16 +113,17 @@ func (s *service) SetStaffInfo() gin.HandlerFunc {
 			return
 		}
 
-		ctx := context.WithValue(c.Request.Context(), "staff_info", tmp)
+		ctx := context.WithValue(c.Request.Context(), ctxKey, tmp)
 		c.Request = c.Request.WithContext(ctx)
 		c.Next()
 	}
 }
 
-func (s *service) GetStaffInfo(ctx context.Context) (pkg.StaffInfo, error) {
-	staffInfo, ok := ctx.Value("staff_info").(pkg.StaffInfo)
+func (s *service) GetClientInfo(ctx context.Context, clientType pkg.ClientType) (pkg.ClientInfo, error) {
+	ctxKey := clientType + "_info"
+	staffInfo, ok := ctx.Value(ctxKey).(pkg.ClientInfo)
 	if staffInfo.ID == 0 || !ok {
-		return pkg.StaffInfo{}, errors.ErrorAuth
+		return pkg.ClientInfo{}, errors.ErrorAuth
 	}
 
 	return staffInfo, nil

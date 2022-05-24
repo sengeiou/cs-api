@@ -21,7 +21,7 @@ type ClientMessage struct {
 type Client interface {
 	GetID() int64
 	GetName() string
-	GetType() pkg.WsClientType
+	GetType() pkg.ClientType
 	GetMessageType() model.MessageType
 	GetStatus() ClientStatus
 	GetSendChan() chan []byte

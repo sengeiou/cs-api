@@ -11,7 +11,7 @@ import (
 
 type MemberClient struct {
 	ID         int64
-	Type       pkg.WsClientType
+	Type       pkg.ClientType
 	Name       string
 	RoomID     int64
 	StaffID    int64 // 客服 ID
@@ -34,7 +34,7 @@ func (mc *MemberClient) GetName() string {
 	return mc.Name
 }
 
-func (mc *MemberClient) GetType() pkg.WsClientType {
+func (mc *MemberClient) GetType() pkg.ClientType {
 	return mc.Type
 }
 
@@ -109,7 +109,7 @@ func (mc *MemberClient) SocketWrite() {
 // Reset 初始化從 sync.Pool 中拿出的 MemberClient
 func (mc *MemberClient) Reset(clientInfo pkg.ClientInfo, manager *ClientManager) error {
 	mc.ID = clientInfo.ID
-	mc.Type = pkg.WsClientTypeMember
+	mc.Type = pkg.ClientTypeMember
 	mc.Name = clientInfo.Name
 	mc.RoomID = clientInfo.RoomID
 	mc.StaffID = clientInfo.StaffID

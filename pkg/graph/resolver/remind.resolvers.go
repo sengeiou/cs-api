@@ -5,11 +5,12 @@ package resolver
 
 import (
 	"context"
+	"cs-api/pkg"
 	"cs-api/pkg/graph/converter"
 )
 
 func (r *mutationResolver) CreateRemind(ctx context.Context, input converter.CreateRemindInput) (bool, error) {
-	staffInfo, err := r.authSvc.GetStaffInfo(ctx)
+	staffInfo, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}
@@ -24,7 +25,7 @@ func (r *mutationResolver) CreateRemind(ctx context.Context, input converter.Cre
 }
 
 func (r *mutationResolver) UpdateRemind(ctx context.Context, input converter.UpdateRemindInput) (bool, error) {
-	staffInfo, err := r.authSvc.GetStaffInfo(ctx)
+	staffInfo, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}
@@ -39,7 +40,7 @@ func (r *mutationResolver) UpdateRemind(ctx context.Context, input converter.Upd
 }
 
 func (r *mutationResolver) DeleteRemind(ctx context.Context, id int64) (bool, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}
@@ -52,7 +53,7 @@ func (r *mutationResolver) DeleteRemind(ctx context.Context, id int64) (bool, er
 }
 
 func (r *queryResolver) ListRemind(ctx context.Context, filter converter.ListRemindInput, pagination converter.PaginationInput) (*converter.ListRemindResp, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +72,7 @@ func (r *queryResolver) ListRemind(ctx context.Context, filter converter.ListRem
 }
 
 func (r *queryResolver) GetRemind(ctx context.Context, id int64) (*converter.GetRemindResp, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return nil, err
 	}

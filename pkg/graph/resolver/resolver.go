@@ -3,11 +3,12 @@ package resolver
 import (
 	"cs-api/config"
 	generated "cs-api/dist/graph"
+	"cs-api/pkg"
 	iface "cs-api/pkg/interface"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/gin-gonic/gin"
 	ifaceTool "github.com/AndySu1021/go-util/interface"
 	zlog "github.com/AndySu1021/go-util/zerolog"
+	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
 	"net/http"
 	"time"
@@ -128,7 +129,7 @@ func InitResolver(logCfg *zlog.Config, engine *gin.Engine, cfg generated.Config,
 	//gqlSvc.SetErrorPresenter(errors.GQLErrorPresenter)
 	//gqlSvc.SetRecoverFunc(graph.GQLRecoverFunc)
 
-	engine.Any("/graph/query", authSvc.SetStaffInfo(), gin.WrapH(gqlSvc))
+	engine.Any("/graph/query/staff", authSvc.SetClientInfo(pkg.ClientTypeStaff), gin.WrapH(gqlSvc))
 
 	if logCfg.Environment != "prod" {
 		gqlSvc.Use(extension.Introspection{})

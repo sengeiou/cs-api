@@ -5,11 +5,12 @@ package resolver
 
 import (
 	"context"
+	"cs-api/pkg"
 	"cs-api/pkg/graph/converter"
 )
 
 func (r *mutationResolver) CreateNotice(ctx context.Context, input converter.CreateNoticeInput) (bool, error) {
-	staffInfo, err := r.authSvc.GetStaffInfo(ctx)
+	staffInfo, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}
@@ -24,7 +25,7 @@ func (r *mutationResolver) CreateNotice(ctx context.Context, input converter.Cre
 }
 
 func (r *mutationResolver) UpdateNotice(ctx context.Context, input converter.UpdateNoticeInput) (bool, error) {
-	staffInfo, err := r.authSvc.GetStaffInfo(ctx)
+	staffInfo, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}
@@ -39,7 +40,7 @@ func (r *mutationResolver) UpdateNotice(ctx context.Context, input converter.Upd
 }
 
 func (r *mutationResolver) DeleteNotice(ctx context.Context, id int64) (bool, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}
@@ -52,7 +53,7 @@ func (r *mutationResolver) DeleteNotice(ctx context.Context, id int64) (bool, er
 }
 
 func (r *queryResolver) ListNotice(ctx context.Context, filter converter.ListNoticeInput, pagination converter.PaginationInput) (*converter.ListNoticeResp, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +72,7 @@ func (r *queryResolver) ListNotice(ctx context.Context, filter converter.ListNot
 }
 
 func (r *queryResolver) GetNotice(ctx context.Context, id int64) (*converter.GetNoticeResp, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return nil, err
 	}

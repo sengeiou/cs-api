@@ -6,29 +6,22 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-type WsClientType int8
+type ClientType string
 
 const (
-	WsClientTypeStaff WsClientType = iota + 1
-	WsClientTypeMember
+	ClientTypeStaff  ClientType = "staff"
+	ClientTypeMember ClientType = "member"
 )
-
-type StaffInfo struct {
-	ID            int64                    `json:"id"`
-	Type          WsClientType             `json:"type"`
-	Name          string                   `json:"name"`
-	Username      string                   `json:"username"`
-	ServingStatus types.StaffServingStatus `json:"serving_status"`
-	Token         string                   `json:"token"`
-}
 
 type ClientInfo struct {
 	ID            int64                    `json:"id"`
-	Type          WsClientType             `json:"type"`
+	Type          ClientType               `json:"type"`
 	Name          string                   `json:"name"`
-	RoomID        int64                    `json:"room_id"`
-	StaffID       int64                    `json:"staff_id"`
-	ServingStatus types.StaffServingStatus `json:"serving_status"`
+	Username      string                   `json:"username"`       // staff only
+	ServingStatus types.StaffServingStatus `json:"serving_status"` // staff only
+	RoomID        int64                    `json:"room_id"`        // member only
+	StaffID       int64                    `json:"staff_id"`       // member only
+	Token         string                   `json:"token"`
 	Conn          *websocket.Conn
 }
 

@@ -39,26 +39,26 @@ func (m *MockIAuthService) EXPECT() *MockIAuthServiceMockRecorder {
 	return m.recorder
 }
 
-// GetStaffInfo mocks base method.
-func (m *MockIAuthService) GetStaffInfo(ctx context.Context) (pkg.StaffInfo, error) {
+// GetClientInfo mocks base method.
+func (m *MockIAuthService) GetClientInfo(ctx context.Context, clientType pkg.ClientType) (pkg.ClientInfo, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetStaffInfo", ctx)
-	ret0, _ := ret[0].(pkg.StaffInfo)
+	ret := m.ctrl.Call(m, "GetClientInfo", ctx, clientType)
+	ret0, _ := ret[0].(pkg.ClientInfo)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetStaffInfo indicates an expected call of GetStaffInfo.
-func (mr *MockIAuthServiceMockRecorder) GetStaffInfo(ctx interface{}) *gomock.Call {
+// GetClientInfo indicates an expected call of GetClientInfo.
+func (mr *MockIAuthServiceMockRecorder) GetClientInfo(ctx, clientType interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetStaffInfo", reflect.TypeOf((*MockIAuthService)(nil).GetStaffInfo), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetClientInfo", reflect.TypeOf((*MockIAuthService)(nil).GetClientInfo), ctx, clientType)
 }
 
 // Login mocks base method.
-func (m *MockIAuthService) Login(ctx context.Context, username, password string) (pkg.StaffInfo, error) {
+func (m *MockIAuthService) Login(ctx context.Context, username, password string) (pkg.ClientInfo, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Login", ctx, username, password)
-	ret0, _ := ret[0].(pkg.StaffInfo)
+	ret0, _ := ret[0].(pkg.ClientInfo)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -70,7 +70,7 @@ func (mr *MockIAuthServiceMockRecorder) Login(ctx, username, password interface{
 }
 
 // Logout mocks base method.
-func (m *MockIAuthService) Logout(ctx context.Context, userInfo pkg.StaffInfo) error {
+func (m *MockIAuthService) Logout(ctx context.Context, userInfo pkg.ClientInfo) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Logout", ctx, userInfo)
 	ret0, _ := ret[0].(error)
@@ -83,18 +83,18 @@ func (mr *MockIAuthServiceMockRecorder) Logout(ctx, userInfo interface{}) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Logout", reflect.TypeOf((*MockIAuthService)(nil).Logout), ctx, userInfo)
 }
 
-// SetStaffInfo mocks base method.
-func (m *MockIAuthService) SetStaffInfo() gin.HandlerFunc {
+// SetClientInfo mocks base method.
+func (m *MockIAuthService) SetClientInfo(clientType pkg.ClientType) gin.HandlerFunc {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "SetStaffInfo")
+	ret := m.ctrl.Call(m, "SetClientInfo", clientType)
 	ret0, _ := ret[0].(gin.HandlerFunc)
 	return ret0
 }
 
-// SetStaffInfo indicates an expected call of SetStaffInfo.
-func (mr *MockIAuthServiceMockRecorder) SetStaffInfo() *gomock.Call {
+// SetClientInfo indicates an expected call of SetClientInfo.
+func (mr *MockIAuthServiceMockRecorder) SetClientInfo(clientType interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetStaffInfo", reflect.TypeOf((*MockIAuthService)(nil).SetStaffInfo))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetClientInfo", reflect.TypeOf((*MockIAuthService)(nil).SetClientInfo), clientType)
 }
 
 // MockIStaffService is a mock of IStaffService interface.
@@ -209,7 +209,7 @@ func (mr *MockIStaffServiceMockRecorder) UpdateStaff(ctx, params interface{}) *g
 }
 
 // UpdateStaffServingStatus mocks base method.
-func (m *MockIStaffService) UpdateStaffServingStatus(ctx context.Context, staffInfo pkg.StaffInfo, status types.StaffServingStatus) error {
+func (m *MockIStaffService) UpdateStaffServingStatus(ctx context.Context, staffInfo pkg.ClientInfo, status types.StaffServingStatus) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateStaffServingStatus", ctx, staffInfo, status)
 	ret0, _ := ret[0].(error)

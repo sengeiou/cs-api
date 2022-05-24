@@ -10,7 +10,7 @@ import (
 )
 
 func (r *queryResolver) ListRoomMessage(ctx context.Context, roomID int64) (*converter.ListRoomMessageResp, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return nil, err
 	}
@@ -27,7 +27,7 @@ func (r *queryResolver) ListRoomMessage(ctx context.Context, roomID int64) (*con
 }
 
 func (r *queryResolver) ListMessage(ctx context.Context, filter converter.ListMessageInput, pagination converter.PaginationInput) (*converter.ListMessageResp, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return nil, err
 	}

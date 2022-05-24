@@ -112,7 +112,7 @@ func (h *Handler) CreateRoom(c *gin.Context) {
 
 	clientInfo := pkg.ClientInfo{
 		ID:      member.ID,
-		Type:    pkg.WsClientTypeMember,
+		Type:    pkg.ClientTypeMember,
 		Name:    member.Name,
 		RoomID:  room.ID,
 		StaffID: room.StaffID,

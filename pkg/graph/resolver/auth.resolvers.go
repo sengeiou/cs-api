@@ -5,10 +5,11 @@ package resolver
 
 import (
 	"context"
+	"cs-api/pkg"
 )
 
 func (r *mutationResolver) Logout(ctx context.Context) (bool, error) {
-	userInfo, err := r.authSvc.GetStaffInfo(ctx)
+	userInfo, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}

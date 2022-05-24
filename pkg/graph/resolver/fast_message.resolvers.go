@@ -6,12 +6,13 @@ package resolver
 import (
 	"context"
 	"cs-api/db/model"
+	"cs-api/pkg"
 	"cs-api/pkg/graph/converter"
 	"time"
 )
 
 func (r *mutationResolver) CreateFastMessage(ctx context.Context, input converter.CreateFastMessageInput) (bool, error) {
-	staffInfo, err := r.authSvc.GetStaffInfo(ctx)
+	staffInfo, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}
@@ -37,7 +38,7 @@ func (r *mutationResolver) CreateFastMessage(ctx context.Context, input converte
 }
 
 func (r *mutationResolver) UpdateFastMessage(ctx context.Context, input converter.UpdateFastMessageInput) (bool, error) {
-	staffInfo, err := r.authSvc.GetStaffInfo(ctx)
+	staffInfo, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}
@@ -60,7 +61,7 @@ func (r *mutationResolver) UpdateFastMessage(ctx context.Context, input converte
 }
 
 func (r *mutationResolver) DeleteFastMessage(ctx context.Context, id int64) (bool, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}
@@ -73,7 +74,7 @@ func (r *mutationResolver) DeleteFastMessage(ctx context.Context, id int64) (boo
 }
 
 func (r *mutationResolver) CreateFastMessageCategory(ctx context.Context, input converter.CreateFastMessageCategoryInput) (bool, error) {
-	staffInfo, err := r.authSvc.GetStaffInfo(ctx)
+	staffInfo, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}
@@ -96,7 +97,7 @@ func (r *mutationResolver) CreateFastMessageCategory(ctx context.Context, input 
 }
 
 func (r *queryResolver) ListFastMessage(ctx context.Context, filter converter.ListFastMessageInput, pagination converter.PaginationInput) (*converter.ListFastMessageResp, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return nil, err
 	}
@@ -115,7 +116,7 @@ func (r *queryResolver) ListFastMessage(ctx context.Context, filter converter.Li
 }
 
 func (r *queryResolver) ListFastMessageCategory(ctx context.Context) (*converter.ListFastMessageCategoryResp, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return nil, err
 	}
@@ -132,7 +133,7 @@ func (r *queryResolver) ListFastMessageCategory(ctx context.Context) (*converter
 }
 
 func (r *queryResolver) ListFastMessageGroup(ctx context.Context) (*converter.ListFastMessageGroupResp, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return nil, err
 	}
@@ -149,7 +150,7 @@ func (r *queryResolver) ListFastMessageGroup(ctx context.Context) (*converter.Li
 }
 
 func (r *queryResolver) GetFastMessage(ctx context.Context, id int64) (*converter.GetFastMessageResp, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return nil, err
 	}

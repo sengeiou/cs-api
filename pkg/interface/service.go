@@ -10,10 +10,10 @@ import (
 )
 
 type IAuthService interface {
-	Login(ctx context.Context, username, password string) (pkg.StaffInfo, error)
-	Logout(ctx context.Context, userInfo pkg.StaffInfo) error
-	SetStaffInfo() gin.HandlerFunc
-	GetStaffInfo(ctx context.Context) (pkg.StaffInfo, error)
+	Login(ctx context.Context, username, password string) (pkg.ClientInfo, error)
+	Logout(ctx context.Context, userInfo pkg.ClientInfo) error
+	SetClientInfo(clientType pkg.ClientType) gin.HandlerFunc
+	GetClientInfo(ctx context.Context, clientType pkg.ClientType) (pkg.ClientInfo, error)
 }
 
 type IStaffService interface {
@@ -22,7 +22,7 @@ type IStaffService interface {
 	CreateStaff(ctx context.Context, params model.CreateStaffParams) error
 	UpdateStaff(ctx context.Context, params interface{}) error
 	DeleteStaff(ctx context.Context, staffId int64) error
-	UpdateStaffServingStatus(ctx context.Context, staffInfo pkg.StaffInfo, status types.StaffServingStatus) error
+	UpdateStaffServingStatus(ctx context.Context, staffInfo pkg.ClientInfo, status types.StaffServingStatus) error
 	ListAvailableStaff(ctx context.Context, staffId int64) ([]model.Staff, error)
 }
 

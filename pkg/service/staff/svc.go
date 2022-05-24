@@ -71,7 +71,7 @@ func (s *service) DeleteStaff(ctx context.Context, staffId int64) error {
 	return s.repo.DeleteStaff(ctx, staffId)
 }
 
-func (s *service) UpdateStaffServingStatus(ctx context.Context, staffInfo pkg.StaffInfo, status types.StaffServingStatus) error {
+func (s *service) UpdateStaffServingStatus(ctx context.Context, staffInfo pkg.ClientInfo, status types.StaffServingStatus) error {
 	now := time.Now().UTC()
 
 	params := model.UpdateStaffServingStatusParams{
@@ -100,16 +100,16 @@ func (s *service) UpdateStaffServingStatus(ctx context.Context, staffInfo pkg.St
 
 	payload, _ := json.Marshal(event)
 
-	newStaffInfo := pkg.StaffInfo{
+	newClientInfo := pkg.ClientInfo{
 		ID:            staffInfo.ID,
-		Type:          pkg.WsClientTypeStaff,
+		Type:          pkg.ClientTypeStaff,
 		Name:          staffInfo.Name,
 		Username:      staffInfo.Username,
 		ServingStatus: status,
 		Token:         staffInfo.Token,
 	}
 
-	result, err := json.Marshal(newStaffInfo)
+	result, err := json.Marshal(newClientInfo)
 	if err != nil {
 		return err
 	}

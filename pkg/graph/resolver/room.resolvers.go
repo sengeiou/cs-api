@@ -5,12 +5,13 @@ package resolver
 
 import (
 	"context"
+	"cs-api/pkg"
 	"cs-api/pkg/graph/converter"
 	"errors"
 )
 
 func (r *mutationResolver) AcceptRoom(ctx context.Context, id int64) (bool, error) {
-	staffInfo, err := r.authSvc.GetStaffInfo(ctx)
+	staffInfo, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}
@@ -23,7 +24,7 @@ func (r *mutationResolver) AcceptRoom(ctx context.Context, id int64) (bool, erro
 }
 
 func (r *mutationResolver) CloseRoom(ctx context.Context, input converter.CloseRoomInput) (bool, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}
@@ -36,7 +37,7 @@ func (r *mutationResolver) CloseRoom(ctx context.Context, input converter.CloseR
 }
 
 func (r *mutationResolver) TransferRoom(ctx context.Context, input converter.TransferRoomInput) (bool, error) {
-	staffInfo, err := r.authSvc.GetStaffInfo(ctx)
+	staffInfo, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}
@@ -53,7 +54,7 @@ func (r *mutationResolver) TransferRoom(ctx context.Context, input converter.Tra
 }
 
 func (r *queryResolver) ListStaffRoom(ctx context.Context, filter converter.ListStaffRoomInput, pagination converter.PaginationInput) (*converter.ListStaffRoomResp, error) {
-	staffInfo, err := r.authSvc.GetStaffInfo(ctx)
+	staffInfo, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return nil, err
 	}
@@ -72,7 +73,7 @@ func (r *queryResolver) ListStaffRoom(ctx context.Context, filter converter.List
 }
 
 func (r *queryResolver) ListRoom(ctx context.Context, filter converter.ListRoomInput, pagination converter.PaginationInput) (*converter.ListRoomResp, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return nil, err
 	}

@@ -13,7 +13,7 @@ import (
 
 type StaffClient struct {
 	ID            int64
-	Type          pkg.WsClientType
+	Type          pkg.ClientType
 	Name          string
 	Socket        *websocket.Conn
 	SendChan      chan []byte // 欲傳送的data
@@ -33,7 +33,7 @@ func (sc *StaffClient) GetName() string {
 	return sc.Name
 }
 
-func (sc *StaffClient) GetType() pkg.WsClientType {
+func (sc *StaffClient) GetType() pkg.ClientType {
 	return sc.Type
 }
 
@@ -110,7 +110,7 @@ func (sc *StaffClient) Reset(clientInfo pkg.ClientInfo, manager *ClientManager) 
 	}
 
 	sc.ID = clientInfo.ID
-	sc.Type = pkg.WsClientTypeStaff
+	sc.Type = pkg.ClientTypeStaff
 	sc.Name = clientInfo.Name
 	sc.Socket = clientInfo.Conn
 	sc.SendChan = make(chan []byte)

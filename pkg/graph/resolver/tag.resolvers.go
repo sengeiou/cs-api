@@ -6,12 +6,13 @@ package resolver
 import (
 	"context"
 	"cs-api/db/model"
+	"cs-api/pkg"
 	"cs-api/pkg/graph/converter"
 	"time"
 )
 
 func (r *mutationResolver) CreateTag(ctx context.Context, input converter.CreateTagInput) (bool, error) {
-	staffInfo, err := r.authSvc.GetStaffInfo(ctx)
+	staffInfo, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}
@@ -26,7 +27,7 @@ func (r *mutationResolver) CreateTag(ctx context.Context, input converter.Create
 }
 
 func (r *mutationResolver) UpdateTag(ctx context.Context, input converter.UpdateTagInput) (bool, error) {
-	staffInfo, err := r.authSvc.GetStaffInfo(ctx)
+	staffInfo, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}
@@ -47,7 +48,7 @@ func (r *mutationResolver) UpdateTag(ctx context.Context, input converter.Update
 }
 
 func (r *mutationResolver) DeleteTag(ctx context.Context, id int64) (bool, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}
@@ -60,7 +61,7 @@ func (r *mutationResolver) DeleteTag(ctx context.Context, id int64) (bool, error
 }
 
 func (r *queryResolver) ListTag(ctx context.Context, filter converter.ListTagInput, pagination converter.PaginationInput) (*converter.ListTagResp, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +80,7 @@ func (r *queryResolver) ListTag(ctx context.Context, filter converter.ListTagInp
 }
 
 func (r *queryResolver) GetTag(ctx context.Context, id int64) (*converter.GetTagResp, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return nil, err
 	}

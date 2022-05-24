@@ -5,12 +5,13 @@ package resolver
 
 import (
 	"context"
+	"cs-api/pkg"
 	"cs-api/pkg/graph/converter"
 	"cs-api/pkg/types"
 )
 
 func (r *mutationResolver) UpdateCsConfig(ctx context.Context, input converter.UpdateCsConfigInput) (bool, error) {
-	staffInfo, err := r.authSvc.GetStaffInfo(ctx)
+	staffInfo, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return false, err
 	}
@@ -29,7 +30,7 @@ func (r *mutationResolver) UpdateCsConfig(ctx context.Context, input converter.U
 }
 
 func (r *queryResolver) GetCsConfig(ctx context.Context) (*converter.GetCsConfigResp, error) {
-	_, err := r.authSvc.GetStaffInfo(ctx)
+	_, err := r.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
 	if err != nil {
 		return nil, err
 	}
