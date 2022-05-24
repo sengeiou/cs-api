@@ -13,6 +13,7 @@ import (
 )
 
 type Handler struct {
+	authSvc iface.IAuthService
 	roomSvc iface.IRoomService
 	msgSvc  iface.IMessageService
 	redis   iface2.IRedis
@@ -32,6 +33,7 @@ var Module = fx.Options(
 type Params struct {
 	fx.In
 
+	AuthSvc iface.IAuthService
 	RoomSvc iface.IRoomService
 	MsgSvc  iface.IMessageService
 	Redis   iface2.IRedis
@@ -41,6 +43,7 @@ type Params struct {
 
 func NewHandler(p Params) *Handler {
 	return &Handler{
+		authSvc: p.AuthSvc,
 		roomSvc: p.RoomSvc,
 		msgSvc:  p.MsgSvc,
 		redis:   p.Redis,
@@ -50,6 +53,7 @@ func NewHandler(p Params) *Handler {
 }
 
 func InitHandler(engine *gin.Engine, h *Handler) {
+	engine.POST("/api/auth/login", h.Login)
 	engine.GET("/api/member/message/list", CheckMemberToken(h), h.ListRoomMessage)
 	engine.POST("/api/member/room/create", h.CreateRoom)
 	engine.POST("/api/member/room/score", CheckMemberToken(h), h.UpdateRoomScore)

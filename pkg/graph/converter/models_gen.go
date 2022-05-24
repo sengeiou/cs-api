@@ -251,17 +251,6 @@ type ListTagResp struct {
 	Tags       []*Tag      `json:"tags"`
 }
 
-type LoginInput struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
-
-type LoginResp struct {
-	StaffID  int64  `json:"staffID"`
-	Username string `json:"username"`
-	Token    string `json:"token"`
-}
-
 type Message struct {
 	ID          string             `json:"id"`
 	MessageType MessageType        `json:"messageType"`

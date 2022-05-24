@@ -5,23 +5,7 @@ package resolver
 
 import (
 	"context"
-	"cs-api/pkg/graph/converter"
 )
-
-func (r *mutationResolver) Login(ctx context.Context, input converter.LoginInput) (*converter.LoginResp, error) {
-	staffInfo, err := r.authSvc.Login(ctx, input.Username, input.Password)
-	if err != nil {
-		return nil, err
-	}
-
-	resp := &converter.LoginResp{
-		StaffID:  staffInfo.ID,
-		Username: staffInfo.Username,
-		Token:    staffInfo.Token,
-	}
-
-	return resp, nil
-}
 
 func (r *mutationResolver) Logout(ctx context.Context) (bool, error) {
 	userInfo, err := r.authSvc.GetStaffInfo(ctx)

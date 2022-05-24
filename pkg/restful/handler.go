@@ -7,11 +7,39 @@ import (
 	"cs-api/pkg/graph/converter"
 	"encoding/json"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"github.com/AndySu1021/go-util/errors"
 	ginTool "github.com/AndySu1021/go-util/gin"
+	"github.com/gin-gonic/gin"
 	"time"
 )
+
+type LoginParams struct {
+	Username string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
+func (h *Handler) Login(c *gin.Context) {
+	var err error
+
+	var params LoginParams
+	if err = c.ShouldBindJSON(&params); err != nil {
+		ginTool.Error(c, errors.ErrorValidation)
+		return
+	}
+
+	ctx := c.Request.Context()
+	staffInfo, err := h.authSvc.Login(ctx, params.Username, params.Password)
+	if err != nil {
+		ginTool.Error(c, err)
+		return
+	}
+
+	ginTool.SuccessWithData(c, gin.H{
+		"staffID":  staffInfo.ID,
+		"username": staffInfo.Username,
+		"token":    staffInfo.Token,
+	})
+}
 
 func (h *Handler) ListRoomMessage(c *gin.Context) {
 	var err error
