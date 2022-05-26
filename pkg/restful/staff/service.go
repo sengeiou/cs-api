@@ -4,12 +4,19 @@ import (
 	"context"
 	"cs-api/db/model"
 	"cs-api/pkg"
+	iface "cs-api/pkg/interface"
 	"cs-api/pkg/types"
 	"database/sql"
 	"encoding/json"
 	"errors"
+	ifaceTool "github.com/AndySu1021/go-util/interface"
 	"time"
 )
+
+type service struct {
+	redis ifaceTool.IRedis
+	repo  iface.IRepository
+}
 
 func (s *service) ListStaff(ctx context.Context, params model.ListStaffParams, filterParams types.FilterStaffParams) (staffs []model.ListStaffRow, count int64, err error) {
 	staffs = make([]model.ListStaffRow, 0)
@@ -126,4 +133,11 @@ func (s *service) UpdateStaffServingStatus(ctx context.Context, staffInfo pkg.Cl
 
 func (s *service) ListAvailableStaff(ctx context.Context, staffId int64) ([]model.Staff, error) {
 	return s.repo.ListAvailableStaff(ctx, staffId)
+}
+
+func NewService(redis ifaceTool.IRedis, repo iface.IRepository) iface.IStaffService {
+	return &service{
+		redis: redis,
+		repo:  repo,
+	}
 }

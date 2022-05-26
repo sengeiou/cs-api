@@ -67,14 +67,6 @@ type ComplexityRoot struct {
 		FastMessage func(childComplexity int) int
 	}
 
-	GetStaffResp struct {
-		Staff func(childComplexity int) int
-	}
-
-	ListAvailableStaffResp struct {
-		Staffs func(childComplexity int) int
-	}
-
 	ListFastMessageCategoryResp struct {
 		Categories func(childComplexity int) int
 	}
@@ -102,11 +94,6 @@ type ComplexityRoot struct {
 		Rooms      func(childComplexity int) int
 	}
 
-	ListStaffResp struct {
-		Pagination func(childComplexity int) int
-		Staffs     func(childComplexity int) int
-	}
-
 	ListStaffRoomResp struct {
 		Pagination func(childComplexity int) int
 		Rooms      func(childComplexity int) int
@@ -132,15 +119,10 @@ type ComplexityRoot struct {
 		CloseRoom                 func(childComplexity int, input converter.CloseRoomInput) int
 		CreateFastMessage         func(childComplexity int, input converter.CreateFastMessageInput) int
 		CreateFastMessageCategory func(childComplexity int, input converter.CreateFastMessageCategoryInput) int
-		CreateStaff               func(childComplexity int, input converter.CreateStaffInput) int
 		DeleteFastMessage         func(childComplexity int, id int64) int
-		DeleteStaff               func(childComplexity int, id int64) int
 		TransferRoom              func(childComplexity int, input converter.TransferRoomInput) int
 		UpdateFastMessage         func(childComplexity int, input converter.UpdateFastMessageInput) int
 		UpdateRoomScore           func(childComplexity int, score int64) int
-		UpdateStaff               func(childComplexity int, input converter.UpdateStaffInput) int
-		UpdateStaffAvatar         func(childComplexity int, avatar string) int
-		UpdateStaffServingStatus  func(childComplexity int, servingStatus converter.StaffServingStatus) int
 		Upload                    func(childComplexity int, file graphql.Upload) int
 	}
 
@@ -152,15 +134,12 @@ type ComplexityRoot struct {
 
 	Query struct {
 		GetFastMessage          func(childComplexity int, id int64) int
-		GetStaff                func(childComplexity int, id int64) int
-		ListAvailableStaff      func(childComplexity int) int
 		ListFastMessage         func(childComplexity int, filter converter.ListFastMessageInput, pagination converter.PaginationInput) int
 		ListFastMessageCategory func(childComplexity int) int
 		ListFastMessageGroup    func(childComplexity int) int
 		ListMessage             func(childComplexity int, filter converter.ListMessageInput, pagination converter.PaginationInput) int
 		ListRoom                func(childComplexity int, filter converter.ListRoomInput, pagination converter.PaginationInput) int
 		ListRoomMessage         func(childComplexity int, filter converter.ListRoomMessageInput) int
-		ListStaff               func(childComplexity int, filter converter.ListStaffInput, pagination converter.PaginationInput) int
 		ListStaffRoom           func(childComplexity int, filter converter.ListStaffRoomInput, pagination converter.PaginationInput) int
 	}
 
@@ -172,18 +151,6 @@ type ComplexityRoot struct {
 		StartTime  func(childComplexity int) int
 		Status     func(childComplexity int) int
 		TagName    func(childComplexity int) int
-	}
-
-	Staff struct {
-		Avatar        func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Name          func(childComplexity int) int
-		Permissions   func(childComplexity int) int
-		Role          func(childComplexity int) int
-		RoleID        func(childComplexity int) int
-		ServingStatus func(childComplexity int) int
-		Status        func(childComplexity int) int
-		Username      func(childComplexity int) int
 	}
 }
 
@@ -197,11 +164,6 @@ type MutationResolver interface {
 	CloseRoom(ctx context.Context, input converter.CloseRoomInput) (bool, error)
 	TransferRoom(ctx context.Context, input converter.TransferRoomInput) (bool, error)
 	UpdateRoomScore(ctx context.Context, score int64) (bool, error)
-	CreateStaff(ctx context.Context, input converter.CreateStaffInput) (bool, error)
-	UpdateStaff(ctx context.Context, input converter.UpdateStaffInput) (bool, error)
-	DeleteStaff(ctx context.Context, id int64) (bool, error)
-	UpdateStaffServingStatus(ctx context.Context, servingStatus converter.StaffServingStatus) (bool, error)
-	UpdateStaffAvatar(ctx context.Context, avatar string) (bool, error)
 }
 type QueryResolver interface {
 	ListFastMessage(ctx context.Context, filter converter.ListFastMessageInput, pagination converter.PaginationInput) (*converter.ListFastMessageResp, error)
@@ -212,9 +174,6 @@ type QueryResolver interface {
 	ListMessage(ctx context.Context, filter converter.ListMessageInput, pagination converter.PaginationInput) (*converter.ListMessageResp, error)
 	ListStaffRoom(ctx context.Context, filter converter.ListStaffRoomInput, pagination converter.PaginationInput) (*converter.ListStaffRoomResp, error)
 	ListRoom(ctx context.Context, filter converter.ListRoomInput, pagination converter.PaginationInput) (*converter.ListRoomResp, error)
-	ListStaff(ctx context.Context, filter converter.ListStaffInput, pagination converter.PaginationInput) (*converter.ListStaffResp, error)
-	ListAvailableStaff(ctx context.Context) (*converter.ListAvailableStaffResp, error)
-	GetStaff(ctx context.Context, id int64) (*converter.GetStaffResp, error)
 }
 
 type executableSchema struct {
@@ -309,20 +268,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.GetFastMessageResp.FastMessage(childComplexity), true
 
-	case "GetStaffResp.staff":
-		if e.complexity.GetStaffResp.Staff == nil {
-			break
-		}
-
-		return e.complexity.GetStaffResp.Staff(childComplexity), true
-
-	case "ListAvailableStaffResp.staffs":
-		if e.complexity.ListAvailableStaffResp.Staffs == nil {
-			break
-		}
-
-		return e.complexity.ListAvailableStaffResp.Staffs(childComplexity), true
-
 	case "ListFastMessageCategoryResp.categories":
 		if e.complexity.ListFastMessageCategoryResp.Categories == nil {
 			break
@@ -385,20 +330,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ListRoomResp.Rooms(childComplexity), true
-
-	case "ListStaffResp.pagination":
-		if e.complexity.ListStaffResp.Pagination == nil {
-			break
-		}
-
-		return e.complexity.ListStaffResp.Pagination(childComplexity), true
-
-	case "ListStaffResp.staffs":
-		if e.complexity.ListStaffResp.Staffs == nil {
-			break
-		}
-
-		return e.complexity.ListStaffResp.Staffs(childComplexity), true
 
 	case "ListStaffRoomResp.pagination":
 		if e.complexity.ListStaffRoomResp.Pagination == nil {
@@ -525,18 +456,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateFastMessageCategory(childComplexity, args["input"].(converter.CreateFastMessageCategoryInput)), true
 
-	case "Mutation.createStaff":
-		if e.complexity.Mutation.CreateStaff == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createStaff_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateStaff(childComplexity, args["input"].(converter.CreateStaffInput)), true
-
 	case "Mutation.deleteFastMessage":
 		if e.complexity.Mutation.DeleteFastMessage == nil {
 			break
@@ -548,18 +467,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.DeleteFastMessage(childComplexity, args["id"].(int64)), true
-
-	case "Mutation.deleteStaff":
-		if e.complexity.Mutation.DeleteStaff == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteStaff_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.DeleteStaff(childComplexity, args["id"].(int64)), true
 
 	case "Mutation.transferRoom":
 		if e.complexity.Mutation.TransferRoom == nil {
@@ -596,42 +503,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.UpdateRoomScore(childComplexity, args["score"].(int64)), true
-
-	case "Mutation.updateStaff":
-		if e.complexity.Mutation.UpdateStaff == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateStaff_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.UpdateStaff(childComplexity, args["input"].(converter.UpdateStaffInput)), true
-
-	case "Mutation.updateStaffAvatar":
-		if e.complexity.Mutation.UpdateStaffAvatar == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateStaffAvatar_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.UpdateStaffAvatar(childComplexity, args["avatar"].(string)), true
-
-	case "Mutation.updateStaffServingStatus":
-		if e.complexity.Mutation.UpdateStaffServingStatus == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateStaffServingStatus_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.UpdateStaffServingStatus(childComplexity, args["servingStatus"].(converter.StaffServingStatus)), true
 
 	case "Mutation.upload":
 		if e.complexity.Mutation.Upload == nil {
@@ -677,25 +548,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.GetFastMessage(childComplexity, args["id"].(int64)), true
-
-	case "Query.getStaff":
-		if e.complexity.Query.GetStaff == nil {
-			break
-		}
-
-		args, err := ec.field_Query_getStaff_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.GetStaff(childComplexity, args["id"].(int64)), true
-
-	case "Query.listAvailableStaff":
-		if e.complexity.Query.ListAvailableStaff == nil {
-			break
-		}
-
-		return e.complexity.Query.ListAvailableStaff(childComplexity), true
 
 	case "Query.listFastMessage":
 		if e.complexity.Query.ListFastMessage == nil {
@@ -759,18 +611,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.ListRoomMessage(childComplexity, args["filter"].(converter.ListRoomMessageInput)), true
 
-	case "Query.listStaff":
-		if e.complexity.Query.ListStaff == nil {
-			break
-		}
-
-		args, err := ec.field_Query_listStaff_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.ListStaff(childComplexity, args["filter"].(converter.ListStaffInput), args["pagination"].(converter.PaginationInput)), true
-
 	case "Query.listStaffRoom":
 		if e.complexity.Query.ListStaffRoom == nil {
 			break
@@ -831,69 +671,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Room.TagName(childComplexity), true
-
-	case "Staff.avatar":
-		if e.complexity.Staff.Avatar == nil {
-			break
-		}
-
-		return e.complexity.Staff.Avatar(childComplexity), true
-
-	case "Staff.id":
-		if e.complexity.Staff.ID == nil {
-			break
-		}
-
-		return e.complexity.Staff.ID(childComplexity), true
-
-	case "Staff.name":
-		if e.complexity.Staff.Name == nil {
-			break
-		}
-
-		return e.complexity.Staff.Name(childComplexity), true
-
-	case "Staff.permissions":
-		if e.complexity.Staff.Permissions == nil {
-			break
-		}
-
-		return e.complexity.Staff.Permissions(childComplexity), true
-
-	case "Staff.role":
-		if e.complexity.Staff.Role == nil {
-			break
-		}
-
-		return e.complexity.Staff.Role(childComplexity), true
-
-	case "Staff.roleID":
-		if e.complexity.Staff.RoleID == nil {
-			break
-		}
-
-		return e.complexity.Staff.RoleID(childComplexity), true
-
-	case "Staff.servingStatus":
-		if e.complexity.Staff.ServingStatus == nil {
-			break
-		}
-
-		return e.complexity.Staff.ServingStatus(childComplexity), true
-
-	case "Staff.status":
-		if e.complexity.Staff.Status == nil {
-			break
-		}
-
-		return e.complexity.Staff.Status(childComplexity), true
-
-	case "Staff.username":
-		if e.complexity.Staff.Username == nil {
-			break
-		}
-
-		return e.complexity.Staff.Username(childComplexity), true
 
 	}
 	return 0, false
@@ -1187,74 +964,6 @@ enum Status {
     Enabled
     Disabled
 }`, BuiltIn: false},
-	{Name: "pkg/graph/schema/staff.graphqls", Input: `type Staff {
-    id: Int64!
-    roleID: Int64!
-    role: String!
-    permissions: [String!]!
-    name: String!
-    username: String!
-    status: Status!
-    servingStatus: StaffServingStatus!
-    avatar: String!
-}
-
-input ListStaffInput {
-    name: String!
-    status: Status!
-    servingStatus: StaffServingStatus!
-}
-
-type ListStaffResp {
-    pagination: Pagination!
-    staffs: [Staff]!
-}
-
-type ListAvailableStaffResp {
-    staffs: [Staff]!
-}
-
-type GetStaffResp {
-    staff: Staff!
-}
-
-extend type Query {
-    listStaff(filter: ListStaffInput!, pagination: PaginationInput!): ListStaffResp!
-    """獲取可轉接的客服"""
-    listAvailableStaff: ListAvailableStaffResp!
-    getStaff(id: Int64!): GetStaffResp!
-}
-
-input CreateStaffInput {
-    roleID: Int64!
-    name: String!
-    username: String!
-    password: String!
-    status: Status!
-}
-
-input UpdateStaffInput {
-    id: Int64!
-    roleID: Int64!
-    name: String!
-    password: String
-    status: Status!
-}
-
-enum StaffServingStatus {
-    All
-    Closed
-    Serving
-    Pending
-}
-
-extend type Mutation {
-    createStaff(input: CreateStaffInput!): Boolean!
-    updateStaff(input: UpdateStaffInput!): Boolean!
-    deleteStaff(id: Int64!): Boolean!
-    updateStaffServingStatus(servingStatus: StaffServingStatus!): Boolean!
-    updateStaffAvatar(avatar: String!): Boolean!
-}`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
@@ -1322,37 +1031,7 @@ func (ec *executionContext) field_Mutation_createFastMessage_args(ctx context.Co
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_createStaff_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 converter.CreateStaffInput
-	if tmp, ok := rawArgs["input"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateStaffInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐCreateStaffInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["input"] = arg0
-	return args, nil
-}
-
 func (ec *executionContext) field_Mutation_deleteFastMessage_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 int64
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNInt642int64(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["id"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_deleteStaff_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 int64
@@ -1412,51 +1091,6 @@ func (ec *executionContext) field_Mutation_updateRoomScore_args(ctx context.Cont
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_updateStaffAvatar_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["avatar"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("avatar"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["avatar"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_updateStaffServingStatus_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 converter.StaffServingStatus
-	if tmp, ok := rawArgs["servingStatus"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("servingStatus"))
-		arg0, err = ec.unmarshalNStaffServingStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐStaffServingStatus(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["servingStatus"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_updateStaff_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 converter.UpdateStaffInput
-	if tmp, ok := rawArgs["input"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNUpdateStaffInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐUpdateStaffInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["input"] = arg0
-	return args, nil
-}
-
 func (ec *executionContext) field_Mutation_upload_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -1488,21 +1122,6 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 }
 
 func (ec *executionContext) field_Query_getFastMessage_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 int64
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNInt642int64(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["id"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_getStaff_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 int64
@@ -1611,30 +1230,6 @@ func (ec *executionContext) field_Query_listStaffRoom_args(ctx context.Context, 
 	if tmp, ok := rawArgs["filter"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
 		arg0, err = ec.unmarshalNListStaffRoomInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListStaffRoomInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["filter"] = arg0
-	var arg1 converter.PaginationInput
-	if tmp, ok := rawArgs["pagination"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pagination"))
-		arg1, err = ec.unmarshalNPaginationInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐPaginationInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["pagination"] = arg1
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_listStaff_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 converter.ListStaffInput
-	if tmp, ok := rawArgs["filter"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
-		arg0, err = ec.unmarshalNListStaffInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListStaffInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2072,76 +1667,6 @@ func (ec *executionContext) _GetFastMessageResp_fastMessage(ctx context.Context,
 	return ec.marshalNFastMessage2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐFastMessage(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _GetStaffResp_staff(ctx context.Context, field graphql.CollectedField, obj *converter.GetStaffResp) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "GetStaffResp",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Staff, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*converter.Staff)
-	fc.Result = res
-	return ec.marshalNStaff2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐStaff(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _ListAvailableStaffResp_staffs(ctx context.Context, field graphql.CollectedField, obj *converter.ListAvailableStaffResp) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "ListAvailableStaffResp",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Staffs, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.([]*converter.Staff)
-	fc.Result = res
-	return ec.marshalNStaff2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐStaff(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _ListFastMessageCategoryResp_categories(ctx context.Context, field graphql.CollectedField, obj *converter.ListFastMessageCategoryResp) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -2455,76 +1980,6 @@ func (ec *executionContext) _ListRoomResp_rooms(ctx context.Context, field graph
 	res := resTmp.([]*converter.Room)
 	fc.Result = res
 	return ec.marshalNRoom2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐRoom(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _ListStaffResp_pagination(ctx context.Context, field graphql.CollectedField, obj *converter.ListStaffResp) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "ListStaffResp",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Pagination, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*converter.Pagination)
-	fc.Result = res
-	return ec.marshalNPagination2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐPagination(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _ListStaffResp_staffs(ctx context.Context, field graphql.CollectedField, obj *converter.ListStaffResp) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "ListStaffResp",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Staffs, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.([]*converter.Staff)
-	fc.Result = res
-	return ec.marshalNStaff2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐStaff(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _ListStaffRoomResp_pagination(ctx context.Context, field graphql.CollectedField, obj *converter.ListStaffRoomResp) (ret graphql.Marshaler) {
@@ -3284,216 +2739,6 @@ func (ec *executionContext) _Mutation_updateRoomScore(ctx context.Context, field
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Mutation_createStaff(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_createStaff_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateStaff(rctx, args["input"].(converter.CreateStaffInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(bool)
-	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Mutation_updateStaff(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_updateStaff_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateStaff(rctx, args["input"].(converter.UpdateStaffInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(bool)
-	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Mutation_deleteStaff(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_deleteStaff_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().DeleteStaff(rctx, args["id"].(int64))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(bool)
-	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Mutation_updateStaffServingStatus(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_updateStaffServingStatus_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateStaffServingStatus(rctx, args["servingStatus"].(converter.StaffServingStatus))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(bool)
-	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Mutation_updateStaffAvatar(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_updateStaffAvatar_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateStaffAvatar(rctx, args["avatar"].(string))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(bool)
-	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _Pagination_page(ctx context.Context, field graphql.CollectedField, obj *converter.Pagination) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -3921,125 +3166,6 @@ func (ec *executionContext) _Query_listRoom(ctx context.Context, field graphql.C
 	return ec.marshalNListRoomResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐListRoomResp(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Query_listStaff(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Query_listStaff_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ListStaff(rctx, args["filter"].(converter.ListStaffInput), args["pagination"].(converter.PaginationInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*converter.ListStaffResp)
-	fc.Result = res
-	return ec.marshalNListStaffResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐListStaffResp(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Query_listAvailableStaff(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ListAvailableStaff(rctx)
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*converter.ListAvailableStaffResp)
-	fc.Result = res
-	return ec.marshalNListAvailableStaffResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐListAvailableStaffResp(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Query_getStaff(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Query_getStaff_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetStaff(rctx, args["id"].(int64))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*converter.GetStaffResp)
-	fc.Result = res
-	return ec.marshalNGetStaffResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐGetStaffResp(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -4354,321 +3480,6 @@ func (ec *executionContext) _Room_status(ctx context.Context, field graphql.Coll
 	res := resTmp.(converter.RoomStatus)
 	fc.Result = res
 	return ec.marshalNRoomStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐRoomStatus(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Staff_id(ctx context.Context, field graphql.CollectedField, obj *converter.Staff) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Staff",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int64)
-	fc.Result = res
-	return ec.marshalNInt642int64(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Staff_roleID(ctx context.Context, field graphql.CollectedField, obj *converter.Staff) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Staff",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.RoleID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int64)
-	fc.Result = res
-	return ec.marshalNInt642int64(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Staff_role(ctx context.Context, field graphql.CollectedField, obj *converter.Staff) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Staff",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Role, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Staff_permissions(ctx context.Context, field graphql.CollectedField, obj *converter.Staff) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Staff",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Permissions, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.([]string)
-	fc.Result = res
-	return ec.marshalNString2ᚕstringᚄ(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Staff_name(ctx context.Context, field graphql.CollectedField, obj *converter.Staff) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Staff",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Name, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Staff_username(ctx context.Context, field graphql.CollectedField, obj *converter.Staff) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Staff",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Username, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Staff_status(ctx context.Context, field graphql.CollectedField, obj *converter.Staff) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Staff",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Status, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(converter.Status)
-	fc.Result = res
-	return ec.marshalNStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐStatus(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Staff_servingStatus(ctx context.Context, field graphql.CollectedField, obj *converter.Staff) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Staff",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ServingStatus, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(converter.StaffServingStatus)
-	fc.Result = res
-	return ec.marshalNStaffServingStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐStaffServingStatus(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Staff_avatar(ctx context.Context, field graphql.CollectedField, obj *converter.Staff) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Staff",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Avatar, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) ___Directive_name(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) (ret graphql.Marshaler) {
@@ -5958,61 +4769,6 @@ func (ec *executionContext) unmarshalInputCreateFastMessageInput(ctx context.Con
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputCreateStaffInput(ctx context.Context, obj interface{}) (converter.CreateStaffInput, error) {
-	var it converter.CreateStaffInput
-	asMap := map[string]interface{}{}
-	for k, v := range obj.(map[string]interface{}) {
-		asMap[k] = v
-	}
-
-	for k, v := range asMap {
-		switch k {
-		case "roleID":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("roleID"))
-			it.RoleID, err = ec.unmarshalNInt642int64(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "name":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-			it.Name, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "username":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("username"))
-			it.Username, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "password":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
-			it.Password, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "status":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-			it.Status, err = ec.unmarshalNStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐStatus(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		}
-	}
-
-	return it, nil
-}
-
 func (ec *executionContext) unmarshalInputListFastMessageInput(ctx context.Context, obj interface{}) (converter.ListFastMessageInput, error) {
 	var it converter.ListFastMessageInput
 	asMap := map[string]interface{}{}
@@ -6161,45 +4917,6 @@ func (ec *executionContext) unmarshalInputListRoomMessageInput(ctx context.Conte
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputListStaffInput(ctx context.Context, obj interface{}) (converter.ListStaffInput, error) {
-	var it converter.ListStaffInput
-	asMap := map[string]interface{}{}
-	for k, v := range obj.(map[string]interface{}) {
-		asMap[k] = v
-	}
-
-	for k, v := range asMap {
-		switch k {
-		case "name":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-			it.Name, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "status":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-			it.Status, err = ec.unmarshalNStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐStatus(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "servingStatus":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("servingStatus"))
-			it.ServingStatus, err = ec.unmarshalNStaffServingStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐStaffServingStatus(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		}
-	}
-
-	return it, nil
-}
-
 func (ec *executionContext) unmarshalInputListStaffRoomInput(ctx context.Context, obj interface{}) (converter.ListStaffRoomInput, error) {
 	var it converter.ListStaffRoomInput
 	asMap := map[string]interface{}{}
@@ -6323,61 +5040,6 @@ func (ec *executionContext) unmarshalInputUpdateFastMessageInput(ctx context.Con
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("content"))
 			it.Content, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "status":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-			it.Status, err = ec.unmarshalNStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐStatus(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		}
-	}
-
-	return it, nil
-}
-
-func (ec *executionContext) unmarshalInputUpdateStaffInput(ctx context.Context, obj interface{}) (converter.UpdateStaffInput, error) {
-	var it converter.UpdateStaffInput
-	asMap := map[string]interface{}{}
-	for k, v := range obj.(map[string]interface{}) {
-		asMap[k] = v
-	}
-
-	for k, v := range asMap {
-		switch k {
-		case "id":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-			it.ID, err = ec.unmarshalNInt642int64(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "roleID":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("roleID"))
-			it.RoleID, err = ec.unmarshalNInt642int64(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "name":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-			it.Name, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "password":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
-			it.Password, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6594,68 +5256,6 @@ func (ec *executionContext) _GetFastMessageResp(ctx context.Context, sel ast.Sel
 	return out
 }
 
-var getStaffRespImplementors = []string{"GetStaffResp"}
-
-func (ec *executionContext) _GetStaffResp(ctx context.Context, sel ast.SelectionSet, obj *converter.GetStaffResp) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, getStaffRespImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("GetStaffResp")
-		case "staff":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._GetStaffResp_staff(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var listAvailableStaffRespImplementors = []string{"ListAvailableStaffResp"}
-
-func (ec *executionContext) _ListAvailableStaffResp(ctx context.Context, sel ast.SelectionSet, obj *converter.ListAvailableStaffResp) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, listAvailableStaffRespImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("ListAvailableStaffResp")
-		case "staffs":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._ListAvailableStaffResp_staffs(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
 var listFastMessageCategoryRespImplementors = []string{"ListFastMessageCategoryResp"}
 
 func (ec *executionContext) _ListFastMessageCategoryResp(ctx context.Context, sel ast.SelectionSet, obj *converter.ListFastMessageCategoryResp) graphql.Marshaler {
@@ -6854,47 +5454,6 @@ func (ec *executionContext) _ListRoomResp(ctx context.Context, sel ast.Selection
 		case "rooms":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._ListRoomResp_rooms(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var listStaffRespImplementors = []string{"ListStaffResp"}
-
-func (ec *executionContext) _ListStaffResp(ctx context.Context, sel ast.SelectionSet, obj *converter.ListStaffResp) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, listStaffRespImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("ListStaffResp")
-		case "pagination":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._ListStaffResp_pagination(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "staffs":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._ListStaffResp_staffs(ctx, field, obj)
 			}
 
 			out.Values[i] = innerFunc(ctx)
@@ -7189,56 +5748,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "createStaff":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createStaff(ctx, field)
-			}
-
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "updateStaff":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateStaff(ctx, field)
-			}
-
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "deleteStaff":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_deleteStaff(ctx, field)
-			}
-
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "updateStaffServingStatus":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateStaffServingStatus(ctx, field)
-			}
-
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "updateStaffAvatar":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateStaffAvatar(ctx, field)
-			}
-
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -7504,75 +6013,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Concurrently(i, func() graphql.Marshaler {
 				return rrm(innerCtx)
 			})
-		case "listStaff":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_listStaff(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return rrm(innerCtx)
-			})
-		case "listAvailableStaff":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_listAvailableStaff(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return rrm(innerCtx)
-			})
-		case "getStaff":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_getStaff(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return rrm(innerCtx)
-			})
 		case "__type":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Query___type(ctx, field)
@@ -7671,117 +6111,6 @@ func (ec *executionContext) _Room(ctx context.Context, sel ast.SelectionSet, obj
 		case "status":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Room_status(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var staffImplementors = []string{"Staff"}
-
-func (ec *executionContext) _Staff(ctx context.Context, sel ast.SelectionSet, obj *converter.Staff) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, staffImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("Staff")
-		case "id":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Staff_id(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "roleID":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Staff_roleID(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "role":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Staff_role(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "permissions":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Staff_permissions(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "name":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Staff_name(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "username":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Staff_username(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "status":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Staff_status(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "servingStatus":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Staff_servingStatus(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "avatar":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Staff_avatar(ctx, field, obj)
 			}
 
 			out.Values[i] = innerFunc(ctx)
@@ -8263,11 +6592,6 @@ func (ec *executionContext) unmarshalNCreateFastMessageInput2csᚑapiᚋpkgᚋgr
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateStaffInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐCreateStaffInput(ctx context.Context, v interface{}) (converter.CreateStaffInput, error) {
-	res, err := ec.unmarshalInputCreateStaffInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
 func (ec *executionContext) marshalNFastMessage2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐFastMessage(ctx context.Context, sel ast.SelectionSet, v []*converter.FastMessage) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
@@ -8406,20 +6730,6 @@ func (ec *executionContext) marshalNGetFastMessageResp2ᚖcsᚑapiᚋpkgᚋgraph
 	return ec._GetFastMessageResp(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNGetStaffResp2csᚑapiᚋpkgᚋgraphᚋconverterᚐGetStaffResp(ctx context.Context, sel ast.SelectionSet, v converter.GetStaffResp) graphql.Marshaler {
-	return ec._GetStaffResp(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNGetStaffResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐGetStaffResp(ctx context.Context, sel ast.SelectionSet, v *converter.GetStaffResp) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._GetStaffResp(ctx, sel, v)
-}
-
 func (ec *executionContext) unmarshalNInt642int64(ctx context.Context, v interface{}) (int64, error) {
 	res, err := helper.UnmarshalInt64(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -8433,20 +6743,6 @@ func (ec *executionContext) marshalNInt642int64(ctx context.Context, sel ast.Sel
 		}
 	}
 	return res
-}
-
-func (ec *executionContext) marshalNListAvailableStaffResp2csᚑapiᚋpkgᚋgraphᚋconverterᚐListAvailableStaffResp(ctx context.Context, sel ast.SelectionSet, v converter.ListAvailableStaffResp) graphql.Marshaler {
-	return ec._ListAvailableStaffResp(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNListAvailableStaffResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐListAvailableStaffResp(ctx context.Context, sel ast.SelectionSet, v *converter.ListAvailableStaffResp) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._ListAvailableStaffResp(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNListFastMessageCategoryResp2csᚑapiᚋpkgᚋgraphᚋconverterᚐListFastMessageCategoryResp(ctx context.Context, sel ast.SelectionSet, v converter.ListFastMessageCategoryResp) graphql.Marshaler {
@@ -8551,25 +6847,6 @@ func (ec *executionContext) marshalNListRoomResp2ᚖcsᚑapiᚋpkgᚋgraphᚋcon
 		return graphql.Null
 	}
 	return ec._ListRoomResp(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalNListStaffInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListStaffInput(ctx context.Context, v interface{}) (converter.ListStaffInput, error) {
-	res, err := ec.unmarshalInputListStaffInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNListStaffResp2csᚑapiᚋpkgᚋgraphᚋconverterᚐListStaffResp(ctx context.Context, sel ast.SelectionSet, v converter.ListStaffResp) graphql.Marshaler {
-	return ec._ListStaffResp(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNListStaffResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐListStaffResp(ctx context.Context, sel ast.SelectionSet, v *converter.ListStaffResp) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._ListStaffResp(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNListStaffRoomInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListStaffRoomInput(ctx context.Context, v interface{}) (converter.ListStaffRoomInput, error) {
@@ -8712,64 +6989,6 @@ func (ec *executionContext) marshalNRoomStatus2csᚑapiᚋpkgᚋgraphᚋconverte
 	return v
 }
 
-func (ec *executionContext) marshalNStaff2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐStaff(ctx context.Context, sel ast.SelectionSet, v []*converter.Staff) graphql.Marshaler {
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalOStaff2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐStaff(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	return ret
-}
-
-func (ec *executionContext) marshalNStaff2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐStaff(ctx context.Context, sel ast.SelectionSet, v *converter.Staff) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._Staff(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalNStaffServingStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐStaffServingStatus(ctx context.Context, v interface{}) (converter.StaffServingStatus, error) {
-	var res converter.StaffServingStatus
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNStaffServingStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐStaffServingStatus(ctx context.Context, sel ast.SelectionSet, v converter.StaffServingStatus) graphql.Marshaler {
-	return v
-}
-
 func (ec *executionContext) unmarshalNStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐStatus(ctx context.Context, v interface{}) (converter.Status, error) {
 	var res converter.Status
 	err := res.UnmarshalGQL(v)
@@ -8795,38 +7014,6 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) unmarshalNString2ᚕstringᚄ(ctx context.Context, v interface{}) ([]string, error) {
-	var vSlice []interface{}
-	if v != nil {
-		vSlice = graphql.CoerceList(v)
-	}
-	var err error
-	res := make([]string, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNString2string(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
-func (ec *executionContext) marshalNString2ᚕstringᚄ(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
-	ret := make(graphql.Array, len(v))
-	for i := range v {
-		ret[i] = ec.marshalNString2string(ctx, sel, v[i])
-	}
-
-	for _, e := range ret {
-		if e == graphql.Null {
-			return graphql.Null
-		}
-	}
-
-	return ret
-}
-
 func (ec *executionContext) unmarshalNTransferRoomInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐTransferRoomInput(ctx context.Context, v interface{}) (converter.TransferRoomInput, error) {
 	res, err := ec.unmarshalInputTransferRoomInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -8834,11 +7021,6 @@ func (ec *executionContext) unmarshalNTransferRoomInput2csᚑapiᚋpkgᚋgraph�
 
 func (ec *executionContext) unmarshalNUpdateFastMessageInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐUpdateFastMessageInput(ctx context.Context, v interface{}) (converter.UpdateFastMessageInput, error) {
 	res, err := ec.unmarshalInputUpdateFastMessageInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalNUpdateStaffInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐUpdateStaffInput(ctx context.Context, v interface{}) (converter.UpdateStaffInput, error) {
-	res, err := ec.unmarshalInputUpdateStaffInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -9176,13 +7358,6 @@ func (ec *executionContext) marshalORoom2ᚖcsᚑapiᚋpkgᚋgraphᚋconverter�
 		return graphql.Null
 	}
 	return ec._Room(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalOStaff2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐStaff(ctx context.Context, sel ast.SelectionSet, v *converter.Staff) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._Staff(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v interface{}) (*string, error) {

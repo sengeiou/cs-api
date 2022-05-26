@@ -8,6 +8,7 @@ import (
 	"cs-api/pkg/restful/remind"
 	"cs-api/pkg/restful/report"
 	"cs-api/pkg/restful/role"
+	"cs-api/pkg/restful/staff"
 	"cs-api/pkg/restful/tag"
 	"cs-api/pkg/restful/tool"
 	"github.com/gin-gonic/gin"
@@ -31,6 +32,7 @@ var Module = fx.Options(
 	member.Module,
 	cs_config.Module,
 	report.Module,
+	staff.Module,
 )
 
 func InitCommonHandler(engine *gin.Engine) {

@@ -11,6 +11,7 @@ import (
 	model0 "cs-api/pkg/model"
 	types "cs-api/pkg/types"
 	reflect "reflect"
+	time "time"
 
 	gin "github.com/gin-gonic/gin"
 	gomock "github.com/golang/mock/gomock"
@@ -706,7 +707,7 @@ func (m *MockIReportService) EXPECT() *MockIReportServiceMockRecorder {
 }
 
 // DailyGuestReport mocks base method.
-func (m *MockIReportService) DailyGuestReport(ctx context.Context, startDate, endDate string) (map[string]int32, error) {
+func (m *MockIReportService) DailyGuestReport(ctx context.Context, startDate, endDate time.Time) (map[string]int32, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DailyGuestReport", ctx, startDate, endDate)
 	ret0, _ := ret[0].(map[string]int32)
@@ -721,7 +722,7 @@ func (mr *MockIReportServiceMockRecorder) DailyGuestReport(ctx, startDate, endDa
 }
 
 // DailyTagReport mocks base method.
-func (m *MockIReportService) DailyTagReport(ctx context.Context, startDate, endDate string) ([]pkg.DailyTagReportColumn, map[string]map[string]int32, error) {
+func (m *MockIReportService) DailyTagReport(ctx context.Context, startDate, endDate time.Time) ([]pkg.DailyTagReportColumn, map[string]map[string]int32, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DailyTagReport", ctx, startDate, endDate)
 	ret0, _ := ret[0].([]pkg.DailyTagReportColumn)

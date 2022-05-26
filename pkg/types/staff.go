@@ -3,7 +3,8 @@ package types
 type StaffServingStatus int8
 
 const (
-	StaffServingStatusClosed StaffServingStatus = iota + 1
+	StaffServingStatusAll StaffServingStatus = iota
+	StaffServingStatusClosed
 	StaffServingStatusServing
 	StaffServingStatusPending
 )

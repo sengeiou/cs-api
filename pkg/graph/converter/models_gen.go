@@ -24,14 +24,6 @@ type CreateFastMessageInput struct {
 	Status     Status `json:"status"`
 }
 
-type CreateStaffInput struct {
-	RoleID   int64  `json:"roleID"`
-	Name     string `json:"name"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Status   Status `json:"status"`
-}
-
 type FastMessage struct {
 	ID         int64  `json:"id"`
 	Category   string `json:"category"`
@@ -53,14 +45,6 @@ type FastMessageGroupItem struct {
 
 type GetFastMessageResp struct {
 	FastMessage *FastMessage `json:"fastMessage"`
-}
-
-type GetStaffResp struct {
-	Staff *Staff `json:"staff"`
-}
-
-type ListAvailableStaffResp struct {
-	Staffs []*Staff `json:"staffs"`
 }
 
 type ListFastMessageCategoryResp struct {
@@ -113,17 +97,6 @@ type ListRoomResp struct {
 	Rooms      []*Room     `json:"rooms"`
 }
 
-type ListStaffInput struct {
-	Name          string             `json:"name"`
-	Status        Status             `json:"status"`
-	ServingStatus StaffServingStatus `json:"servingStatus"`
-}
-
-type ListStaffResp struct {
-	Pagination *Pagination `json:"pagination"`
-	Staffs     []*Staff    `json:"staffs"`
-}
-
 type ListStaffRoomInput struct {
 	Status RoomStatus `json:"status"`
 }
@@ -169,18 +142,6 @@ type Room struct {
 	Status     RoomStatus `json:"status"`
 }
 
-type Staff struct {
-	ID            int64              `json:"id"`
-	RoleID        int64              `json:"roleID"`
-	Role          string             `json:"role"`
-	Permissions   []string           `json:"permissions"`
-	Name          string             `json:"name"`
-	Username      string             `json:"username"`
-	Status        Status             `json:"status"`
-	ServingStatus StaffServingStatus `json:"servingStatus"`
-	Avatar        string             `json:"avatar"`
-}
-
 type TransferRoomInput struct {
 	ID      int64 `json:"id"`
 	StaffID int64 `json:"staffID"`
@@ -192,14 +153,6 @@ type UpdateFastMessageInput struct {
 	Title      string `json:"title"`
 	Content    string `json:"content"`
 	Status     Status `json:"status"`
-}
-
-type UpdateStaffInput struct {
-	ID       int64   `json:"id"`
-	RoleID   int64   `json:"roleID"`
-	Name     string  `json:"name"`
-	Password *string `json:"password"`
-	Status   Status  `json:"status"`
 }
 
 type ClientType string
@@ -387,51 +340,6 @@ func (e *RoomStatus) UnmarshalGQL(v interface{}) error {
 }
 
 func (e RoomStatus) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
-}
-
-type StaffServingStatus string
-
-const (
-	StaffServingStatusAll     StaffServingStatus = "All"
-	StaffServingStatusClosed  StaffServingStatus = "Closed"
-	StaffServingStatusServing StaffServingStatus = "Serving"
-	StaffServingStatusPending StaffServingStatus = "Pending"
-)
-
-var AllStaffServingStatus = []StaffServingStatus{
-	StaffServingStatusAll,
-	StaffServingStatusClosed,
-	StaffServingStatusServing,
-	StaffServingStatusPending,
-}
-
-func (e StaffServingStatus) IsValid() bool {
-	switch e {
-	case StaffServingStatusAll, StaffServingStatusClosed, StaffServingStatusServing, StaffServingStatusPending:
-		return true
-	}
-	return false
-}
-
-func (e StaffServingStatus) String() string {
-	return string(e)
-}
-
-func (e *StaffServingStatus) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = StaffServingStatus(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid StaffServingStatus", str)
-	}
-	return nil
-}
-
-func (e StaffServingStatus) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
