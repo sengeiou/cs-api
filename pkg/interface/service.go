@@ -53,15 +53,16 @@ type ITagService interface {
 	DeleteTag(ctx context.Context, tagId int64) error
 }
 
-type IFastMessageService interface {
-	ListFastMessage(ctx context.Context, params model.ListFastMessageParams, filterParams types.FilterFastMessageParams) ([]model.ListFastMessageRow, int64, error)
-	GetFastMessage(ctx context.Context, id int64) (model.FastMessage, error)
-	CreateFastMessage(ctx context.Context, params model.CreateFastMessageParams) error
-	UpdateFastMessage(ctx context.Context, params model.UpdateFastMessageParams) error
-	DeleteFastMessage(ctx context.Context, id int64) error
+type IFastReplyService interface {
+	ListFastReply(ctx context.Context, params model.ListFastReplyParams, filterParams types.FilterFastReplyParams) ([]model.ListFastReplyRow, int64, error)
+	GetFastReply(ctx context.Context, id int64) (model.FastReply, error)
+	CreateFastReply(ctx context.Context, params model.CreateFastReplyParams) error
+	UpdateFastReply(ctx context.Context, params model.UpdateFastReplyParams) error
+	DeleteFastReply(ctx context.Context, id int64) error
 	ListCategory(ctx context.Context) ([]model.Constant, error)
-	CreateCategory(ctx context.Context, params model.CreateFastMessageCategoryParams) error
-	ListFastMessageGroup(ctx context.Context) ([]pkg.FastMessageGroupItem, error)
+	CreateCategory(ctx context.Context, params model.CreateFastReplyCategoryParams) error
+	CheckCategory(ctx context.Context, id int64) (interface{}, error)
+	ListFastReplyGroup(ctx context.Context) ([]pkg.FastReplyGroupItem, error)
 }
 
 type IReportService interface {

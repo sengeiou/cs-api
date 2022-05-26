@@ -4,6 +4,7 @@ import (
 	iface "cs-api/pkg/interface"
 	"cs-api/pkg/restful/auth"
 	"cs-api/pkg/restful/cs_config"
+	"cs-api/pkg/restful/fast_reply"
 	"cs-api/pkg/restful/member"
 	"cs-api/pkg/restful/message"
 	"cs-api/pkg/restful/notice"
@@ -39,6 +40,7 @@ var Module = fx.Options(
 	report.Module,
 	staff.Module,
 	message.Module,
+	fast_reply.Module,
 )
 
 func InitCommonHandler(engine *gin.Engine) {

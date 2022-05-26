@@ -12,13 +12,17 @@ FROM constant
 WHERE `type` = 2
   and `key` = 'CsConfig' LIMIT 1;
 
--- name: CreateFastMessageCategory :exec
+-- name: CreateFastReplyCategory :exec
 INSERT INTO constant (`type`, `key`, value, created_by, created_at, updated_by, updated_at)
-VALUES (1, 'FastMessage', ?, ?, ?, ?, ?);
+VALUES (1, 'FastReply', ?, ?, ?, ?, ?);
 
--- name: ListFastMessageCategory :many
+-- name: ListFastReplyCategory :many
 SELECT *
 FROM constant
 WHERE `type` = 1
-  and `key` = 'FastMessage';
+  and `key` = 'FastReply';
 
+-- name: CheckFastReplyCategory :one
+SELECT 1
+FROM constant
+WHERE id = ? LIMIT 1;

@@ -1,1 +1,0 @@
-drop table if exists fast_message;

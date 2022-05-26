@@ -69,15 +69,16 @@ func NewRepository(t *testing.T) iface.IRepository {
 	// Constant
 	mock.EXPECT().GetCsConfig(gomock.Any()).AnyTimes().Return(model.Constant{Value: `{"max_member":5}`}, nil)
 	mock.EXPECT().UpdateCsConfig(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
-	mock.EXPECT().ListFastMessageCategory(gomock.Any()).AnyTimes().Return(make([]model.Constant, 0), nil)
-	mock.EXPECT().CreateFastMessageCategory(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
+	mock.EXPECT().ListFastReplyCategory(gomock.Any()).AnyTimes().Return(make([]model.Constant, 0), nil)
+	mock.EXPECT().CreateFastReplyCategory(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
+	mock.EXPECT().CheckFastReplyCategory(gomock.Any(), gomock.Any()).AnyTimes().Return(1, nil)
 
-	// FastMessage
-	mock.EXPECT().GetFastMessage(gomock.Any(), gomock.Any()).AnyTimes().Return(model.FastMessage{}, nil)
-	mock.EXPECT().CreateFastMessage(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
-	mock.EXPECT().UpdateFastMessage(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
-	mock.EXPECT().DeleteFastMessage(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
-	mock.EXPECT().GetAllAvailableFastMessage(gomock.Any()).AnyTimes().Return([]model.GetAllAvailableFastMessageRow{
+	// FastReply
+	mock.EXPECT().GetFastReply(gomock.Any(), gomock.Any()).AnyTimes().Return(model.FastReply{}, nil)
+	mock.EXPECT().CreateFastReply(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
+	mock.EXPECT().UpdateFastReply(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
+	mock.EXPECT().DeleteFastReply(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
+	mock.EXPECT().GetAllAvailableFastReply(gomock.Any()).AnyTimes().Return([]model.GetAllAvailableFastReplyRow{
 		{
 			CategoryID: 1,
 			Title:      "測試1",

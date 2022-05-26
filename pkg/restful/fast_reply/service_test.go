@@ -1,4 +1,4 @@
-package fast_message
+package fast_reply
 
 import (
 	"context"
@@ -11,20 +11,20 @@ import (
 	"testing"
 )
 
-func Test_service_ListFastMessage(t *testing.T) {
+func Test_service_ListFastReply(t *testing.T) {
 	type fields struct {
 		repo iface.IRepository
 	}
 	type args struct {
 		ctx          context.Context
-		params       model.ListFastMessageParams
-		filterParams types.FilterFastMessageParams
+		params       model.ListFastReplyParams
+		filterParams types.FilterFastReplyParams
 	}
 	tests := []struct {
 		name         string
 		fields       fields
 		args         args
-		wantMessages []model.ListFastMessageRow
+		wantMessages []model.ListFastReplyRow
 		wantCount    int64
 		wantErr      bool
 	}{
@@ -33,10 +33,10 @@ func Test_service_ListFastMessage(t *testing.T) {
 			fields: fields{repo: mock.NewRepository(t)},
 			args: args{
 				ctx:          context.Background(),
-				params:       model.ListFastMessageParams{},
-				filterParams: types.FilterFastMessageParams{},
+				params:       model.ListFastReplyParams{},
+				filterParams: types.FilterFastReplyParams{},
 			},
-			wantMessages: make([]model.ListFastMessageRow, 0),
+			wantMessages: make([]model.ListFastReplyRow, 0),
 			wantCount:    0,
 			wantErr:      false,
 		},
@@ -46,22 +46,22 @@ func Test_service_ListFastMessage(t *testing.T) {
 			s := &service{
 				repo: tt.fields.repo,
 			}
-			gotMessages, gotCount, err := s.ListFastMessage(tt.args.ctx, tt.args.params, tt.args.filterParams)
+			gotMessages, gotCount, err := s.ListFastReply(tt.args.ctx, tt.args.params, tt.args.filterParams)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("ListFastMessage() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("ListFastReply() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(gotMessages, tt.wantMessages) {
-				t.Errorf("ListFastMessage() gotMessages = %v, want %v", gotMessages, tt.wantMessages)
+				t.Errorf("ListFastReply() gotMessages = %v, want %v", gotMessages, tt.wantMessages)
 			}
 			if gotCount != tt.wantCount {
-				t.Errorf("ListFastMessage() gotCount = %v, want %v", gotCount, tt.wantCount)
+				t.Errorf("ListFastReply() gotCount = %v, want %v", gotCount, tt.wantCount)
 			}
 		})
 	}
 }
 
-func Test_service_GetFastMessage(t *testing.T) {
+func Test_service_GetFastReply(t *testing.T) {
 	type fields struct {
 		repo iface.IRepository
 	}
@@ -73,7 +73,7 @@ func Test_service_GetFastMessage(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    model.FastMessage
+		want    model.FastReply
 		wantErr bool
 	}{
 		{
@@ -83,7 +83,7 @@ func Test_service_GetFastMessage(t *testing.T) {
 				ctx: context.Background(),
 				id:  1,
 			},
-			want:    model.FastMessage{},
+			want:    model.FastReply{},
 			wantErr: false,
 		},
 	}
@@ -92,25 +92,25 @@ func Test_service_GetFastMessage(t *testing.T) {
 			s := &service{
 				repo: tt.fields.repo,
 			}
-			got, err := s.GetFastMessage(tt.args.ctx, tt.args.id)
+			got, err := s.GetFastReply(tt.args.ctx, tt.args.id)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("GetFastMessage() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("GetFastReply() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetFastMessage() got = %v, want %v", got, tt.want)
+				t.Errorf("GetFastReply() got = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_service_CreateFastMessage(t *testing.T) {
+func Test_service_CreateFastReply(t *testing.T) {
 	type fields struct {
 		repo iface.IRepository
 	}
 	type args struct {
 		ctx    context.Context
-		params model.CreateFastMessageParams
+		params model.CreateFastReplyParams
 	}
 	tests := []struct {
 		name    string
@@ -123,7 +123,7 @@ func Test_service_CreateFastMessage(t *testing.T) {
 			fields: fields{repo: mock.NewRepository(t)},
 			args: args{
 				ctx:    context.Background(),
-				params: model.CreateFastMessageParams{},
+				params: model.CreateFastReplyParams{},
 			},
 			wantErr: false,
 		},
@@ -133,20 +133,20 @@ func Test_service_CreateFastMessage(t *testing.T) {
 			s := &service{
 				repo: tt.fields.repo,
 			}
-			if err := s.CreateFastMessage(tt.args.ctx, tt.args.params); (err != nil) != tt.wantErr {
-				t.Errorf("CreateFastMessage() error = %v, wantErr %v", err, tt.wantErr)
+			if err := s.CreateFastReply(tt.args.ctx, tt.args.params); (err != nil) != tt.wantErr {
+				t.Errorf("CreateFastReply() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
 }
 
-func Test_service_UpdateFastMessage(t *testing.T) {
+func Test_service_UpdateFastReply(t *testing.T) {
 	type fields struct {
 		repo iface.IRepository
 	}
 	type args struct {
 		ctx    context.Context
-		params model.UpdateFastMessageParams
+		params model.UpdateFastReplyParams
 	}
 	tests := []struct {
 		name    string
@@ -159,7 +159,7 @@ func Test_service_UpdateFastMessage(t *testing.T) {
 			fields: fields{repo: mock.NewRepository(t)},
 			args: args{
 				ctx:    context.Background(),
-				params: model.UpdateFastMessageParams{},
+				params: model.UpdateFastReplyParams{},
 			},
 			wantErr: false,
 		},
@@ -169,14 +169,14 @@ func Test_service_UpdateFastMessage(t *testing.T) {
 			s := &service{
 				repo: tt.fields.repo,
 			}
-			if err := s.UpdateFastMessage(tt.args.ctx, tt.args.params); (err != nil) != tt.wantErr {
-				t.Errorf("UpdateFastMessage() error = %v, wantErr %v", err, tt.wantErr)
+			if err := s.UpdateFastReply(tt.args.ctx, tt.args.params); (err != nil) != tt.wantErr {
+				t.Errorf("UpdateFastReply() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
 }
 
-func Test_service_DeleteFastMessage(t *testing.T) {
+func Test_service_DeleteFastReply(t *testing.T) {
 	type fields struct {
 		repo iface.IRepository
 	}
@@ -205,8 +205,8 @@ func Test_service_DeleteFastMessage(t *testing.T) {
 			s := &service{
 				repo: tt.fields.repo,
 			}
-			if err := s.DeleteFastMessage(tt.args.ctx, tt.args.id); (err != nil) != tt.wantErr {
-				t.Errorf("DeleteFastMessage() error = %v, wantErr %v", err, tt.wantErr)
+			if err := s.DeleteFastReply(tt.args.ctx, tt.args.id); (err != nil) != tt.wantErr {
+				t.Errorf("DeleteFastReply() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
@@ -257,7 +257,7 @@ func Test_service_CreateCategory(t *testing.T) {
 	}
 	type args struct {
 		ctx    context.Context
-		params model.CreateFastMessageCategoryParams
+		params model.CreateFastReplyCategoryParams
 	}
 	tests := []struct {
 		name    string
@@ -270,7 +270,7 @@ func Test_service_CreateCategory(t *testing.T) {
 			fields: fields{repo: mock.NewRepository(t)},
 			args: args{
 				ctx:    context.Background(),
-				params: model.CreateFastMessageCategoryParams{},
+				params: model.CreateFastReplyCategoryParams{},
 			},
 			wantErr: false,
 		},
@@ -287,7 +287,7 @@ func Test_service_CreateCategory(t *testing.T) {
 	}
 }
 
-func Test_service_ListFastMessageGroup(t *testing.T) {
+func Test_service_ListFastReplyGroup(t *testing.T) {
 	type fields struct {
 		repo iface.IRepository
 	}
@@ -298,20 +298,20 @@ func Test_service_ListFastMessageGroup(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    []pkg.FastMessageGroupItem
+		want    []pkg.FastReplyGroupItem
 		wantErr bool
 	}{
 		{
 			name:   "normal test",
 			fields: fields{repo: mock.NewRepository(t)},
 			args:   args{ctx: context.Background()},
-			want: []pkg.FastMessageGroupItem{
+			want: []pkg.FastReplyGroupItem{
 				{
-					Category: pkg.FastMessageCategory{
+					Category: pkg.FastReplyCategory{
 						ID:   1,
 						Name: "分類1",
 					},
-					Items: []model.GetAllAvailableFastMessageRow{
+					Items: []model.GetAllAvailableFastReplyRow{
 						{
 							CategoryID: 1,
 							Title:      "測試1",
@@ -329,13 +329,53 @@ func Test_service_ListFastMessageGroup(t *testing.T) {
 			s := &service{
 				repo: tt.fields.repo,
 			}
-			got, err := s.ListFastMessageGroup(tt.args.ctx)
+			got, err := s.ListFastReplyGroup(tt.args.ctx)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("ListFastMessageGroup() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("ListFastReplyGroup() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ListFastMessageGroup() got = %v, want %v", got, tt.want)
+				t.Errorf("ListFastReplyGroup() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_service_CheckCategory(t *testing.T) {
+	type fields struct {
+		repo iface.IRepository
+	}
+	type args struct {
+		ctx context.Context
+		id  int64
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    interface{}
+		wantErr bool
+	}{
+		{
+			name:    "normal test",
+			fields:  fields{repo: mock.NewRepository(t)},
+			args:    args{ctx: context.Background(), id: 1},
+			want:    1,
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &service{
+				repo: tt.fields.repo,
+			}
+			got, err := s.CheckCategory(tt.args.ctx, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("CheckCategory() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("CheckCategory() got = %v, want %v", got, tt.want)
 			}
 		})
 	}

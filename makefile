@@ -2,7 +2,7 @@ gql:
 	go get github.com/99designs/gqlgen@v0.17.2
 	go run github.com/99designs/gqlgen generate --config ./gqlgen.yml
 
-server:
+server: sqlc
 	go run main.go server
 
 mock:

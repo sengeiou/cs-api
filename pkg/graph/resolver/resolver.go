@@ -23,19 +23,18 @@ import (
 )
 
 type Resolver struct {
-	authSvc        iface.IAuthService
-	staffSvc       iface.IStaffService
-	roomSvc        iface.IRoomService
-	messageSvc     iface.IMessageService
-	tagSvc         iface.ITagService
-	fastMessageSvc iface.IFastMessageService
-	reportSvc      iface.IReportService
-	csConfigSvc    iface.ICsConfigService
-	noticeSvc      iface.INoticeService
-	remindSvc      iface.IRemindService
-	redis          ifaceTool.IRedis
-	storage        iface.IStorage
-	config         *config.Config
+	authSvc     iface.IAuthService
+	staffSvc    iface.IStaffService
+	roomSvc     iface.IRoomService
+	messageSvc  iface.IMessageService
+	tagSvc      iface.ITagService
+	reportSvc   iface.IReportService
+	csConfigSvc iface.ICsConfigService
+	noticeSvc   iface.INoticeService
+	remindSvc   iface.IRemindService
+	redis       ifaceTool.IRedis
+	storage     iface.IStorage
+	config      *config.Config
 }
 
 var Module = fx.Options(
@@ -51,36 +50,34 @@ var Module = fx.Options(
 type Params struct {
 	fx.In
 
-	AuthSvc        iface.IAuthService
-	StaffSvc       iface.IStaffService
-	RoomSvc        iface.IRoomService
-	MessageSvc     iface.IMessageService
-	TagSvc         iface.ITagService
-	FastMessageSvc iface.IFastMessageService
-	ReportSvc      iface.IReportService
-	CsConfigSvc    iface.ICsConfigService
-	NoticeSvc      iface.INoticeService
-	RemindSvc      iface.IRemindService
-	Redis          ifaceTool.IRedis
-	Storage        iface.IStorage
-	Config         *config.Config
+	AuthSvc     iface.IAuthService
+	StaffSvc    iface.IStaffService
+	RoomSvc     iface.IRoomService
+	MessageSvc  iface.IMessageService
+	TagSvc      iface.ITagService
+	ReportSvc   iface.IReportService
+	CsConfigSvc iface.ICsConfigService
+	NoticeSvc   iface.INoticeService
+	RemindSvc   iface.IRemindService
+	Redis       ifaceTool.IRedis
+	Storage     iface.IStorage
+	Config      *config.Config
 }
 
 func NewResolver(p Params) *Resolver {
 	return &Resolver{
-		authSvc:        p.AuthSvc,
-		staffSvc:       p.StaffSvc,
-		roomSvc:        p.RoomSvc,
-		messageSvc:     p.MessageSvc,
-		tagSvc:         p.TagSvc,
-		fastMessageSvc: p.FastMessageSvc,
-		reportSvc:      p.ReportSvc,
-		csConfigSvc:    p.CsConfigSvc,
-		noticeSvc:      p.NoticeSvc,
-		remindSvc:      p.RemindSvc,
-		redis:          p.Redis,
-		storage:        p.Storage,
-		config:         p.Config,
+		authSvc:     p.AuthSvc,
+		staffSvc:    p.StaffSvc,
+		roomSvc:     p.RoomSvc,
+		messageSvc:  p.MessageSvc,
+		tagSvc:      p.TagSvc,
+		reportSvc:   p.ReportSvc,
+		csConfigSvc: p.CsConfigSvc,
+		noticeSvc:   p.NoticeSvc,
+		remindSvc:   p.RemindSvc,
+		redis:       p.Redis,
+		storage:     p.Storage,
+		config:      p.Config,
 	}
 }
 

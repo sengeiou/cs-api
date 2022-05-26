@@ -13,59 +13,6 @@ type CloseRoomInput struct {
 	TagID int64 `json:"tagID"`
 }
 
-type CreateFastMessageCategoryInput struct {
-	Name string `json:"name"`
-}
-
-type CreateFastMessageInput struct {
-	CategoryID int64  `json:"categoryID"`
-	Title      string `json:"title"`
-	Content    string `json:"content"`
-	Status     Status `json:"status"`
-}
-
-type FastMessage struct {
-	ID         int64  `json:"id"`
-	Category   string `json:"category"`
-	CategoryID int64  `json:"categoryID"`
-	Title      string `json:"title"`
-	Content    string `json:"content"`
-	Status     Status `json:"status"`
-}
-
-type FastMessageCategory struct {
-	ID   int64  `json:"id"`
-	Name string `json:"name"`
-}
-
-type FastMessageGroupItem struct {
-	Category *FastMessageCategory `json:"category"`
-	Items    []*FastMessage       `json:"items"`
-}
-
-type GetFastMessageResp struct {
-	FastMessage *FastMessage `json:"fastMessage"`
-}
-
-type ListFastMessageCategoryResp struct {
-	Categories []*FastMessageCategory `json:"categories"`
-}
-
-type ListFastMessageGroupResp struct {
-	Group []*FastMessageGroupItem `json:"group"`
-}
-
-type ListFastMessageInput struct {
-	Title   string `json:"title"`
-	Content string `json:"content"`
-	Status  Status `json:"status"`
-}
-
-type ListFastMessageResp struct {
-	Pagination   *Pagination    `json:"pagination"`
-	FastMessages []*FastMessage `json:"fastMessages"`
-}
-
 type ListRoomInput struct {
 	RoomID  int64      `json:"roomID"`
 	StaffID int64      `json:"staffID"`
@@ -110,14 +57,6 @@ type Room struct {
 type TransferRoomInput struct {
 	ID      int64 `json:"id"`
 	StaffID int64 `json:"staffID"`
-}
-
-type UpdateFastMessageInput struct {
-	ID         int64  `json:"id"`
-	CategoryID int64  `json:"categoryID"`
-	Title      string `json:"title"`
-	Content    string `json:"content"`
-	Status     Status `json:"status"`
 }
 
 type RoomStatus string

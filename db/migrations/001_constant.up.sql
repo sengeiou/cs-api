@@ -1,7 +1,7 @@
 create table if not exists constant
 (
     id         bigint unsigned auto_increment primary key,
-    type       tinyint         not null comment '常數類型 1快捷訊息 2客服配置',
+    type       tinyint         not null comment '常數類型 1快捷回覆 2客服配置',
     `key`      varchar(255)    not null comment '鍵',
     value      varchar(255)    not null comment '值',
     created_by bigint unsigned not null comment '創建管理員',

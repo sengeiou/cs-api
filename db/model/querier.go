@@ -14,13 +14,14 @@ import (
 
 type Querier interface {
 	AcceptRoom(ctx context.Context, arg AcceptRoomParams) error
+	CheckFastReplyCategory(ctx context.Context, id int64) (interface{}, error)
 	CloseRoom(ctx context.Context, arg CloseRoomParams) error
 	ConstantSeeder(ctx context.Context) error
 	// 計算每日分類諮詢數
 	CountClosedRoomByTag(ctx context.Context, arg CountClosedRoomByTagParams) ([]CountClosedRoomByTagRow, error)
 	// 計算每日訪客數
 	CountDailyRoomByMember(ctx context.Context, arg CountDailyRoomByMemberParams) (int64, error)
-	CountListFastMessage(ctx context.Context) (int64, error)
+	CountListFastReply(ctx context.Context) (int64, error)
 	CountListNotice(ctx context.Context) (int64, error)
 	CountListRemind(ctx context.Context) (int64, error)
 	CountListRole(ctx context.Context) (int64, error)
@@ -28,8 +29,8 @@ type Querier interface {
 	CountListStaff(ctx context.Context) (int64, error)
 	CountListStaffRoom(ctx context.Context, status types.RoomStatus) (int64, error)
 	CountListTag(ctx context.Context) (int64, error)
-	CreateFastMessage(ctx context.Context, arg CreateFastMessageParams) error
-	CreateFastMessageCategory(ctx context.Context, arg CreateFastMessageCategoryParams) error
+	CreateFastReply(ctx context.Context, arg CreateFastReplyParams) error
+	CreateFastReplyCategory(ctx context.Context, arg CreateFastReplyCategoryParams) error
 	CreateMember(ctx context.Context, arg CreateMemberParams) (sql.Result, error)
 	CreateNotice(ctx context.Context, arg CreateNoticeParams) error
 	CreateRemind(ctx context.Context, arg CreateRemindParams) error
@@ -39,7 +40,7 @@ type Querier interface {
 	CreateRoom(ctx context.Context, arg CreateRoomParams) (sql.Result, error)
 	CreateStaff(ctx context.Context, arg CreateStaffParams) error
 	CreateTag(ctx context.Context, arg CreateTagParams) error
-	DeleteFastMessage(ctx context.Context, id int64) error
+	DeleteFastReply(ctx context.Context, id int64) error
 	DeleteNotice(ctx context.Context, id int64) error
 	DeleteRemind(ctx context.Context, id int64) error
 	DeleteReportDailyGuest(ctx context.Context, date time.Time) error
@@ -47,10 +48,10 @@ type Querier interface {
 	DeleteRole(ctx context.Context, id int64) error
 	DeleteStaff(ctx context.Context, id int64) error
 	DeleteTag(ctx context.Context, id int64) error
-	GetAllAvailableFastMessage(ctx context.Context) ([]GetAllAvailableFastMessageRow, error)
+	GetAllAvailableFastReply(ctx context.Context) ([]GetAllAvailableFastReplyRow, error)
 	GetAllTag(ctx context.Context) ([]Tag, error)
 	GetCsConfig(ctx context.Context) (Constant, error)
-	GetFastMessage(ctx context.Context, id int64) (FastMessage, error)
+	GetFastReply(ctx context.Context, id int64) (FastReply, error)
 	GetGuestMember(ctx context.Context, deviceID string) (Member, error)
 	GetLatestNotice(ctx context.Context) (Notice, error)
 	// 獲取會員並未關閉的房間
@@ -65,8 +66,8 @@ type Querier interface {
 	GetStaffRoom(ctx context.Context, staffID int64) ([]int64, error)
 	GetTag(ctx context.Context, id int64) (GetTagRow, error)
 	ListAvailableStaff(ctx context.Context, id int64) ([]Staff, error)
-	ListFastMessage(ctx context.Context, arg ListFastMessageParams) ([]ListFastMessageRow, error)
-	ListFastMessageCategory(ctx context.Context) ([]Constant, error)
+	ListFastReply(ctx context.Context, arg ListFastReplyParams) ([]ListFastReplyRow, error)
+	ListFastReplyCategory(ctx context.Context) ([]Constant, error)
 	ListNotice(ctx context.Context, arg ListNoticeParams) ([]Notice, error)
 	ListRemind(ctx context.Context, arg ListRemindParams) ([]Remind, error)
 	ListReportDailyGuest(ctx context.Context, arg ListReportDailyGuestParams) ([]ReportDailyGuest, error)
@@ -81,7 +82,7 @@ type Querier interface {
 	StaffSeeder(ctx context.Context, password string) error
 	TagSeeder(ctx context.Context) error
 	UpdateCsConfig(ctx context.Context, arg UpdateCsConfigParams) error
-	UpdateFastMessage(ctx context.Context, arg UpdateFastMessageParams) error
+	UpdateFastReply(ctx context.Context, arg UpdateFastReplyParams) error
 	UpdateNotice(ctx context.Context, arg UpdateNoticeParams) error
 	UpdateRemind(ctx context.Context, arg UpdateRemindParams) error
 	UpdateRole(ctx context.Context, arg UpdateRoleParams) error

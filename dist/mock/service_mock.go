@@ -543,31 +543,45 @@ func (mr *MockITagServiceMockRecorder) UpdateTag(ctx, params interface{}) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateTag", reflect.TypeOf((*MockITagService)(nil).UpdateTag), ctx, params)
 }
 
-// MockIFastMessageService is a mock of IFastMessageService interface.
-type MockIFastMessageService struct {
+// MockIFastReplyService is a mock of IFastReplyService interface.
+type MockIFastReplyService struct {
 	ctrl     *gomock.Controller
-	recorder *MockIFastMessageServiceMockRecorder
+	recorder *MockIFastReplyServiceMockRecorder
 }
 
-// MockIFastMessageServiceMockRecorder is the mock recorder for MockIFastMessageService.
-type MockIFastMessageServiceMockRecorder struct {
-	mock *MockIFastMessageService
+// MockIFastReplyServiceMockRecorder is the mock recorder for MockIFastReplyService.
+type MockIFastReplyServiceMockRecorder struct {
+	mock *MockIFastReplyService
 }
 
-// NewMockIFastMessageService creates a new mock instance.
-func NewMockIFastMessageService(ctrl *gomock.Controller) *MockIFastMessageService {
-	mock := &MockIFastMessageService{ctrl: ctrl}
-	mock.recorder = &MockIFastMessageServiceMockRecorder{mock}
+// NewMockIFastReplyService creates a new mock instance.
+func NewMockIFastReplyService(ctrl *gomock.Controller) *MockIFastReplyService {
+	mock := &MockIFastReplyService{ctrl: ctrl}
+	mock.recorder = &MockIFastReplyServiceMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockIFastMessageService) EXPECT() *MockIFastMessageServiceMockRecorder {
+func (m *MockIFastReplyService) EXPECT() *MockIFastReplyServiceMockRecorder {
 	return m.recorder
 }
 
+// CheckCategory mocks base method.
+func (m *MockIFastReplyService) CheckCategory(ctx context.Context, id int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CheckCategory", ctx, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CheckCategory indicates an expected call of CheckCategory.
+func (mr *MockIFastReplyServiceMockRecorder) CheckCategory(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckCategory", reflect.TypeOf((*MockIFastReplyService)(nil).CheckCategory), ctx, id)
+}
+
 // CreateCategory mocks base method.
-func (m *MockIFastMessageService) CreateCategory(ctx context.Context, params model.CreateFastMessageCategoryParams) error {
+func (m *MockIFastReplyService) CreateCategory(ctx context.Context, params model.CreateFastReplyCategoryParams) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateCategory", ctx, params)
 	ret0, _ := ret[0].(error)
@@ -575,56 +589,56 @@ func (m *MockIFastMessageService) CreateCategory(ctx context.Context, params mod
 }
 
 // CreateCategory indicates an expected call of CreateCategory.
-func (mr *MockIFastMessageServiceMockRecorder) CreateCategory(ctx, params interface{}) *gomock.Call {
+func (mr *MockIFastReplyServiceMockRecorder) CreateCategory(ctx, params interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateCategory", reflect.TypeOf((*MockIFastMessageService)(nil).CreateCategory), ctx, params)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateCategory", reflect.TypeOf((*MockIFastReplyService)(nil).CreateCategory), ctx, params)
 }
 
-// CreateFastMessage mocks base method.
-func (m *MockIFastMessageService) CreateFastMessage(ctx context.Context, params model.CreateFastMessageParams) error {
+// CreateFastReply mocks base method.
+func (m *MockIFastReplyService) CreateFastReply(ctx context.Context, params model.CreateFastReplyParams) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateFastMessage", ctx, params)
+	ret := m.ctrl.Call(m, "CreateFastReply", ctx, params)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// CreateFastMessage indicates an expected call of CreateFastMessage.
-func (mr *MockIFastMessageServiceMockRecorder) CreateFastMessage(ctx, params interface{}) *gomock.Call {
+// CreateFastReply indicates an expected call of CreateFastReply.
+func (mr *MockIFastReplyServiceMockRecorder) CreateFastReply(ctx, params interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateFastMessage", reflect.TypeOf((*MockIFastMessageService)(nil).CreateFastMessage), ctx, params)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateFastReply", reflect.TypeOf((*MockIFastReplyService)(nil).CreateFastReply), ctx, params)
 }
 
-// DeleteFastMessage mocks base method.
-func (m *MockIFastMessageService) DeleteFastMessage(ctx context.Context, id int64) error {
+// DeleteFastReply mocks base method.
+func (m *MockIFastReplyService) DeleteFastReply(ctx context.Context, id int64) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteFastMessage", ctx, id)
+	ret := m.ctrl.Call(m, "DeleteFastReply", ctx, id)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// DeleteFastMessage indicates an expected call of DeleteFastMessage.
-func (mr *MockIFastMessageServiceMockRecorder) DeleteFastMessage(ctx, id interface{}) *gomock.Call {
+// DeleteFastReply indicates an expected call of DeleteFastReply.
+func (mr *MockIFastReplyServiceMockRecorder) DeleteFastReply(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteFastMessage", reflect.TypeOf((*MockIFastMessageService)(nil).DeleteFastMessage), ctx, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteFastReply", reflect.TypeOf((*MockIFastReplyService)(nil).DeleteFastReply), ctx, id)
 }
 
-// GetFastMessage mocks base method.
-func (m *MockIFastMessageService) GetFastMessage(ctx context.Context, id int64) (model.FastMessage, error) {
+// GetFastReply mocks base method.
+func (m *MockIFastReplyService) GetFastReply(ctx context.Context, id int64) (model.FastReply, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetFastMessage", ctx, id)
-	ret0, _ := ret[0].(model.FastMessage)
+	ret := m.ctrl.Call(m, "GetFastReply", ctx, id)
+	ret0, _ := ret[0].(model.FastReply)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetFastMessage indicates an expected call of GetFastMessage.
-func (mr *MockIFastMessageServiceMockRecorder) GetFastMessage(ctx, id interface{}) *gomock.Call {
+// GetFastReply indicates an expected call of GetFastReply.
+func (mr *MockIFastReplyServiceMockRecorder) GetFastReply(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFastMessage", reflect.TypeOf((*MockIFastMessageService)(nil).GetFastMessage), ctx, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFastReply", reflect.TypeOf((*MockIFastReplyService)(nil).GetFastReply), ctx, id)
 }
 
 // ListCategory mocks base method.
-func (m *MockIFastMessageService) ListCategory(ctx context.Context) ([]model.Constant, error) {
+func (m *MockIFastReplyService) ListCategory(ctx context.Context) ([]model.Constant, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListCategory", ctx)
 	ret0, _ := ret[0].([]model.Constant)
@@ -633,54 +647,54 @@ func (m *MockIFastMessageService) ListCategory(ctx context.Context) ([]model.Con
 }
 
 // ListCategory indicates an expected call of ListCategory.
-func (mr *MockIFastMessageServiceMockRecorder) ListCategory(ctx interface{}) *gomock.Call {
+func (mr *MockIFastReplyServiceMockRecorder) ListCategory(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListCategory", reflect.TypeOf((*MockIFastMessageService)(nil).ListCategory), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListCategory", reflect.TypeOf((*MockIFastReplyService)(nil).ListCategory), ctx)
 }
 
-// ListFastMessage mocks base method.
-func (m *MockIFastMessageService) ListFastMessage(ctx context.Context, params model.ListFastMessageParams, filterParams types.FilterFastMessageParams) ([]model.ListFastMessageRow, int64, error) {
+// ListFastReply mocks base method.
+func (m *MockIFastReplyService) ListFastReply(ctx context.Context, params model.ListFastReplyParams, filterParams types.FilterFastReplyParams) ([]model.ListFastReplyRow, int64, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ListFastMessage", ctx, params, filterParams)
-	ret0, _ := ret[0].([]model.ListFastMessageRow)
+	ret := m.ctrl.Call(m, "ListFastReply", ctx, params, filterParams)
+	ret0, _ := ret[0].([]model.ListFastReplyRow)
 	ret1, _ := ret[1].(int64)
 	ret2, _ := ret[2].(error)
 	return ret0, ret1, ret2
 }
 
-// ListFastMessage indicates an expected call of ListFastMessage.
-func (mr *MockIFastMessageServiceMockRecorder) ListFastMessage(ctx, params, filterParams interface{}) *gomock.Call {
+// ListFastReply indicates an expected call of ListFastReply.
+func (mr *MockIFastReplyServiceMockRecorder) ListFastReply(ctx, params, filterParams interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListFastMessage", reflect.TypeOf((*MockIFastMessageService)(nil).ListFastMessage), ctx, params, filterParams)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListFastReply", reflect.TypeOf((*MockIFastReplyService)(nil).ListFastReply), ctx, params, filterParams)
 }
 
-// ListFastMessageGroup mocks base method.
-func (m *MockIFastMessageService) ListFastMessageGroup(ctx context.Context) ([]pkg.FastMessageGroupItem, error) {
+// ListFastReplyGroup mocks base method.
+func (m *MockIFastReplyService) ListFastReplyGroup(ctx context.Context) ([]pkg.FastReplyGroupItem, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ListFastMessageGroup", ctx)
-	ret0, _ := ret[0].([]pkg.FastMessageGroupItem)
+	ret := m.ctrl.Call(m, "ListFastReplyGroup", ctx)
+	ret0, _ := ret[0].([]pkg.FastReplyGroupItem)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// ListFastMessageGroup indicates an expected call of ListFastMessageGroup.
-func (mr *MockIFastMessageServiceMockRecorder) ListFastMessageGroup(ctx interface{}) *gomock.Call {
+// ListFastReplyGroup indicates an expected call of ListFastReplyGroup.
+func (mr *MockIFastReplyServiceMockRecorder) ListFastReplyGroup(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListFastMessageGroup", reflect.TypeOf((*MockIFastMessageService)(nil).ListFastMessageGroup), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListFastReplyGroup", reflect.TypeOf((*MockIFastReplyService)(nil).ListFastReplyGroup), ctx)
 }
 
-// UpdateFastMessage mocks base method.
-func (m *MockIFastMessageService) UpdateFastMessage(ctx context.Context, params model.UpdateFastMessageParams) error {
+// UpdateFastReply mocks base method.
+func (m *MockIFastReplyService) UpdateFastReply(ctx context.Context, params model.UpdateFastReplyParams) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateFastMessage", ctx, params)
+	ret := m.ctrl.Call(m, "UpdateFastReply", ctx, params)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// UpdateFastMessage indicates an expected call of UpdateFastMessage.
-func (mr *MockIFastMessageServiceMockRecorder) UpdateFastMessage(ctx, params interface{}) *gomock.Call {
+// UpdateFastReply indicates an expected call of UpdateFastReply.
+func (mr *MockIFastReplyServiceMockRecorder) UpdateFastReply(ctx, params interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateFastMessage", reflect.TypeOf((*MockIFastMessageService)(nil).UpdateFastMessage), ctx, params)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateFastReply", reflect.TypeOf((*MockIFastReplyService)(nil).UpdateFastReply), ctx, params)
 }
 
 // MockIReportService is a mock of IReportService interface.

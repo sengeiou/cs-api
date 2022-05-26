@@ -10,12 +10,25 @@ import (
 	"time"
 )
 
-const createFastMessageCategory = `-- name: CreateFastMessageCategory :exec
-INSERT INTO constant (` + "`" + `type` + "`" + `, ` + "`" + `key` + "`" + `, value, created_by, created_at, updated_by, updated_at)
-VALUES (1, 'FastMessage', ?, ?, ?, ?, ?)
+const checkFastReplyCategory = `-- name: CheckFastReplyCategory :one
+SELECT 1
+FROM constant
+WHERE id = ? LIMIT 1
 `
 
-type CreateFastMessageCategoryParams struct {
+func (q *Queries) CheckFastReplyCategory(ctx context.Context, id int64) (interface{}, error) {
+	row := q.queryRow(ctx, q.checkFastReplyCategoryStmt, checkFastReplyCategory, id)
+	var column_1 interface{}
+	err := row.Scan(&column_1)
+	return column_1, err
+}
+
+const createFastReplyCategory = `-- name: CreateFastReplyCategory :exec
+INSERT INTO constant (` + "`" + `type` + "`" + `, ` + "`" + `key` + "`" + `, value, created_by, created_at, updated_by, updated_at)
+VALUES (1, 'FastReply', ?, ?, ?, ?, ?)
+`
+
+type CreateFastReplyCategoryParams struct {
 	Value     string    `db:"value" json:"value"`
 	CreatedBy int64     `db:"created_by" json:"created_by"`
 	CreatedAt time.Time `db:"created_at" json:"created_at"`
@@ -23,8 +36,8 @@ type CreateFastMessageCategoryParams struct {
 	UpdatedAt time.Time `db:"updated_at" json:"updated_at"`
 }
 
-func (q *Queries) CreateFastMessageCategory(ctx context.Context, arg CreateFastMessageCategoryParams) error {
-	_, err := q.exec(ctx, q.createFastMessageCategoryStmt, createFastMessageCategory,
+func (q *Queries) CreateFastReplyCategory(ctx context.Context, arg CreateFastReplyCategoryParams) error {
+	_, err := q.exec(ctx, q.createFastReplyCategoryStmt, createFastReplyCategory,
 		arg.Value,
 		arg.CreatedBy,
 		arg.CreatedAt,
@@ -57,15 +70,15 @@ func (q *Queries) GetCsConfig(ctx context.Context) (Constant, error) {
 	return i, err
 }
 
-const listFastMessageCategory = `-- name: ListFastMessageCategory :many
+const listFastReplyCategory = `-- name: ListFastReplyCategory :many
 SELECT id, type, ` + "`" + `key` + "`" + `, value, created_by, created_at, updated_by, updated_at
 FROM constant
 WHERE ` + "`" + `type` + "`" + ` = 1
-  and ` + "`" + `key` + "`" + ` = 'FastMessage'
+  and ` + "`" + `key` + "`" + ` = 'FastReply'
 `
 
-func (q *Queries) ListFastMessageCategory(ctx context.Context) ([]Constant, error) {
-	rows, err := q.query(ctx, q.listFastMessageCategoryStmt, listFastMessageCategory)
+func (q *Queries) ListFastReplyCategory(ctx context.Context) ([]Constant, error) {
+	rows, err := q.query(ctx, q.listFastReplyCategoryStmt, listFastReplyCategory)
 	if err != nil {
 		return nil, err
 	}

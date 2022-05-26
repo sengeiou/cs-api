@@ -22,7 +22,7 @@ overrides:
     go_type: "cs-api/pkg/types.ConstantType"
   - column: "constant.key"
     go_type: "cs-api/pkg/types.ConstantKey"
-  - column: "fast_message.status"
+  - column: "fast_reply.status"
     go_type: "cs-api/pkg/types.Status"
   - column: "member.type"
     go_type: "cs-api/pkg/types.MemberType"

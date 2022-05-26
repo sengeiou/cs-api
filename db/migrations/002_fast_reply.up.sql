@@ -1,4 +1,4 @@
-create table if not exists fast_message
+create table if not exists fast_reply
 (
     id          bigint unsigned auto_increment primary key,
     category_id bigint unsigned   not null comment '分類ID(constantID)',

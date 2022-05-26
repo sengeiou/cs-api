@@ -27,6 +27,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.acceptRoomStmt, err = db.PrepareContext(ctx, acceptRoom); err != nil {
 		return nil, fmt.Errorf("error preparing query AcceptRoom: %w", err)
 	}
+	if q.checkFastReplyCategoryStmt, err = db.PrepareContext(ctx, checkFastReplyCategory); err != nil {
+		return nil, fmt.Errorf("error preparing query CheckFastReplyCategory: %w", err)
+	}
 	if q.closeRoomStmt, err = db.PrepareContext(ctx, closeRoom); err != nil {
 		return nil, fmt.Errorf("error preparing query CloseRoom: %w", err)
 	}
@@ -39,8 +42,8 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.countDailyRoomByMemberStmt, err = db.PrepareContext(ctx, countDailyRoomByMember); err != nil {
 		return nil, fmt.Errorf("error preparing query CountDailyRoomByMember: %w", err)
 	}
-	if q.countListFastMessageStmt, err = db.PrepareContext(ctx, countListFastMessage); err != nil {
-		return nil, fmt.Errorf("error preparing query CountListFastMessage: %w", err)
+	if q.countListFastReplyStmt, err = db.PrepareContext(ctx, countListFastReply); err != nil {
+		return nil, fmt.Errorf("error preparing query CountListFastReply: %w", err)
 	}
 	if q.countListNoticeStmt, err = db.PrepareContext(ctx, countListNotice); err != nil {
 		return nil, fmt.Errorf("error preparing query CountListNotice: %w", err)
@@ -63,11 +66,11 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.countListTagStmt, err = db.PrepareContext(ctx, countListTag); err != nil {
 		return nil, fmt.Errorf("error preparing query CountListTag: %w", err)
 	}
-	if q.createFastMessageStmt, err = db.PrepareContext(ctx, createFastMessage); err != nil {
-		return nil, fmt.Errorf("error preparing query CreateFastMessage: %w", err)
+	if q.createFastReplyStmt, err = db.PrepareContext(ctx, createFastReply); err != nil {
+		return nil, fmt.Errorf("error preparing query CreateFastReply: %w", err)
 	}
-	if q.createFastMessageCategoryStmt, err = db.PrepareContext(ctx, createFastMessageCategory); err != nil {
-		return nil, fmt.Errorf("error preparing query CreateFastMessageCategory: %w", err)
+	if q.createFastReplyCategoryStmt, err = db.PrepareContext(ctx, createFastReplyCategory); err != nil {
+		return nil, fmt.Errorf("error preparing query CreateFastReplyCategory: %w", err)
 	}
 	if q.createMemberStmt, err = db.PrepareContext(ctx, createMember); err != nil {
 		return nil, fmt.Errorf("error preparing query CreateMember: %w", err)
@@ -96,8 +99,8 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.createTagStmt, err = db.PrepareContext(ctx, createTag); err != nil {
 		return nil, fmt.Errorf("error preparing query CreateTag: %w", err)
 	}
-	if q.deleteFastMessageStmt, err = db.PrepareContext(ctx, deleteFastMessage); err != nil {
-		return nil, fmt.Errorf("error preparing query DeleteFastMessage: %w", err)
+	if q.deleteFastReplyStmt, err = db.PrepareContext(ctx, deleteFastReply); err != nil {
+		return nil, fmt.Errorf("error preparing query DeleteFastReply: %w", err)
 	}
 	if q.deleteNoticeStmt, err = db.PrepareContext(ctx, deleteNotice); err != nil {
 		return nil, fmt.Errorf("error preparing query DeleteNotice: %w", err)
@@ -120,8 +123,8 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.deleteTagStmt, err = db.PrepareContext(ctx, deleteTag); err != nil {
 		return nil, fmt.Errorf("error preparing query DeleteTag: %w", err)
 	}
-	if q.getAllAvailableFastMessageStmt, err = db.PrepareContext(ctx, getAllAvailableFastMessage); err != nil {
-		return nil, fmt.Errorf("error preparing query GetAllAvailableFastMessage: %w", err)
+	if q.getAllAvailableFastReplyStmt, err = db.PrepareContext(ctx, getAllAvailableFastReply); err != nil {
+		return nil, fmt.Errorf("error preparing query GetAllAvailableFastReply: %w", err)
 	}
 	if q.getAllTagStmt, err = db.PrepareContext(ctx, getAllTag); err != nil {
 		return nil, fmt.Errorf("error preparing query GetAllTag: %w", err)
@@ -129,8 +132,8 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.getCsConfigStmt, err = db.PrepareContext(ctx, getCsConfig); err != nil {
 		return nil, fmt.Errorf("error preparing query GetCsConfig: %w", err)
 	}
-	if q.getFastMessageStmt, err = db.PrepareContext(ctx, getFastMessage); err != nil {
-		return nil, fmt.Errorf("error preparing query GetFastMessage: %w", err)
+	if q.getFastReplyStmt, err = db.PrepareContext(ctx, getFastReply); err != nil {
+		return nil, fmt.Errorf("error preparing query GetFastReply: %w", err)
 	}
 	if q.getGuestMemberStmt, err = db.PrepareContext(ctx, getGuestMember); err != nil {
 		return nil, fmt.Errorf("error preparing query GetGuestMember: %w", err)
@@ -171,11 +174,11 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.listAvailableStaffStmt, err = db.PrepareContext(ctx, listAvailableStaff); err != nil {
 		return nil, fmt.Errorf("error preparing query ListAvailableStaff: %w", err)
 	}
-	if q.listFastMessageStmt, err = db.PrepareContext(ctx, listFastMessage); err != nil {
-		return nil, fmt.Errorf("error preparing query ListFastMessage: %w", err)
+	if q.listFastReplyStmt, err = db.PrepareContext(ctx, listFastReply); err != nil {
+		return nil, fmt.Errorf("error preparing query ListFastReply: %w", err)
 	}
-	if q.listFastMessageCategoryStmt, err = db.PrepareContext(ctx, listFastMessageCategory); err != nil {
-		return nil, fmt.Errorf("error preparing query ListFastMessageCategory: %w", err)
+	if q.listFastReplyCategoryStmt, err = db.PrepareContext(ctx, listFastReplyCategory); err != nil {
+		return nil, fmt.Errorf("error preparing query ListFastReplyCategory: %w", err)
 	}
 	if q.listNoticeStmt, err = db.PrepareContext(ctx, listNotice); err != nil {
 		return nil, fmt.Errorf("error preparing query ListNotice: %w", err)
@@ -219,8 +222,8 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.updateCsConfigStmt, err = db.PrepareContext(ctx, updateCsConfig); err != nil {
 		return nil, fmt.Errorf("error preparing query UpdateCsConfig: %w", err)
 	}
-	if q.updateFastMessageStmt, err = db.PrepareContext(ctx, updateFastMessage); err != nil {
-		return nil, fmt.Errorf("error preparing query UpdateFastMessage: %w", err)
+	if q.updateFastReplyStmt, err = db.PrepareContext(ctx, updateFastReply); err != nil {
+		return nil, fmt.Errorf("error preparing query UpdateFastReply: %w", err)
 	}
 	if q.updateNoticeStmt, err = db.PrepareContext(ctx, updateNotice); err != nil {
 		return nil, fmt.Errorf("error preparing query UpdateNotice: %w", err)
@@ -265,6 +268,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing acceptRoomStmt: %w", cerr)
 		}
 	}
+	if q.checkFastReplyCategoryStmt != nil {
+		if cerr := q.checkFastReplyCategoryStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing checkFastReplyCategoryStmt: %w", cerr)
+		}
+	}
 	if q.closeRoomStmt != nil {
 		if cerr := q.closeRoomStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing closeRoomStmt: %w", cerr)
@@ -285,9 +293,9 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing countDailyRoomByMemberStmt: %w", cerr)
 		}
 	}
-	if q.countListFastMessageStmt != nil {
-		if cerr := q.countListFastMessageStmt.Close(); cerr != nil {
-			err = fmt.Errorf("error closing countListFastMessageStmt: %w", cerr)
+	if q.countListFastReplyStmt != nil {
+		if cerr := q.countListFastReplyStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing countListFastReplyStmt: %w", cerr)
 		}
 	}
 	if q.countListNoticeStmt != nil {
@@ -325,14 +333,14 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing countListTagStmt: %w", cerr)
 		}
 	}
-	if q.createFastMessageStmt != nil {
-		if cerr := q.createFastMessageStmt.Close(); cerr != nil {
-			err = fmt.Errorf("error closing createFastMessageStmt: %w", cerr)
+	if q.createFastReplyStmt != nil {
+		if cerr := q.createFastReplyStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing createFastReplyStmt: %w", cerr)
 		}
 	}
-	if q.createFastMessageCategoryStmt != nil {
-		if cerr := q.createFastMessageCategoryStmt.Close(); cerr != nil {
-			err = fmt.Errorf("error closing createFastMessageCategoryStmt: %w", cerr)
+	if q.createFastReplyCategoryStmt != nil {
+		if cerr := q.createFastReplyCategoryStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing createFastReplyCategoryStmt: %w", cerr)
 		}
 	}
 	if q.createMemberStmt != nil {
@@ -380,9 +388,9 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing createTagStmt: %w", cerr)
 		}
 	}
-	if q.deleteFastMessageStmt != nil {
-		if cerr := q.deleteFastMessageStmt.Close(); cerr != nil {
-			err = fmt.Errorf("error closing deleteFastMessageStmt: %w", cerr)
+	if q.deleteFastReplyStmt != nil {
+		if cerr := q.deleteFastReplyStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deleteFastReplyStmt: %w", cerr)
 		}
 	}
 	if q.deleteNoticeStmt != nil {
@@ -420,9 +428,9 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing deleteTagStmt: %w", cerr)
 		}
 	}
-	if q.getAllAvailableFastMessageStmt != nil {
-		if cerr := q.getAllAvailableFastMessageStmt.Close(); cerr != nil {
-			err = fmt.Errorf("error closing getAllAvailableFastMessageStmt: %w", cerr)
+	if q.getAllAvailableFastReplyStmt != nil {
+		if cerr := q.getAllAvailableFastReplyStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getAllAvailableFastReplyStmt: %w", cerr)
 		}
 	}
 	if q.getAllTagStmt != nil {
@@ -435,9 +443,9 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing getCsConfigStmt: %w", cerr)
 		}
 	}
-	if q.getFastMessageStmt != nil {
-		if cerr := q.getFastMessageStmt.Close(); cerr != nil {
-			err = fmt.Errorf("error closing getFastMessageStmt: %w", cerr)
+	if q.getFastReplyStmt != nil {
+		if cerr := q.getFastReplyStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getFastReplyStmt: %w", cerr)
 		}
 	}
 	if q.getGuestMemberStmt != nil {
@@ -505,14 +513,14 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing listAvailableStaffStmt: %w", cerr)
 		}
 	}
-	if q.listFastMessageStmt != nil {
-		if cerr := q.listFastMessageStmt.Close(); cerr != nil {
-			err = fmt.Errorf("error closing listFastMessageStmt: %w", cerr)
+	if q.listFastReplyStmt != nil {
+		if cerr := q.listFastReplyStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing listFastReplyStmt: %w", cerr)
 		}
 	}
-	if q.listFastMessageCategoryStmt != nil {
-		if cerr := q.listFastMessageCategoryStmt.Close(); cerr != nil {
-			err = fmt.Errorf("error closing listFastMessageCategoryStmt: %w", cerr)
+	if q.listFastReplyCategoryStmt != nil {
+		if cerr := q.listFastReplyCategoryStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing listFastReplyCategoryStmt: %w", cerr)
 		}
 	}
 	if q.listNoticeStmt != nil {
@@ -585,9 +593,9 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing updateCsConfigStmt: %w", cerr)
 		}
 	}
-	if q.updateFastMessageStmt != nil {
-		if cerr := q.updateFastMessageStmt.Close(); cerr != nil {
-			err = fmt.Errorf("error closing updateFastMessageStmt: %w", cerr)
+	if q.updateFastReplyStmt != nil {
+		if cerr := q.updateFastReplyStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing updateFastReplyStmt: %w", cerr)
 		}
 	}
 	if q.updateNoticeStmt != nil {
@@ -682,167 +690,169 @@ func (q *Queries) queryRow(ctx context.Context, stmt *sql.Stmt, query string, ar
 }
 
 type Queries struct {
-	db                             DBTX
-	tx                             *sql.Tx
-	acceptRoomStmt                 *sql.Stmt
-	closeRoomStmt                  *sql.Stmt
-	constantSeederStmt             *sql.Stmt
-	countClosedRoomByTagStmt       *sql.Stmt
-	countDailyRoomByMemberStmt     *sql.Stmt
-	countListFastMessageStmt       *sql.Stmt
-	countListNoticeStmt            *sql.Stmt
-	countListRemindStmt            *sql.Stmt
-	countListRoleStmt              *sql.Stmt
-	countListRoomStmt              *sql.Stmt
-	countListStaffStmt             *sql.Stmt
-	countListStaffRoomStmt         *sql.Stmt
-	countListTagStmt               *sql.Stmt
-	createFastMessageStmt          *sql.Stmt
-	createFastMessageCategoryStmt  *sql.Stmt
-	createMemberStmt               *sql.Stmt
-	createNoticeStmt               *sql.Stmt
-	createRemindStmt               *sql.Stmt
-	createReportDailyGuestStmt     *sql.Stmt
-	createReportDailyTagStmt       *sql.Stmt
-	createRoleStmt                 *sql.Stmt
-	createRoomStmt                 *sql.Stmt
-	createStaffStmt                *sql.Stmt
-	createTagStmt                  *sql.Stmt
-	deleteFastMessageStmt          *sql.Stmt
-	deleteNoticeStmt               *sql.Stmt
-	deleteRemindStmt               *sql.Stmt
-	deleteReportDailyGuestStmt     *sql.Stmt
-	deleteReportDailyTagStmt       *sql.Stmt
-	deleteRoleStmt                 *sql.Stmt
-	deleteStaffStmt                *sql.Stmt
-	deleteTagStmt                  *sql.Stmt
-	getAllAvailableFastMessageStmt *sql.Stmt
-	getAllTagStmt                  *sql.Stmt
-	getCsConfigStmt                *sql.Stmt
-	getFastMessageStmt             *sql.Stmt
-	getGuestMemberStmt             *sql.Stmt
-	getLatestNoticeStmt            *sql.Stmt
-	getMemberAvailableRoomStmt     *sql.Stmt
-	getNormalMemberStmt            *sql.Stmt
-	getNoticeStmt                  *sql.Stmt
-	getRemindStmt                  *sql.Stmt
-	getRoleStmt                    *sql.Stmt
-	getRoomStmt                    *sql.Stmt
-	getStaffStmt                   *sql.Stmt
-	getStaffCountByRoleIdStmt      *sql.Stmt
-	getStaffRoomStmt               *sql.Stmt
-	getTagStmt                     *sql.Stmt
-	listAvailableStaffStmt         *sql.Stmt
-	listFastMessageStmt            *sql.Stmt
-	listFastMessageCategoryStmt    *sql.Stmt
-	listNoticeStmt                 *sql.Stmt
-	listRemindStmt                 *sql.Stmt
-	listReportDailyGuestStmt       *sql.Stmt
-	listReportDailyTagStmt         *sql.Stmt
-	listRoleStmt                   *sql.Stmt
-	listRoomStmt                   *sql.Stmt
-	listStaffStmt                  *sql.Stmt
-	listStaffRoomStmt              *sql.Stmt
-	listTagStmt                    *sql.Stmt
-	roleSeederStmt                 *sql.Stmt
-	staffLoginStmt                 *sql.Stmt
-	staffSeederStmt                *sql.Stmt
-	tagSeederStmt                  *sql.Stmt
-	updateCsConfigStmt             *sql.Stmt
-	updateFastMessageStmt          *sql.Stmt
-	updateNoticeStmt               *sql.Stmt
-	updateRemindStmt               *sql.Stmt
-	updateRoleStmt                 *sql.Stmt
-	updateRoomScoreStmt            *sql.Stmt
-	updateRoomStaffStmt            *sql.Stmt
-	updateStaffStmt                *sql.Stmt
-	updateStaffAvatarStmt          *sql.Stmt
-	updateStaffLoginStmt           *sql.Stmt
-	updateStaffServingStatusStmt   *sql.Stmt
-	updateStaffWithPasswordStmt    *sql.Stmt
-	updateTagStmt                  *sql.Stmt
+	db                           DBTX
+	tx                           *sql.Tx
+	acceptRoomStmt               *sql.Stmt
+	checkFastReplyCategoryStmt   *sql.Stmt
+	closeRoomStmt                *sql.Stmt
+	constantSeederStmt           *sql.Stmt
+	countClosedRoomByTagStmt     *sql.Stmt
+	countDailyRoomByMemberStmt   *sql.Stmt
+	countListFastReplyStmt       *sql.Stmt
+	countListNoticeStmt          *sql.Stmt
+	countListRemindStmt          *sql.Stmt
+	countListRoleStmt            *sql.Stmt
+	countListRoomStmt            *sql.Stmt
+	countListStaffStmt           *sql.Stmt
+	countListStaffRoomStmt       *sql.Stmt
+	countListTagStmt             *sql.Stmt
+	createFastReplyStmt          *sql.Stmt
+	createFastReplyCategoryStmt  *sql.Stmt
+	createMemberStmt             *sql.Stmt
+	createNoticeStmt             *sql.Stmt
+	createRemindStmt             *sql.Stmt
+	createReportDailyGuestStmt   *sql.Stmt
+	createReportDailyTagStmt     *sql.Stmt
+	createRoleStmt               *sql.Stmt
+	createRoomStmt               *sql.Stmt
+	createStaffStmt              *sql.Stmt
+	createTagStmt                *sql.Stmt
+	deleteFastReplyStmt          *sql.Stmt
+	deleteNoticeStmt             *sql.Stmt
+	deleteRemindStmt             *sql.Stmt
+	deleteReportDailyGuestStmt   *sql.Stmt
+	deleteReportDailyTagStmt     *sql.Stmt
+	deleteRoleStmt               *sql.Stmt
+	deleteStaffStmt              *sql.Stmt
+	deleteTagStmt                *sql.Stmt
+	getAllAvailableFastReplyStmt *sql.Stmt
+	getAllTagStmt                *sql.Stmt
+	getCsConfigStmt              *sql.Stmt
+	getFastReplyStmt             *sql.Stmt
+	getGuestMemberStmt           *sql.Stmt
+	getLatestNoticeStmt          *sql.Stmt
+	getMemberAvailableRoomStmt   *sql.Stmt
+	getNormalMemberStmt          *sql.Stmt
+	getNoticeStmt                *sql.Stmt
+	getRemindStmt                *sql.Stmt
+	getRoleStmt                  *sql.Stmt
+	getRoomStmt                  *sql.Stmt
+	getStaffStmt                 *sql.Stmt
+	getStaffCountByRoleIdStmt    *sql.Stmt
+	getStaffRoomStmt             *sql.Stmt
+	getTagStmt                   *sql.Stmt
+	listAvailableStaffStmt       *sql.Stmt
+	listFastReplyStmt            *sql.Stmt
+	listFastReplyCategoryStmt    *sql.Stmt
+	listNoticeStmt               *sql.Stmt
+	listRemindStmt               *sql.Stmt
+	listReportDailyGuestStmt     *sql.Stmt
+	listReportDailyTagStmt       *sql.Stmt
+	listRoleStmt                 *sql.Stmt
+	listRoomStmt                 *sql.Stmt
+	listStaffStmt                *sql.Stmt
+	listStaffRoomStmt            *sql.Stmt
+	listTagStmt                  *sql.Stmt
+	roleSeederStmt               *sql.Stmt
+	staffLoginStmt               *sql.Stmt
+	staffSeederStmt              *sql.Stmt
+	tagSeederStmt                *sql.Stmt
+	updateCsConfigStmt           *sql.Stmt
+	updateFastReplyStmt          *sql.Stmt
+	updateNoticeStmt             *sql.Stmt
+	updateRemindStmt             *sql.Stmt
+	updateRoleStmt               *sql.Stmt
+	updateRoomScoreStmt          *sql.Stmt
+	updateRoomStaffStmt          *sql.Stmt
+	updateStaffStmt              *sql.Stmt
+	updateStaffAvatarStmt        *sql.Stmt
+	updateStaffLoginStmt         *sql.Stmt
+	updateStaffServingStatusStmt *sql.Stmt
+	updateStaffWithPasswordStmt  *sql.Stmt
+	updateTagStmt                *sql.Stmt
 }
 
 func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 	return &Queries{
-		db:                             tx,
-		tx:                             tx,
-		acceptRoomStmt:                 q.acceptRoomStmt,
-		closeRoomStmt:                  q.closeRoomStmt,
-		constantSeederStmt:             q.constantSeederStmt,
-		countClosedRoomByTagStmt:       q.countClosedRoomByTagStmt,
-		countDailyRoomByMemberStmt:     q.countDailyRoomByMemberStmt,
-		countListFastMessageStmt:       q.countListFastMessageStmt,
-		countListNoticeStmt:            q.countListNoticeStmt,
-		countListRemindStmt:            q.countListRemindStmt,
-		countListRoleStmt:              q.countListRoleStmt,
-		countListRoomStmt:              q.countListRoomStmt,
-		countListStaffStmt:             q.countListStaffStmt,
-		countListStaffRoomStmt:         q.countListStaffRoomStmt,
-		countListTagStmt:               q.countListTagStmt,
-		createFastMessageStmt:          q.createFastMessageStmt,
-		createFastMessageCategoryStmt:  q.createFastMessageCategoryStmt,
-		createMemberStmt:               q.createMemberStmt,
-		createNoticeStmt:               q.createNoticeStmt,
-		createRemindStmt:               q.createRemindStmt,
-		createReportDailyGuestStmt:     q.createReportDailyGuestStmt,
-		createReportDailyTagStmt:       q.createReportDailyTagStmt,
-		createRoleStmt:                 q.createRoleStmt,
-		createRoomStmt:                 q.createRoomStmt,
-		createStaffStmt:                q.createStaffStmt,
-		createTagStmt:                  q.createTagStmt,
-		deleteFastMessageStmt:          q.deleteFastMessageStmt,
-		deleteNoticeStmt:               q.deleteNoticeStmt,
-		deleteRemindStmt:               q.deleteRemindStmt,
-		deleteReportDailyGuestStmt:     q.deleteReportDailyGuestStmt,
-		deleteReportDailyTagStmt:       q.deleteReportDailyTagStmt,
-		deleteRoleStmt:                 q.deleteRoleStmt,
-		deleteStaffStmt:                q.deleteStaffStmt,
-		deleteTagStmt:                  q.deleteTagStmt,
-		getAllAvailableFastMessageStmt: q.getAllAvailableFastMessageStmt,
-		getAllTagStmt:                  q.getAllTagStmt,
-		getCsConfigStmt:                q.getCsConfigStmt,
-		getFastMessageStmt:             q.getFastMessageStmt,
-		getGuestMemberStmt:             q.getGuestMemberStmt,
-		getLatestNoticeStmt:            q.getLatestNoticeStmt,
-		getMemberAvailableRoomStmt:     q.getMemberAvailableRoomStmt,
-		getNormalMemberStmt:            q.getNormalMemberStmt,
-		getNoticeStmt:                  q.getNoticeStmt,
-		getRemindStmt:                  q.getRemindStmt,
-		getRoleStmt:                    q.getRoleStmt,
-		getRoomStmt:                    q.getRoomStmt,
-		getStaffStmt:                   q.getStaffStmt,
-		getStaffCountByRoleIdStmt:      q.getStaffCountByRoleIdStmt,
-		getStaffRoomStmt:               q.getStaffRoomStmt,
-		getTagStmt:                     q.getTagStmt,
-		listAvailableStaffStmt:         q.listAvailableStaffStmt,
-		listFastMessageStmt:            q.listFastMessageStmt,
-		listFastMessageCategoryStmt:    q.listFastMessageCategoryStmt,
-		listNoticeStmt:                 q.listNoticeStmt,
-		listRemindStmt:                 q.listRemindStmt,
-		listReportDailyGuestStmt:       q.listReportDailyGuestStmt,
-		listReportDailyTagStmt:         q.listReportDailyTagStmt,
-		listRoleStmt:                   q.listRoleStmt,
-		listRoomStmt:                   q.listRoomStmt,
-		listStaffStmt:                  q.listStaffStmt,
-		listStaffRoomStmt:              q.listStaffRoomStmt,
-		listTagStmt:                    q.listTagStmt,
-		roleSeederStmt:                 q.roleSeederStmt,
-		staffLoginStmt:                 q.staffLoginStmt,
-		staffSeederStmt:                q.staffSeederStmt,
-		tagSeederStmt:                  q.tagSeederStmt,
-		updateCsConfigStmt:             q.updateCsConfigStmt,
-		updateFastMessageStmt:          q.updateFastMessageStmt,
-		updateNoticeStmt:               q.updateNoticeStmt,
-		updateRemindStmt:               q.updateRemindStmt,
-		updateRoleStmt:                 q.updateRoleStmt,
-		updateRoomScoreStmt:            q.updateRoomScoreStmt,
-		updateRoomStaffStmt:            q.updateRoomStaffStmt,
-		updateStaffStmt:                q.updateStaffStmt,
-		updateStaffAvatarStmt:          q.updateStaffAvatarStmt,
-		updateStaffLoginStmt:           q.updateStaffLoginStmt,
-		updateStaffServingStatusStmt:   q.updateStaffServingStatusStmt,
-		updateStaffWithPasswordStmt:    q.updateStaffWithPasswordStmt,
-		updateTagStmt:                  q.updateTagStmt,
+		db:                           tx,
+		tx:                           tx,
+		acceptRoomStmt:               q.acceptRoomStmt,
+		checkFastReplyCategoryStmt:   q.checkFastReplyCategoryStmt,
+		closeRoomStmt:                q.closeRoomStmt,
+		constantSeederStmt:           q.constantSeederStmt,
+		countClosedRoomByTagStmt:     q.countClosedRoomByTagStmt,
+		countDailyRoomByMemberStmt:   q.countDailyRoomByMemberStmt,
+		countListFastReplyStmt:       q.countListFastReplyStmt,
+		countListNoticeStmt:          q.countListNoticeStmt,
+		countListRemindStmt:          q.countListRemindStmt,
+		countListRoleStmt:            q.countListRoleStmt,
+		countListRoomStmt:            q.countListRoomStmt,
+		countListStaffStmt:           q.countListStaffStmt,
+		countListStaffRoomStmt:       q.countListStaffRoomStmt,
+		countListTagStmt:             q.countListTagStmt,
+		createFastReplyStmt:          q.createFastReplyStmt,
+		createFastReplyCategoryStmt:  q.createFastReplyCategoryStmt,
+		createMemberStmt:             q.createMemberStmt,
+		createNoticeStmt:             q.createNoticeStmt,
+		createRemindStmt:             q.createRemindStmt,
+		createReportDailyGuestStmt:   q.createReportDailyGuestStmt,
+		createReportDailyTagStmt:     q.createReportDailyTagStmt,
+		createRoleStmt:               q.createRoleStmt,
+		createRoomStmt:               q.createRoomStmt,
+		createStaffStmt:              q.createStaffStmt,
+		createTagStmt:                q.createTagStmt,
+		deleteFastReplyStmt:          q.deleteFastReplyStmt,
+		deleteNoticeStmt:             q.deleteNoticeStmt,
+		deleteRemindStmt:             q.deleteRemindStmt,
+		deleteReportDailyGuestStmt:   q.deleteReportDailyGuestStmt,
+		deleteReportDailyTagStmt:     q.deleteReportDailyTagStmt,
+		deleteRoleStmt:               q.deleteRoleStmt,
+		deleteStaffStmt:              q.deleteStaffStmt,
+		deleteTagStmt:                q.deleteTagStmt,
+		getAllAvailableFastReplyStmt: q.getAllAvailableFastReplyStmt,
+		getAllTagStmt:                q.getAllTagStmt,
+		getCsConfigStmt:              q.getCsConfigStmt,
+		getFastReplyStmt:             q.getFastReplyStmt,
+		getGuestMemberStmt:           q.getGuestMemberStmt,
+		getLatestNoticeStmt:          q.getLatestNoticeStmt,
+		getMemberAvailableRoomStmt:   q.getMemberAvailableRoomStmt,
+		getNormalMemberStmt:          q.getNormalMemberStmt,
+		getNoticeStmt:                q.getNoticeStmt,
+		getRemindStmt:                q.getRemindStmt,
+		getRoleStmt:                  q.getRoleStmt,
+		getRoomStmt:                  q.getRoomStmt,
+		getStaffStmt:                 q.getStaffStmt,
+		getStaffCountByRoleIdStmt:    q.getStaffCountByRoleIdStmt,
+		getStaffRoomStmt:             q.getStaffRoomStmt,
+		getTagStmt:                   q.getTagStmt,
+		listAvailableStaffStmt:       q.listAvailableStaffStmt,
+		listFastReplyStmt:            q.listFastReplyStmt,
+		listFastReplyCategoryStmt:    q.listFastReplyCategoryStmt,
+		listNoticeStmt:               q.listNoticeStmt,
+		listRemindStmt:               q.listRemindStmt,
+		listReportDailyGuestStmt:     q.listReportDailyGuestStmt,
+		listReportDailyTagStmt:       q.listReportDailyTagStmt,
+		listRoleStmt:                 q.listRoleStmt,
+		listRoomStmt:                 q.listRoomStmt,
+		listStaffStmt:                q.listStaffStmt,
+		listStaffRoomStmt:            q.listStaffRoomStmt,
+		listTagStmt:                  q.listTagStmt,
+		roleSeederStmt:               q.roleSeederStmt,
+		staffLoginStmt:               q.staffLoginStmt,
+		staffSeederStmt:              q.staffSeederStmt,
+		tagSeederStmt:                q.tagSeederStmt,
+		updateCsConfigStmt:           q.updateCsConfigStmt,
+		updateFastReplyStmt:          q.updateFastReplyStmt,
+		updateNoticeStmt:             q.updateNoticeStmt,
+		updateRemindStmt:             q.updateRemindStmt,
+		updateRoleStmt:               q.updateRoleStmt,
+		updateRoomScoreStmt:          q.updateRoomScoreStmt,
+		updateRoomStaffStmt:          q.updateRoomStaffStmt,
+		updateStaffStmt:              q.updateStaffStmt,
+		updateStaffAvatarStmt:        q.updateStaffAvatarStmt,
+		updateStaffLoginStmt:         q.updateStaffLoginStmt,
+		updateStaffServingStatusStmt: q.updateStaffServingStatusStmt,
+		updateStaffWithPasswordStmt:  q.updateStaffWithPasswordStmt,
+		updateTagStmt:                q.updateTagStmt,
 	}
 }

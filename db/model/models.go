@@ -14,7 +14,7 @@ import (
 
 type Constant struct {
 	ID int64 `db:"id" json:"id"`
-	// 常數類型 1快捷訊息 2客服配置
+	// 常數類型 1快捷回覆 2客服配置
 	Type types.ConstantType `db:"type" json:"type"`
 	// 鍵
 	Key types.ConstantKey `db:"key" json:"key"`
@@ -30,7 +30,7 @@ type Constant struct {
 	UpdatedAt time.Time `db:"updated_at" json:"updated_at"`
 }
 
-type FastMessage struct {
+type FastReply struct {
 	ID int64 `db:"id" json:"id"`
 	// 分類ID(constantID)
 	CategoryID int64 `db:"category_id" json:"category_id"`

@@ -48,14 +48,14 @@ type StaffEventInfo struct {
 	Payload StaffEventPayload `json:"payload"`
 }
 
-type FastMessageCategory struct {
+type FastReplyCategory struct {
 	ID   int64
 	Name string
 }
 
-type FastMessageGroupItem struct {
-	Category FastMessageCategory
-	Items    []model.GetAllAvailableFastMessageRow
+type FastReplyGroupItem struct {
+	Category FastReplyCategory
+	Items    []model.GetAllAvailableFastReplyRow
 }
 
 type DailyTagReportColumn struct {

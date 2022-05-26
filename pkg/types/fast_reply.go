@@ -1,6 +1,6 @@
 package types
 
-type FilterFastMessageParams struct {
+type FilterFastReplyParams struct {
 	Title   *string
 	Content *string
 	Status  *Status
