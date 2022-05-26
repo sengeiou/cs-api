@@ -21,13 +21,13 @@ func InitTransport(p Params) {
 	routes := p.Engine.Group("/api", p.AuthSvc.SetClientInfo(pkg.ClientTypeStaff))
 
 	routes.GET("/notices",
-		p.AuthSvc.CheckPermission("Notice.List"),
+		p.AuthSvc.CheckPermission("ListNotice"),
 		p.R.Op("ListNotice"),
 		p.H.ListNotice,
 	)
 
 	routes.POST("/notice",
-		p.AuthSvc.CheckPermission("Notice.Create"),
+		p.AuthSvc.CheckPermission("CreateNotice"),
 		p.R.Op("CreateNotice"),
 		p.H.CreateNotice,
 	)
@@ -38,19 +38,19 @@ func InitTransport(p Params) {
 	)
 
 	routes.GET("/notice/:id",
-		p.AuthSvc.CheckPermission("Notice.Get"),
+		p.AuthSvc.CheckPermission("GetNotice"),
 		p.R.Op("GetNotice"),
 		p.H.GetNotice,
 	)
 
 	routes.PUT("/notice/:id",
-		p.AuthSvc.CheckPermission("Notice.Update"),
+		p.AuthSvc.CheckPermission("UpdateNotice"),
 		p.R.Op("UpdateNotice"),
 		p.H.UpdateNotice,
 	)
 
 	routes.DELETE("/notice/:id",
-		p.AuthSvc.CheckPermission("Notice.Delete"),
+		p.AuthSvc.CheckPermission("DeleteNotice"),
 		p.R.Op("DeleteNotice"),
 		p.H.DeleteNotice,
 	)

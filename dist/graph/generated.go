@@ -92,10 +92,6 @@ type ComplexityRoot struct {
 		FastMessage func(childComplexity int) int
 	}
 
-	GetRemindResp struct {
-		Remind func(childComplexity int) int
-	}
-
 	GetStaffResp struct {
 		Staff func(childComplexity int) int
 	}
@@ -129,11 +125,6 @@ type ComplexityRoot struct {
 	ListMessageResp struct {
 		Messages   func(childComplexity int) int
 		Pagination func(childComplexity int) int
-	}
-
-	ListRemindResp struct {
-		Pagination func(childComplexity int) int
-		Reminds    func(childComplexity int) int
 	}
 
 	ListRoomMessageResp struct {
@@ -175,15 +166,12 @@ type ComplexityRoot struct {
 		CloseRoom                 func(childComplexity int, input converter.CloseRoomInput) int
 		CreateFastMessage         func(childComplexity int, input converter.CreateFastMessageInput) int
 		CreateFastMessageCategory func(childComplexity int, input converter.CreateFastMessageCategoryInput) int
-		CreateRemind              func(childComplexity int, input converter.CreateRemindInput) int
 		CreateStaff               func(childComplexity int, input converter.CreateStaffInput) int
 		DeleteFastMessage         func(childComplexity int, id int64) int
-		DeleteRemind              func(childComplexity int, id int64) int
 		DeleteStaff               func(childComplexity int, id int64) int
 		TransferRoom              func(childComplexity int, input converter.TransferRoomInput) int
 		UpdateCsConfig            func(childComplexity int, input converter.UpdateCsConfigInput) int
 		UpdateFastMessage         func(childComplexity int, input converter.UpdateFastMessageInput) int
-		UpdateRemind              func(childComplexity int, input converter.UpdateRemindInput) int
 		UpdateRoomScore           func(childComplexity int, score int64) int
 		UpdateStaff               func(childComplexity int, input converter.UpdateStaffInput) int
 		UpdateStaffAvatar         func(childComplexity int, avatar string) int
@@ -200,7 +188,6 @@ type ComplexityRoot struct {
 	Query struct {
 		GetCsConfig             func(childComplexity int) int
 		GetFastMessage          func(childComplexity int, id int64) int
-		GetRemind               func(childComplexity int, id int64) int
 		GetStaff                func(childComplexity int, id int64) int
 		ListAvailableStaff      func(childComplexity int) int
 		ListDailyGuestReport    func(childComplexity int, filter converter.ListDailyGuestReportInput) int
@@ -209,18 +196,10 @@ type ComplexityRoot struct {
 		ListFastMessageCategory func(childComplexity int) int
 		ListFastMessageGroup    func(childComplexity int) int
 		ListMessage             func(childComplexity int, filter converter.ListMessageInput, pagination converter.PaginationInput) int
-		ListRemind              func(childComplexity int, filter converter.ListRemindInput, pagination converter.PaginationInput) int
 		ListRoom                func(childComplexity int, filter converter.ListRoomInput, pagination converter.PaginationInput) int
 		ListRoomMessage         func(childComplexity int, filter converter.ListRoomMessageInput) int
 		ListStaff               func(childComplexity int, filter converter.ListStaffInput, pagination converter.PaginationInput) int
 		ListStaffRoom           func(childComplexity int, filter converter.ListStaffRoomInput, pagination converter.PaginationInput) int
-	}
-
-	Remind struct {
-		Content func(childComplexity int) int
-		ID      func(childComplexity int) int
-		Status  func(childComplexity int) int
-		Title   func(childComplexity int) int
 	}
 
 	Room struct {
@@ -253,9 +232,6 @@ type MutationResolver interface {
 	UpdateFastMessage(ctx context.Context, input converter.UpdateFastMessageInput) (bool, error)
 	DeleteFastMessage(ctx context.Context, id int64) (bool, error)
 	CreateFastMessageCategory(ctx context.Context, input converter.CreateFastMessageCategoryInput) (bool, error)
-	CreateRemind(ctx context.Context, input converter.CreateRemindInput) (bool, error)
-	UpdateRemind(ctx context.Context, input converter.UpdateRemindInput) (bool, error)
-	DeleteRemind(ctx context.Context, id int64) (bool, error)
 	AcceptRoom(ctx context.Context, id int64) (bool, error)
 	CloseRoom(ctx context.Context, input converter.CloseRoomInput) (bool, error)
 	TransferRoom(ctx context.Context, input converter.TransferRoomInput) (bool, error)
@@ -274,8 +250,6 @@ type QueryResolver interface {
 	GetFastMessage(ctx context.Context, id int64) (*converter.GetFastMessageResp, error)
 	ListRoomMessage(ctx context.Context, filter converter.ListRoomMessageInput) (*converter.ListRoomMessageResp, error)
 	ListMessage(ctx context.Context, filter converter.ListMessageInput, pagination converter.PaginationInput) (*converter.ListMessageResp, error)
-	ListRemind(ctx context.Context, filter converter.ListRemindInput, pagination converter.PaginationInput) (*converter.ListRemindResp, error)
-	GetRemind(ctx context.Context, id int64) (*converter.GetRemindResp, error)
 	ListDailyTagReport(ctx context.Context, filter converter.ListDailyTagReportInput) (*converter.ListDailyTagReportResp, error)
 	ListDailyGuestReport(ctx context.Context, filter converter.ListDailyGuestReportInput) (*converter.ListDailyGuestReportResp, error)
 	ListStaffRoom(ctx context.Context, filter converter.ListStaffRoomInput, pagination converter.PaginationInput) (*converter.ListStaffRoomResp, error)
@@ -447,13 +421,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.GetFastMessageResp.FastMessage(childComplexity), true
 
-	case "GetRemindResp.remind":
-		if e.complexity.GetRemindResp.Remind == nil {
-			break
-		}
-
-		return e.complexity.GetRemindResp.Remind(childComplexity), true
-
 	case "GetStaffResp.staff":
 		if e.complexity.GetStaffResp.Staff == nil {
 			break
@@ -530,20 +497,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ListMessageResp.Pagination(childComplexity), true
-
-	case "ListRemindResp.pagination":
-		if e.complexity.ListRemindResp.Pagination == nil {
-			break
-		}
-
-		return e.complexity.ListRemindResp.Pagination(childComplexity), true
-
-	case "ListRemindResp.reminds":
-		if e.complexity.ListRemindResp.Reminds == nil {
-			break
-		}
-
-		return e.complexity.ListRemindResp.Reminds(childComplexity), true
 
 	case "ListRoomMessageResp.messages":
 		if e.complexity.ListRoomMessageResp.Messages == nil {
@@ -705,18 +658,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateFastMessageCategory(childComplexity, args["input"].(converter.CreateFastMessageCategoryInput)), true
 
-	case "Mutation.createRemind":
-		if e.complexity.Mutation.CreateRemind == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createRemind_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateRemind(childComplexity, args["input"].(converter.CreateRemindInput)), true
-
 	case "Mutation.createStaff":
 		if e.complexity.Mutation.CreateStaff == nil {
 			break
@@ -740,18 +681,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.DeleteFastMessage(childComplexity, args["id"].(int64)), true
-
-	case "Mutation.deleteRemind":
-		if e.complexity.Mutation.DeleteRemind == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteRemind_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.DeleteRemind(childComplexity, args["id"].(int64)), true
 
 	case "Mutation.deleteStaff":
 		if e.complexity.Mutation.DeleteStaff == nil {
@@ -800,18 +729,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.UpdateFastMessage(childComplexity, args["input"].(converter.UpdateFastMessageInput)), true
-
-	case "Mutation.updateRemind":
-		if e.complexity.Mutation.UpdateRemind == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateRemind_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.UpdateRemind(childComplexity, args["input"].(converter.UpdateRemindInput)), true
 
 	case "Mutation.updateRoomScore":
 		if e.complexity.Mutation.UpdateRoomScore == nil {
@@ -913,18 +830,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.GetFastMessage(childComplexity, args["id"].(int64)), true
 
-	case "Query.getRemind":
-		if e.complexity.Query.GetRemind == nil {
-			break
-		}
-
-		args, err := ec.field_Query_getRemind_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.GetRemind(childComplexity, args["id"].(int64)), true
-
 	case "Query.getStaff":
 		if e.complexity.Query.GetStaff == nil {
 			break
@@ -1006,18 +911,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.ListMessage(childComplexity, args["filter"].(converter.ListMessageInput), args["pagination"].(converter.PaginationInput)), true
 
-	case "Query.listRemind":
-		if e.complexity.Query.ListRemind == nil {
-			break
-		}
-
-		args, err := ec.field_Query_listRemind_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.ListRemind(childComplexity, args["filter"].(converter.ListRemindInput), args["pagination"].(converter.PaginationInput)), true
-
 	case "Query.listRoom":
 		if e.complexity.Query.ListRoom == nil {
 			break
@@ -1065,34 +958,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.ListStaffRoom(childComplexity, args["filter"].(converter.ListStaffRoomInput), args["pagination"].(converter.PaginationInput)), true
-
-	case "Remind.content":
-		if e.complexity.Remind.Content == nil {
-			break
-		}
-
-		return e.complexity.Remind.Content(childComplexity), true
-
-	case "Remind.id":
-		if e.complexity.Remind.ID == nil {
-			break
-		}
-
-		return e.complexity.Remind.ID(childComplexity), true
-
-	case "Remind.status":
-		if e.complexity.Remind.Status == nil {
-			break
-		}
-
-		return e.complexity.Remind.Status(childComplexity), true
-
-	case "Remind.title":
-		if e.complexity.Remind.Title == nil {
-			break
-		}
-
-		return e.complexity.Remind.Title(childComplexity), true
 
 	case "Room.endTime":
 		if e.complexity.Room.EndTime == nil {
@@ -1436,50 +1301,6 @@ extend type Query {
     listRoomMessage(filter: ListRoomMessageInput!): ListRoomMessageResp!
     listMessage(filter: ListMessageInput!, pagination: PaginationInput!): ListMessageResp!
 }`, BuiltIn: false},
-	{Name: "pkg/graph/schema/remind.graphqls", Input: `type Remind {
-    id: Int64!
-    title: String!
-    content: String!
-    status: Status!
-}
-
-input ListRemindInput {
-    content: String!
-    status: Status!
-}
-
-type ListRemindResp {
-    pagination: Pagination!
-    reminds: [Remind]!
-}
-
-type GetRemindResp {
-    remind: Remind!
-}
-
-extend type Query {
-    listRemind(filter: ListRemindInput!, pagination: PaginationInput!): ListRemindResp!
-    getRemind(id: Int64!): GetRemindResp!
-}
-
-input CreateRemindInput {
-    title: String!
-    content: String!
-    status: Status!
-}
-
-input UpdateRemindInput {
-    id: Int64!
-    title: String!
-    content: String!
-    status: Status!
-}
-
-extend type Mutation {
-    createRemind(input: CreateRemindInput!): Boolean!
-    updateRemind(input: UpdateRemindInput!): Boolean!
-    deleteRemind(id: Int64!): Boolean!
-}`, BuiltIn: false},
 	{Name: "pkg/graph/schema/report.graphqls", Input: `type DailyTagReportColumn {
     label: String!
     key: String!
@@ -1742,21 +1563,6 @@ func (ec *executionContext) field_Mutation_createFastMessage_args(ctx context.Co
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_createRemind_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 converter.CreateRemindInput
-	if tmp, ok := rawArgs["input"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateRemindInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐCreateRemindInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["input"] = arg0
-	return args, nil
-}
-
 func (ec *executionContext) field_Mutation_createStaff_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -1773,21 +1579,6 @@ func (ec *executionContext) field_Mutation_createStaff_args(ctx context.Context,
 }
 
 func (ec *executionContext) field_Mutation_deleteFastMessage_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 int64
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNInt642int64(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["id"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_deleteRemind_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 int64
@@ -1854,21 +1645,6 @@ func (ec *executionContext) field_Mutation_updateFastMessage_args(ctx context.Co
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalNUpdateFastMessageInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐUpdateFastMessageInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["input"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_updateRemind_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 converter.UpdateRemindInput
-	if tmp, ok := rawArgs["input"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNUpdateRemindInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐUpdateRemindInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1982,21 +1758,6 @@ func (ec *executionContext) field_Query_getFastMessage_args(ctx context.Context,
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_getRemind_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 int64
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNInt642int64(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["id"] = arg0
-	return args, nil
-}
-
 func (ec *executionContext) field_Query_getStaff_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -2073,30 +1834,6 @@ func (ec *executionContext) field_Query_listMessage_args(ctx context.Context, ra
 	if tmp, ok := rawArgs["filter"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
 		arg0, err = ec.unmarshalNListMessageInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListMessageInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["filter"] = arg0
-	var arg1 converter.PaginationInput
-	if tmp, ok := rawArgs["pagination"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pagination"))
-		arg1, err = ec.unmarshalNPaginationInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐPaginationInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["pagination"] = arg1
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_listRemind_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 converter.ListRemindInput
-	if tmp, ok := rawArgs["filter"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
-		arg0, err = ec.unmarshalNListRemindInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListRemindInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2971,41 +2708,6 @@ func (ec *executionContext) _GetFastMessageResp_fastMessage(ctx context.Context,
 	return ec.marshalNFastMessage2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐFastMessage(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _GetRemindResp_remind(ctx context.Context, field graphql.CollectedField, obj *converter.GetRemindResp) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "GetRemindResp",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Remind, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*converter.Remind)
-	fc.Result = res
-	return ec.marshalNRemind2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐRemind(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _GetStaffResp_staff(ctx context.Context, field graphql.CollectedField, obj *converter.GetStaffResp) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -3389,76 +3091,6 @@ func (ec *executionContext) _ListMessageResp_messages(ctx context.Context, field
 	res := resTmp.([]*converter.Message)
 	fc.Result = res
 	return ec.marshalNMessage2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐMessage(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _ListRemindResp_pagination(ctx context.Context, field graphql.CollectedField, obj *converter.ListRemindResp) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "ListRemindResp",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Pagination, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*converter.Pagination)
-	fc.Result = res
-	return ec.marshalNPagination2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐPagination(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _ListRemindResp_reminds(ctx context.Context, field graphql.CollectedField, obj *converter.ListRemindResp) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "ListRemindResp",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Reminds, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.([]*converter.Remind)
-	fc.Result = res
-	return ec.marshalNRemind2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐRemind(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _ListRoomMessageResp_messages(ctx context.Context, field graphql.CollectedField, obj *converter.ListRoomMessageResp) (ret graphql.Marshaler) {
@@ -4267,132 +3899,6 @@ func (ec *executionContext) _Mutation_createFastMessageCategory(ctx context.Cont
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Mutation_createRemind(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_createRemind_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateRemind(rctx, args["input"].(converter.CreateRemindInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(bool)
-	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Mutation_updateRemind(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_updateRemind_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateRemind(rctx, args["input"].(converter.UpdateRemindInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(bool)
-	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Mutation_deleteRemind(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_deleteRemind_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().DeleteRemind(rctx, args["id"].(int64))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(bool)
-	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _Mutation_acceptRoom(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -5149,90 +4655,6 @@ func (ec *executionContext) _Query_listMessage(ctx context.Context, field graphq
 	return ec.marshalNListMessageResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐListMessageResp(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Query_listRemind(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Query_listRemind_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ListRemind(rctx, args["filter"].(converter.ListRemindInput), args["pagination"].(converter.PaginationInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*converter.ListRemindResp)
-	fc.Result = res
-	return ec.marshalNListRemindResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐListRemindResp(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Query_getRemind(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Query_getRemind_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetRemind(rctx, args["id"].(int64))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*converter.GetRemindResp)
-	fc.Result = res
-	return ec.marshalNGetRemindResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐGetRemindResp(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _Query_listDailyTagReport(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -5589,146 +5011,6 @@ func (ec *executionContext) _Query___schema(ctx context.Context, field graphql.C
 	res := resTmp.(*introspection.Schema)
 	fc.Result = res
 	return ec.marshalO__Schema2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐSchema(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Remind_id(ctx context.Context, field graphql.CollectedField, obj *converter.Remind) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Remind",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int64)
-	fc.Result = res
-	return ec.marshalNInt642int64(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Remind_title(ctx context.Context, field graphql.CollectedField, obj *converter.Remind) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Remind",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Title, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Remind_content(ctx context.Context, field graphql.CollectedField, obj *converter.Remind) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Remind",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Content, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Remind_status(ctx context.Context, field graphql.CollectedField, obj *converter.Remind) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Remind",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Status, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(converter.Status)
-	fc.Result = res
-	return ec.marshalNStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐStatus(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Room_id(ctx context.Context, field graphql.CollectedField, obj *converter.Room) (ret graphql.Marshaler) {
@@ -7578,45 +6860,6 @@ func (ec *executionContext) unmarshalInputCreateFastMessageInput(ctx context.Con
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputCreateRemindInput(ctx context.Context, obj interface{}) (converter.CreateRemindInput, error) {
-	var it converter.CreateRemindInput
-	asMap := map[string]interface{}{}
-	for k, v := range obj.(map[string]interface{}) {
-		asMap[k] = v
-	}
-
-	for k, v := range asMap {
-		switch k {
-		case "title":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
-			it.Title, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "content":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("content"))
-			it.Content, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "status":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-			it.Status, err = ec.unmarshalNStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐStatus(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		}
-	}
-
-	return it, nil
-}
-
 func (ec *executionContext) unmarshalInputCreateStaffInput(ctx context.Context, obj interface{}) (converter.CreateStaffInput, error) {
 	var it converter.CreateStaffInput
 	asMap := map[string]interface{}{}
@@ -7803,37 +7046,6 @@ func (ec *executionContext) unmarshalInputListMessageInput(ctx context.Context, 
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("content"))
 			it.Content, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		}
-	}
-
-	return it, nil
-}
-
-func (ec *executionContext) unmarshalInputListRemindInput(ctx context.Context, obj interface{}) (converter.ListRemindInput, error) {
-	var it converter.ListRemindInput
-	asMap := map[string]interface{}{}
-	for k, v := range obj.(map[string]interface{}) {
-		asMap[k] = v
-	}
-
-	for k, v := range asMap {
-		switch k {
-		case "content":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("content"))
-			it.Content, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "status":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-			it.Status, err = ec.unmarshalNStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐStatus(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8098,53 +7310,6 @@ func (ec *executionContext) unmarshalInputUpdateFastMessageInput(ctx context.Con
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryID"))
 			it.CategoryID, err = ec.unmarshalNInt642int64(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "title":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
-			it.Title, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "content":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("content"))
-			it.Content, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "status":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-			it.Status, err = ec.unmarshalNStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐStatus(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		}
-	}
-
-	return it, nil
-}
-
-func (ec *executionContext) unmarshalInputUpdateRemindInput(ctx context.Context, obj interface{}) (converter.UpdateRemindInput, error) {
-	var it converter.UpdateRemindInput
-	asMap := map[string]interface{}{}
-	for k, v := range obj.(map[string]interface{}) {
-		asMap[k] = v
-	}
-
-	for k, v := range asMap {
-		switch k {
-		case "id":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-			it.ID, err = ec.unmarshalNInt642int64(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8637,37 +7802,6 @@ func (ec *executionContext) _GetFastMessageResp(ctx context.Context, sel ast.Sel
 	return out
 }
 
-var getRemindRespImplementors = []string{"GetRemindResp"}
-
-func (ec *executionContext) _GetRemindResp(ctx context.Context, sel ast.SelectionSet, obj *converter.GetRemindResp) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, getRemindRespImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("GetRemindResp")
-		case "remind":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._GetRemindResp_remind(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
 var getStaffRespImplementors = []string{"GetStaffResp"}
 
 func (ec *executionContext) _GetStaffResp(ctx context.Context, sel ast.SelectionSet, obj *converter.GetStaffResp) graphql.Marshaler {
@@ -8928,47 +8062,6 @@ func (ec *executionContext) _ListMessageResp(ctx context.Context, sel ast.Select
 		case "messages":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._ListMessageResp_messages(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var listRemindRespImplementors = []string{"ListRemindResp"}
-
-func (ec *executionContext) _ListRemindResp(ctx context.Context, sel ast.SelectionSet, obj *converter.ListRemindResp) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, listRemindRespImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("ListRemindResp")
-		case "pagination":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._ListRemindResp_pagination(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "reminds":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._ListRemindResp_reminds(ctx, field, obj)
 			}
 
 			out.Values[i] = innerFunc(ctx)
@@ -9346,36 +8439,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "createRemind":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createRemind(ctx, field)
-			}
-
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "updateRemind":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateRemind(ctx, field)
-			}
-
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "deleteRemind":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_deleteRemind(ctx, field)
-			}
-
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "acceptRoom":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_acceptRoom(ctx, field)
@@ -9708,52 +8771,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Concurrently(i, func() graphql.Marshaler {
 				return rrm(innerCtx)
 			})
-		case "listRemind":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_listRemind(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return rrm(innerCtx)
-			})
-		case "getRemind":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_getRemind(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return rrm(innerCtx)
-			})
 		case "listDailyTagReport":
 			field := field
 
@@ -9929,67 +8946,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
 
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var remindImplementors = []string{"Remind"}
-
-func (ec *executionContext) _Remind(ctx context.Context, sel ast.SelectionSet, obj *converter.Remind) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, remindImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("Remind")
-		case "id":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Remind_id(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "title":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Remind_title(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "content":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Remind_content(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "status":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Remind_status(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -10666,11 +9622,6 @@ func (ec *executionContext) unmarshalNCreateFastMessageInput2csᚑapiᚋpkgᚋgr
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateRemindInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐCreateRemindInput(ctx context.Context, v interface{}) (converter.CreateRemindInput, error) {
-	res, err := ec.unmarshalInputCreateRemindInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
 func (ec *executionContext) unmarshalNCreateStaffInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐCreateStaffInput(ctx context.Context, v interface{}) (converter.CreateStaffInput, error) {
 	res, err := ec.unmarshalInputCreateStaffInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -10952,20 +9903,6 @@ func (ec *executionContext) marshalNGetFastMessageResp2ᚖcsᚑapiᚋpkgᚋgraph
 	return ec._GetFastMessageResp(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNGetRemindResp2csᚑapiᚋpkgᚋgraphᚋconverterᚐGetRemindResp(ctx context.Context, sel ast.SelectionSet, v converter.GetRemindResp) graphql.Marshaler {
-	return ec._GetRemindResp(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNGetRemindResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐGetRemindResp(ctx context.Context, sel ast.SelectionSet, v *converter.GetRemindResp) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._GetRemindResp(ctx, sel, v)
-}
-
 func (ec *executionContext) marshalNGetStaffResp2csᚑapiᚋpkgᚋgraphᚋconverterᚐGetStaffResp(ctx context.Context, sel ast.SelectionSet, v converter.GetStaffResp) graphql.Marshaler {
 	return ec._GetStaffResp(ctx, sel, &v)
 }
@@ -11111,25 +10048,6 @@ func (ec *executionContext) marshalNListMessageResp2ᚖcsᚑapiᚋpkgᚋgraphᚋ
 		return graphql.Null
 	}
 	return ec._ListMessageResp(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalNListRemindInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListRemindInput(ctx context.Context, v interface{}) (converter.ListRemindInput, error) {
-	res, err := ec.unmarshalInputListRemindInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNListRemindResp2csᚑapiᚋpkgᚋgraphᚋconverterᚐListRemindResp(ctx context.Context, sel ast.SelectionSet, v converter.ListRemindResp) graphql.Marshaler {
-	return ec._ListRemindResp(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNListRemindResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐListRemindResp(ctx context.Context, sel ast.SelectionSet, v *converter.ListRemindResp) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._ListRemindResp(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNListRoomInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListRoomInput(ctx context.Context, v interface{}) (converter.ListRoomInput, error) {
@@ -11279,54 +10197,6 @@ func (ec *executionContext) marshalNPagination2ᚖcsᚑapiᚋpkgᚋgraphᚋconve
 func (ec *executionContext) unmarshalNPaginationInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐPaginationInput(ctx context.Context, v interface{}) (converter.PaginationInput, error) {
 	res, err := ec.unmarshalInputPaginationInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNRemind2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐRemind(ctx context.Context, sel ast.SelectionSet, v []*converter.Remind) graphql.Marshaler {
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalORemind2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐRemind(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	return ret
-}
-
-func (ec *executionContext) marshalNRemind2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐRemind(ctx context.Context, sel ast.SelectionSet, v *converter.Remind) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._Remind(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNRoom2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐRoom(ctx context.Context, sel ast.SelectionSet, v []*converter.Room) graphql.Marshaler {
@@ -11504,11 +10374,6 @@ func (ec *executionContext) unmarshalNUpdateCsConfigInput2csᚑapiᚋpkgᚋgraph
 
 func (ec *executionContext) unmarshalNUpdateFastMessageInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐUpdateFastMessageInput(ctx context.Context, v interface{}) (converter.UpdateFastMessageInput, error) {
 	res, err := ec.unmarshalInputUpdateFastMessageInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalNUpdateRemindInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐUpdateRemindInput(ctx context.Context, v interface{}) (converter.UpdateRemindInput, error) {
-	res, err := ec.unmarshalInputUpdateRemindInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -11865,13 +10730,6 @@ func (ec *executionContext) marshalOMessageExtraInfo2ᚖcsᚑapiᚋpkgᚋgraph�
 		return graphql.Null
 	}
 	return ec._MessageExtraInfo(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalORemind2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐRemind(ctx context.Context, sel ast.SelectionSet, v *converter.Remind) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._Remind(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalORoom2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐRoom(ctx context.Context, sel ast.SelectionSet, v *converter.Room) graphql.Marshaler {

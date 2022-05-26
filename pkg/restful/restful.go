@@ -3,6 +3,7 @@ package restful
 import (
 	"cs-api/pkg/restful/auth"
 	"cs-api/pkg/restful/notice"
+	"cs-api/pkg/restful/remind"
 	"cs-api/pkg/restful/role"
 	"cs-api/pkg/restful/tag"
 	"cs-api/pkg/restful/tool"
@@ -23,6 +24,7 @@ var Module = fx.Options(
 	tag.Module,
 	role.Module,
 	notice.Module,
+	remind.Module,
 )
 
 func InitCommonHandler(engine *gin.Engine) {

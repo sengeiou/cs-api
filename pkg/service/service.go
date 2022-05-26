@@ -5,7 +5,6 @@ import (
 	"cs-api/pkg/service/fast_message"
 	"cs-api/pkg/service/member"
 	"cs-api/pkg/service/message"
-	"cs-api/pkg/service/remind"
 	"cs-api/pkg/service/report"
 	"cs-api/pkg/service/room"
 	"cs-api/pkg/service/staff"
@@ -21,6 +20,5 @@ var Module = fx.Options(
 		fast_message.NewFastMessageService,
 		report.NewReportService,
 		message.NewMessageService,
-		remind.NewRemindService,
 	),
 )

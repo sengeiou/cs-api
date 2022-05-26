@@ -3,9 +3,14 @@ package remind
 import (
 	"context"
 	"cs-api/db/model"
+	iface "cs-api/pkg/interface"
 	"cs-api/pkg/types"
 	"database/sql"
 )
+
+type service struct {
+	repo iface.IRepository
+}
 
 func (s *service) ListRemind(ctx context.Context, params model.ListRemindParams, filterParams types.FilterRemindParams) (reminds []model.Remind, count int64, err error) {
 	reminds = make([]model.Remind, 0)
@@ -52,4 +57,10 @@ func (s *service) UpdateRemind(ctx context.Context, params model.UpdateRemindPar
 
 func (s *service) DeleteRemind(ctx context.Context, remindId int64) error {
 	return s.repo.DeleteRemind(ctx, remindId)
+}
+
+func NewService(Repo iface.IRepository) iface.IRemindService {
+	return &service{
+		repo: Repo,
+	}
 }

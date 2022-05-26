@@ -24,12 +24,6 @@ type CreateFastMessageInput struct {
 	Status     Status `json:"status"`
 }
 
-type CreateRemindInput struct {
-	Title   string `json:"title"`
-	Content string `json:"content"`
-	Status  Status `json:"status"`
-}
-
 type CreateStaffInput struct {
 	RoleID   int64  `json:"roleID"`
 	Name     string `json:"name"`
@@ -84,10 +78,6 @@ type GetCsConfigResp struct {
 
 type GetFastMessageResp struct {
 	FastMessage *FastMessage `json:"fastMessage"`
-}
-
-type GetRemindResp struct {
-	Remind *Remind `json:"remind"`
 }
 
 type GetStaffResp struct {
@@ -145,16 +135,6 @@ type ListMessageInput struct {
 type ListMessageResp struct {
 	Pagination *Pagination `json:"pagination"`
 	Messages   []*Message  `json:"messages"`
-}
-
-type ListRemindInput struct {
-	Content string `json:"content"`
-	Status  Status `json:"status"`
-}
-
-type ListRemindResp struct {
-	Pagination *Pagination `json:"pagination"`
-	Reminds    []*Remind   `json:"reminds"`
 }
 
 type ListRoomInput struct {
@@ -223,13 +203,6 @@ type PaginationInput struct {
 	PageSize int64 `json:"pageSize"`
 }
 
-type Remind struct {
-	ID      int64  `json:"id"`
-	Title   string `json:"title"`
-	Content string `json:"content"`
-	Status  Status `json:"status"`
-}
-
 type Room struct {
 	ID         int64      `json:"id"`
 	MemberName string     `json:"memberName"`
@@ -272,13 +245,6 @@ type UpdateFastMessageInput struct {
 	Title      string `json:"title"`
 	Content    string `json:"content"`
 	Status     Status `json:"status"`
-}
-
-type UpdateRemindInput struct {
-	ID      int64  `json:"id"`
-	Title   string `json:"title"`
-	Content string `json:"content"`
-	Status  Status `json:"status"`
 }
 
 type UpdateStaffInput struct {
