@@ -166,7 +166,7 @@ func (h *handler) ListRole(c *gin.Context) {
 
 	params, filterParams := formatListRoleParams(requestParams)
 
-	tags, count, err := h.roleSvc.ListRole(ctx, params, filterParams)
+	roles, count, err := h.roleSvc.ListRole(ctx, params, filterParams)
 	if err != nil {
 		ginTool.Error(c, err)
 		return
@@ -174,7 +174,7 @@ func (h *handler) ListRole(c *gin.Context) {
 
 	requestParams.Pagination.Total = count
 
-	ginTool.SuccessWithPagination(c, tags, requestParams.Pagination)
+	ginTool.SuccessWithPagination(c, roles, requestParams.Pagination)
 }
 
 func formatListRoleParams(requestParams ListRoleParams) (model.ListRoleParams, types.FilterRoleParams) {

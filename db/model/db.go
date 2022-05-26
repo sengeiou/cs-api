@@ -126,9 +126,6 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.getAllTagStmt, err = db.PrepareContext(ctx, getAllTag); err != nil {
 		return nil, fmt.Errorf("error preparing query GetAllTag: %w", err)
 	}
-	if q.getAvailableNoticeStmt, err = db.PrepareContext(ctx, getAvailableNotice); err != nil {
-		return nil, fmt.Errorf("error preparing query GetAvailableNotice: %w", err)
-	}
 	if q.getCsConfigStmt, err = db.PrepareContext(ctx, getCsConfig); err != nil {
 		return nil, fmt.Errorf("error preparing query GetCsConfig: %w", err)
 	}
@@ -137,6 +134,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	}
 	if q.getGuestMemberStmt, err = db.PrepareContext(ctx, getGuestMember); err != nil {
 		return nil, fmt.Errorf("error preparing query GetGuestMember: %w", err)
+	}
+	if q.getLatestNoticeStmt, err = db.PrepareContext(ctx, getLatestNotice); err != nil {
+		return nil, fmt.Errorf("error preparing query GetLatestNotice: %w", err)
 	}
 	if q.getMemberAvailableRoomStmt, err = db.PrepareContext(ctx, getMemberAvailableRoom); err != nil {
 		return nil, fmt.Errorf("error preparing query GetMemberAvailableRoom: %w", err)
@@ -430,11 +430,6 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing getAllTagStmt: %w", cerr)
 		}
 	}
-	if q.getAvailableNoticeStmt != nil {
-		if cerr := q.getAvailableNoticeStmt.Close(); cerr != nil {
-			err = fmt.Errorf("error closing getAvailableNoticeStmt: %w", cerr)
-		}
-	}
 	if q.getCsConfigStmt != nil {
 		if cerr := q.getCsConfigStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getCsConfigStmt: %w", cerr)
@@ -448,6 +443,11 @@ func (q *Queries) Close() error {
 	if q.getGuestMemberStmt != nil {
 		if cerr := q.getGuestMemberStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getGuestMemberStmt: %w", cerr)
+		}
+	}
+	if q.getLatestNoticeStmt != nil {
+		if cerr := q.getLatestNoticeStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getLatestNoticeStmt: %w", cerr)
 		}
 	}
 	if q.getMemberAvailableRoomStmt != nil {
@@ -718,10 +718,10 @@ type Queries struct {
 	deleteTagStmt                  *sql.Stmt
 	getAllAvailableFastMessageStmt *sql.Stmt
 	getAllTagStmt                  *sql.Stmt
-	getAvailableNoticeStmt         *sql.Stmt
 	getCsConfigStmt                *sql.Stmt
 	getFastMessageStmt             *sql.Stmt
 	getGuestMemberStmt             *sql.Stmt
+	getLatestNoticeStmt            *sql.Stmt
 	getMemberAvailableRoomStmt     *sql.Stmt
 	getNormalMemberStmt            *sql.Stmt
 	getNoticeStmt                  *sql.Stmt
@@ -801,10 +801,10 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		deleteTagStmt:                  q.deleteTagStmt,
 		getAllAvailableFastMessageStmt: q.getAllAvailableFastMessageStmt,
 		getAllTagStmt:                  q.getAllTagStmt,
-		getAvailableNoticeStmt:         q.getAvailableNoticeStmt,
 		getCsConfigStmt:                q.getCsConfigStmt,
 		getFastMessageStmt:             q.getFastMessageStmt,
 		getGuestMemberStmt:             q.getGuestMemberStmt,
+		getLatestNoticeStmt:            q.getLatestNoticeStmt,
 		getMemberAvailableRoomStmt:     q.getMemberAvailableRoomStmt,
 		getNormalMemberStmt:            q.getNormalMemberStmt,
 		getNoticeStmt:                  q.getNoticeStmt,

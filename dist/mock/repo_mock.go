@@ -529,21 +529,6 @@ func (mr *MockIRepositoryMockRecorder) GetAllTag(ctx interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllTag", reflect.TypeOf((*MockIRepository)(nil).GetAllTag), ctx)
 }
 
-// GetAvailableNotice mocks base method.
-func (m *MockIRepository) GetAvailableNotice(ctx context.Context) (model.Notice, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetAvailableNotice", ctx)
-	ret0, _ := ret[0].(model.Notice)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetAvailableNotice indicates an expected call of GetAvailableNotice.
-func (mr *MockIRepositoryMockRecorder) GetAvailableNotice(ctx interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAvailableNotice", reflect.TypeOf((*MockIRepository)(nil).GetAvailableNotice), ctx)
-}
-
 // GetCsConfig mocks base method.
 func (m *MockIRepository) GetCsConfig(ctx context.Context) (model.Constant, error) {
 	m.ctrl.T.Helper()
@@ -587,6 +572,21 @@ func (m *MockIRepository) GetGuestMember(ctx context.Context, deviceID string) (
 func (mr *MockIRepositoryMockRecorder) GetGuestMember(ctx, deviceID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetGuestMember", reflect.TypeOf((*MockIRepository)(nil).GetGuestMember), ctx, deviceID)
+}
+
+// GetLatestNotice mocks base method.
+func (m *MockIRepository) GetLatestNotice(ctx context.Context) (model.Notice, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetLatestNotice", ctx)
+	ret0, _ := ret[0].(model.Notice)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetLatestNotice indicates an expected call of GetLatestNotice.
+func (mr *MockIRepositoryMockRecorder) GetLatestNotice(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLatestNotice", reflect.TypeOf((*MockIRepository)(nil).GetLatestNotice), ctx)
 }
 
 // GetMemberAvailableRoom mocks base method.

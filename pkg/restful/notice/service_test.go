@@ -240,7 +240,7 @@ func Test_service_GetAvailableNotice(t *testing.T) {
 			s := &service{
 				repo: tt.fields.repo,
 			}
-			got, err := s.GetAvailableNotice(tt.args.ctx)
+			got, err := s.GetLatestNotice(tt.args.ctx)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetAvailableNotice() error = %v, wantErr %v", err, tt.wantErr)
 				return

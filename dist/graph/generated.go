@@ -92,10 +92,6 @@ type ComplexityRoot struct {
 		FastMessage func(childComplexity int) int
 	}
 
-	GetNoticeResp struct {
-		Notice func(childComplexity int) int
-	}
-
 	GetRemindResp struct {
 		Remind func(childComplexity int) int
 	}
@@ -132,11 +128,6 @@ type ComplexityRoot struct {
 
 	ListMessageResp struct {
 		Messages   func(childComplexity int) int
-		Pagination func(childComplexity int) int
-	}
-
-	ListNoticeResp struct {
-		Notices    func(childComplexity int) int
 		Pagination func(childComplexity int) int
 	}
 
@@ -184,32 +175,20 @@ type ComplexityRoot struct {
 		CloseRoom                 func(childComplexity int, input converter.CloseRoomInput) int
 		CreateFastMessage         func(childComplexity int, input converter.CreateFastMessageInput) int
 		CreateFastMessageCategory func(childComplexity int, input converter.CreateFastMessageCategoryInput) int
-		CreateNotice              func(childComplexity int, input converter.CreateNoticeInput) int
 		CreateRemind              func(childComplexity int, input converter.CreateRemindInput) int
 		CreateStaff               func(childComplexity int, input converter.CreateStaffInput) int
 		DeleteFastMessage         func(childComplexity int, id int64) int
-		DeleteNotice              func(childComplexity int, id int64) int
 		DeleteRemind              func(childComplexity int, id int64) int
 		DeleteStaff               func(childComplexity int, id int64) int
 		TransferRoom              func(childComplexity int, input converter.TransferRoomInput) int
 		UpdateCsConfig            func(childComplexity int, input converter.UpdateCsConfigInput) int
 		UpdateFastMessage         func(childComplexity int, input converter.UpdateFastMessageInput) int
-		UpdateNotice              func(childComplexity int, input converter.UpdateNoticeInput) int
 		UpdateRemind              func(childComplexity int, input converter.UpdateRemindInput) int
 		UpdateRoomScore           func(childComplexity int, score int64) int
 		UpdateStaff               func(childComplexity int, input converter.UpdateStaffInput) int
 		UpdateStaffAvatar         func(childComplexity int, avatar string) int
 		UpdateStaffServingStatus  func(childComplexity int, servingStatus converter.StaffServingStatus) int
 		Upload                    func(childComplexity int, file graphql.Upload) int
-	}
-
-	Notice struct {
-		Content func(childComplexity int) int
-		EndAt   func(childComplexity int) int
-		ID      func(childComplexity int) int
-		StartAt func(childComplexity int) int
-		Status  func(childComplexity int) int
-		Title   func(childComplexity int) int
 	}
 
 	Pagination struct {
@@ -221,7 +200,6 @@ type ComplexityRoot struct {
 	Query struct {
 		GetCsConfig             func(childComplexity int) int
 		GetFastMessage          func(childComplexity int, id int64) int
-		GetNotice               func(childComplexity int, id int64) int
 		GetRemind               func(childComplexity int, id int64) int
 		GetStaff                func(childComplexity int, id int64) int
 		ListAvailableStaff      func(childComplexity int) int
@@ -231,7 +209,6 @@ type ComplexityRoot struct {
 		ListFastMessageCategory func(childComplexity int) int
 		ListFastMessageGroup    func(childComplexity int) int
 		ListMessage             func(childComplexity int, filter converter.ListMessageInput, pagination converter.PaginationInput) int
-		ListNotice              func(childComplexity int, filter converter.ListNoticeInput, pagination converter.PaginationInput) int
 		ListRemind              func(childComplexity int, filter converter.ListRemindInput, pagination converter.PaginationInput) int
 		ListRoom                func(childComplexity int, filter converter.ListRoomInput, pagination converter.PaginationInput) int
 		ListRoomMessage         func(childComplexity int, filter converter.ListRoomMessageInput) int
@@ -276,9 +253,6 @@ type MutationResolver interface {
 	UpdateFastMessage(ctx context.Context, input converter.UpdateFastMessageInput) (bool, error)
 	DeleteFastMessage(ctx context.Context, id int64) (bool, error)
 	CreateFastMessageCategory(ctx context.Context, input converter.CreateFastMessageCategoryInput) (bool, error)
-	CreateNotice(ctx context.Context, input converter.CreateNoticeInput) (bool, error)
-	UpdateNotice(ctx context.Context, input converter.UpdateNoticeInput) (bool, error)
-	DeleteNotice(ctx context.Context, id int64) (bool, error)
 	CreateRemind(ctx context.Context, input converter.CreateRemindInput) (bool, error)
 	UpdateRemind(ctx context.Context, input converter.UpdateRemindInput) (bool, error)
 	DeleteRemind(ctx context.Context, id int64) (bool, error)
@@ -300,8 +274,6 @@ type QueryResolver interface {
 	GetFastMessage(ctx context.Context, id int64) (*converter.GetFastMessageResp, error)
 	ListRoomMessage(ctx context.Context, filter converter.ListRoomMessageInput) (*converter.ListRoomMessageResp, error)
 	ListMessage(ctx context.Context, filter converter.ListMessageInput, pagination converter.PaginationInput) (*converter.ListMessageResp, error)
-	ListNotice(ctx context.Context, filter converter.ListNoticeInput, pagination converter.PaginationInput) (*converter.ListNoticeResp, error)
-	GetNotice(ctx context.Context, id int64) (*converter.GetNoticeResp, error)
 	ListRemind(ctx context.Context, filter converter.ListRemindInput, pagination converter.PaginationInput) (*converter.ListRemindResp, error)
 	GetRemind(ctx context.Context, id int64) (*converter.GetRemindResp, error)
 	ListDailyTagReport(ctx context.Context, filter converter.ListDailyTagReportInput) (*converter.ListDailyTagReportResp, error)
@@ -475,13 +447,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.GetFastMessageResp.FastMessage(childComplexity), true
 
-	case "GetNoticeResp.notice":
-		if e.complexity.GetNoticeResp.Notice == nil {
-			break
-		}
-
-		return e.complexity.GetNoticeResp.Notice(childComplexity), true
-
 	case "GetRemindResp.remind":
 		if e.complexity.GetRemindResp.Remind == nil {
 			break
@@ -565,20 +530,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ListMessageResp.Pagination(childComplexity), true
-
-	case "ListNoticeResp.notices":
-		if e.complexity.ListNoticeResp.Notices == nil {
-			break
-		}
-
-		return e.complexity.ListNoticeResp.Notices(childComplexity), true
-
-	case "ListNoticeResp.pagination":
-		if e.complexity.ListNoticeResp.Pagination == nil {
-			break
-		}
-
-		return e.complexity.ListNoticeResp.Pagination(childComplexity), true
 
 	case "ListRemindResp.pagination":
 		if e.complexity.ListRemindResp.Pagination == nil {
@@ -754,18 +705,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateFastMessageCategory(childComplexity, args["input"].(converter.CreateFastMessageCategoryInput)), true
 
-	case "Mutation.createNotice":
-		if e.complexity.Mutation.CreateNotice == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createNotice_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateNotice(childComplexity, args["input"].(converter.CreateNoticeInput)), true
-
 	case "Mutation.createRemind":
 		if e.complexity.Mutation.CreateRemind == nil {
 			break
@@ -801,18 +740,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.DeleteFastMessage(childComplexity, args["id"].(int64)), true
-
-	case "Mutation.deleteNotice":
-		if e.complexity.Mutation.DeleteNotice == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteNotice_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.DeleteNotice(childComplexity, args["id"].(int64)), true
 
 	case "Mutation.deleteRemind":
 		if e.complexity.Mutation.DeleteRemind == nil {
@@ -873,18 +800,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.UpdateFastMessage(childComplexity, args["input"].(converter.UpdateFastMessageInput)), true
-
-	case "Mutation.updateNotice":
-		if e.complexity.Mutation.UpdateNotice == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateNotice_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.UpdateNotice(childComplexity, args["input"].(converter.UpdateNoticeInput)), true
 
 	case "Mutation.updateRemind":
 		if e.complexity.Mutation.UpdateRemind == nil {
@@ -958,48 +873,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.Upload(childComplexity, args["file"].(graphql.Upload)), true
 
-	case "Notice.content":
-		if e.complexity.Notice.Content == nil {
-			break
-		}
-
-		return e.complexity.Notice.Content(childComplexity), true
-
-	case "Notice.endAt":
-		if e.complexity.Notice.EndAt == nil {
-			break
-		}
-
-		return e.complexity.Notice.EndAt(childComplexity), true
-
-	case "Notice.id":
-		if e.complexity.Notice.ID == nil {
-			break
-		}
-
-		return e.complexity.Notice.ID(childComplexity), true
-
-	case "Notice.startAt":
-		if e.complexity.Notice.StartAt == nil {
-			break
-		}
-
-		return e.complexity.Notice.StartAt(childComplexity), true
-
-	case "Notice.status":
-		if e.complexity.Notice.Status == nil {
-			break
-		}
-
-		return e.complexity.Notice.Status(childComplexity), true
-
-	case "Notice.title":
-		if e.complexity.Notice.Title == nil {
-			break
-		}
-
-		return e.complexity.Notice.Title(childComplexity), true
-
 	case "Pagination.page":
 		if e.complexity.Pagination.Page == nil {
 			break
@@ -1039,18 +912,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.GetFastMessage(childComplexity, args["id"].(int64)), true
-
-	case "Query.getNotice":
-		if e.complexity.Query.GetNotice == nil {
-			break
-		}
-
-		args, err := ec.field_Query_getNotice_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.GetNotice(childComplexity, args["id"].(int64)), true
 
 	case "Query.getRemind":
 		if e.complexity.Query.GetRemind == nil {
@@ -1144,18 +1005,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.ListMessage(childComplexity, args["filter"].(converter.ListMessageInput), args["pagination"].(converter.PaginationInput)), true
-
-	case "Query.listNotice":
-		if e.complexity.Query.ListNotice == nil {
-			break
-		}
-
-		args, err := ec.field_Query_listNotice_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.ListNotice(childComplexity, args["filter"].(converter.ListNoticeInput), args["pagination"].(converter.PaginationInput)), true
 
 	case "Query.listRemind":
 		if e.complexity.Query.ListRemind == nil {
@@ -1587,56 +1436,6 @@ extend type Query {
     listRoomMessage(filter: ListRoomMessageInput!): ListRoomMessageResp!
     listMessage(filter: ListMessageInput!, pagination: PaginationInput!): ListMessageResp!
 }`, BuiltIn: false},
-	{Name: "pkg/graph/schema/notice.graphqls", Input: `type Notice {
-    id: Int64!
-    title: String!
-    content: String!
-    startAt: String!
-    endAt: String!
-    status: Status!
-}
-
-input ListNoticeInput {
-    content: String!
-    status: Status!
-}
-
-type ListNoticeResp {
-    pagination: Pagination!
-    notices: [Notice]!
-}
-
-type GetNoticeResp {
-    notice: Notice!
-}
-
-extend type Query {
-    listNotice(filter: ListNoticeInput!, pagination: PaginationInput!): ListNoticeResp!
-    getNotice(id: Int64!): GetNoticeResp!
-}
-
-input CreateNoticeInput {
-    title: String!
-    content: String!
-    startAt: String!
-    endAt: String!
-    status: Status!
-}
-
-input UpdateNoticeInput {
-    id: Int64!
-    title: String!
-    content: String!
-    startAt: String!
-    endAt: String!
-    status: Status!
-}
-
-extend type Mutation {
-    createNotice(input: CreateNoticeInput!): Boolean!
-    updateNotice(input: UpdateNoticeInput!): Boolean!
-    deleteNotice(id: Int64!): Boolean!
-}`, BuiltIn: false},
 	{Name: "pkg/graph/schema/remind.graphqls", Input: `type Remind {
     id: Int64!
     title: String!
@@ -1943,21 +1742,6 @@ func (ec *executionContext) field_Mutation_createFastMessage_args(ctx context.Co
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_createNotice_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 converter.CreateNoticeInput
-	if tmp, ok := rawArgs["input"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateNoticeInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐCreateNoticeInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["input"] = arg0
-	return args, nil
-}
-
 func (ec *executionContext) field_Mutation_createRemind_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -1989,21 +1773,6 @@ func (ec *executionContext) field_Mutation_createStaff_args(ctx context.Context,
 }
 
 func (ec *executionContext) field_Mutation_deleteFastMessage_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 int64
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNInt642int64(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["id"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_deleteNotice_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 int64
@@ -2085,21 +1854,6 @@ func (ec *executionContext) field_Mutation_updateFastMessage_args(ctx context.Co
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalNUpdateFastMessageInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐUpdateFastMessageInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["input"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_updateNotice_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 converter.UpdateNoticeInput
-	if tmp, ok := rawArgs["input"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNUpdateNoticeInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐUpdateNoticeInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2228,21 +1982,6 @@ func (ec *executionContext) field_Query_getFastMessage_args(ctx context.Context,
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_getNotice_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 int64
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNInt642int64(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["id"] = arg0
-	return args, nil
-}
-
 func (ec *executionContext) field_Query_getRemind_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -2334,30 +2073,6 @@ func (ec *executionContext) field_Query_listMessage_args(ctx context.Context, ra
 	if tmp, ok := rawArgs["filter"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
 		arg0, err = ec.unmarshalNListMessageInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListMessageInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["filter"] = arg0
-	var arg1 converter.PaginationInput
-	if tmp, ok := rawArgs["pagination"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pagination"))
-		arg1, err = ec.unmarshalNPaginationInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐPaginationInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["pagination"] = arg1
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_listNotice_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 converter.ListNoticeInput
-	if tmp, ok := rawArgs["filter"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
-		arg0, err = ec.unmarshalNListNoticeInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListNoticeInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3256,41 +2971,6 @@ func (ec *executionContext) _GetFastMessageResp_fastMessage(ctx context.Context,
 	return ec.marshalNFastMessage2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐFastMessage(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _GetNoticeResp_notice(ctx context.Context, field graphql.CollectedField, obj *converter.GetNoticeResp) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "GetNoticeResp",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Notice, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*converter.Notice)
-	fc.Result = res
-	return ec.marshalNNotice2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐNotice(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _GetRemindResp_remind(ctx context.Context, field graphql.CollectedField, obj *converter.GetRemindResp) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -3709,76 +3389,6 @@ func (ec *executionContext) _ListMessageResp_messages(ctx context.Context, field
 	res := resTmp.([]*converter.Message)
 	fc.Result = res
 	return ec.marshalNMessage2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐMessage(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _ListNoticeResp_pagination(ctx context.Context, field graphql.CollectedField, obj *converter.ListNoticeResp) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "ListNoticeResp",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Pagination, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*converter.Pagination)
-	fc.Result = res
-	return ec.marshalNPagination2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐPagination(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _ListNoticeResp_notices(ctx context.Context, field graphql.CollectedField, obj *converter.ListNoticeResp) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "ListNoticeResp",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Notices, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.([]*converter.Notice)
-	fc.Result = res
-	return ec.marshalNNotice2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐNotice(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _ListRemindResp_pagination(ctx context.Context, field graphql.CollectedField, obj *converter.ListRemindResp) (ret graphql.Marshaler) {
@@ -4657,132 +4267,6 @@ func (ec *executionContext) _Mutation_createFastMessageCategory(ctx context.Cont
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Mutation_createNotice(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_createNotice_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateNotice(rctx, args["input"].(converter.CreateNoticeInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(bool)
-	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Mutation_updateNotice(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_updateNotice_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateNotice(rctx, args["input"].(converter.UpdateNoticeInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(bool)
-	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Mutation_deleteNotice(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_deleteNotice_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().DeleteNotice(rctx, args["id"].(int64))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(bool)
-	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _Mutation_createRemind(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -5287,216 +4771,6 @@ func (ec *executionContext) _Mutation_updateStaffAvatar(ctx context.Context, fie
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Notice_id(ctx context.Context, field graphql.CollectedField, obj *converter.Notice) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Notice",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int64)
-	fc.Result = res
-	return ec.marshalNInt642int64(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Notice_title(ctx context.Context, field graphql.CollectedField, obj *converter.Notice) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Notice",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Title, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Notice_content(ctx context.Context, field graphql.CollectedField, obj *converter.Notice) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Notice",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Content, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Notice_startAt(ctx context.Context, field graphql.CollectedField, obj *converter.Notice) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Notice",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.StartAt, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Notice_endAt(ctx context.Context, field graphql.CollectedField, obj *converter.Notice) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Notice",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.EndAt, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Notice_status(ctx context.Context, field graphql.CollectedField, obj *converter.Notice) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Notice",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Status, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(converter.Status)
-	fc.Result = res
-	return ec.marshalNStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐStatus(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _Pagination_page(ctx context.Context, field graphql.CollectedField, obj *converter.Pagination) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -5873,90 +5147,6 @@ func (ec *executionContext) _Query_listMessage(ctx context.Context, field graphq
 	res := resTmp.(*converter.ListMessageResp)
 	fc.Result = res
 	return ec.marshalNListMessageResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐListMessageResp(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Query_listNotice(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Query_listNotice_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ListNotice(rctx, args["filter"].(converter.ListNoticeInput), args["pagination"].(converter.PaginationInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*converter.ListNoticeResp)
-	fc.Result = res
-	return ec.marshalNListNoticeResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐListNoticeResp(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Query_getNotice(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Query_getNotice_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetNotice(rctx, args["id"].(int64))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*converter.GetNoticeResp)
-	fc.Result = res
-	return ec.marshalNGetNoticeResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐGetNoticeResp(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_listRemind(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -8388,61 +7578,6 @@ func (ec *executionContext) unmarshalInputCreateFastMessageInput(ctx context.Con
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputCreateNoticeInput(ctx context.Context, obj interface{}) (converter.CreateNoticeInput, error) {
-	var it converter.CreateNoticeInput
-	asMap := map[string]interface{}{}
-	for k, v := range obj.(map[string]interface{}) {
-		asMap[k] = v
-	}
-
-	for k, v := range asMap {
-		switch k {
-		case "title":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
-			it.Title, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "content":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("content"))
-			it.Content, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "startAt":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("startAt"))
-			it.StartAt, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "endAt":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endAt"))
-			it.EndAt, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "status":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-			it.Status, err = ec.unmarshalNStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐStatus(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		}
-	}
-
-	return it, nil
-}
-
 func (ec *executionContext) unmarshalInputCreateRemindInput(ctx context.Context, obj interface{}) (converter.CreateRemindInput, error) {
 	var it converter.CreateRemindInput
 	asMap := map[string]interface{}{}
@@ -8668,37 +7803,6 @@ func (ec *executionContext) unmarshalInputListMessageInput(ctx context.Context, 
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("content"))
 			it.Content, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		}
-	}
-
-	return it, nil
-}
-
-func (ec *executionContext) unmarshalInputListNoticeInput(ctx context.Context, obj interface{}) (converter.ListNoticeInput, error) {
-	var it converter.ListNoticeInput
-	asMap := map[string]interface{}{}
-	for k, v := range obj.(map[string]interface{}) {
-		asMap[k] = v
-	}
-
-	for k, v := range asMap {
-		switch k {
-		case "content":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("content"))
-			it.Content, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "status":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-			it.Status, err = ec.unmarshalNStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐStatus(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9010,69 +8114,6 @@ func (ec *executionContext) unmarshalInputUpdateFastMessageInput(ctx context.Con
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("content"))
 			it.Content, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "status":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-			it.Status, err = ec.unmarshalNStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐStatus(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		}
-	}
-
-	return it, nil
-}
-
-func (ec *executionContext) unmarshalInputUpdateNoticeInput(ctx context.Context, obj interface{}) (converter.UpdateNoticeInput, error) {
-	var it converter.UpdateNoticeInput
-	asMap := map[string]interface{}{}
-	for k, v := range obj.(map[string]interface{}) {
-		asMap[k] = v
-	}
-
-	for k, v := range asMap {
-		switch k {
-		case "id":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-			it.ID, err = ec.unmarshalNInt642int64(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "title":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
-			it.Title, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "content":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("content"))
-			it.Content, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "startAt":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("startAt"))
-			it.StartAt, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "endAt":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endAt"))
-			it.EndAt, err = ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9596,37 +8637,6 @@ func (ec *executionContext) _GetFastMessageResp(ctx context.Context, sel ast.Sel
 	return out
 }
 
-var getNoticeRespImplementors = []string{"GetNoticeResp"}
-
-func (ec *executionContext) _GetNoticeResp(ctx context.Context, sel ast.SelectionSet, obj *converter.GetNoticeResp) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, getNoticeRespImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("GetNoticeResp")
-		case "notice":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._GetNoticeResp_notice(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
 var getRemindRespImplementors = []string{"GetRemindResp"}
 
 func (ec *executionContext) _GetRemindResp(ctx context.Context, sel ast.SelectionSet, obj *converter.GetRemindResp) graphql.Marshaler {
@@ -9918,47 +8928,6 @@ func (ec *executionContext) _ListMessageResp(ctx context.Context, sel ast.Select
 		case "messages":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._ListMessageResp_messages(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var listNoticeRespImplementors = []string{"ListNoticeResp"}
-
-func (ec *executionContext) _ListNoticeResp(ctx context.Context, sel ast.SelectionSet, obj *converter.ListNoticeResp) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, listNoticeRespImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("ListNoticeResp")
-		case "pagination":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._ListNoticeResp_pagination(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "notices":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._ListNoticeResp_notices(ctx, field, obj)
 			}
 
 			out.Values[i] = innerFunc(ctx)
@@ -10377,36 +9346,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "createNotice":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createNotice(ctx, field)
-			}
-
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "updateNotice":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateNotice(ctx, field)
-			}
-
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "deleteNotice":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_deleteNotice(ctx, field)
-			}
-
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "createRemind":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createRemind(ctx, field)
@@ -10523,87 +9462,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			}
 
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var noticeImplementors = []string{"Notice"}
-
-func (ec *executionContext) _Notice(ctx context.Context, sel ast.SelectionSet, obj *converter.Notice) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, noticeImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("Notice")
-		case "id":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Notice_id(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "title":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Notice_title(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "content":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Notice_content(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "startAt":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Notice_startAt(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "endAt":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Notice_endAt(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "status":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Notice_status(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
@@ -10837,52 +9695,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_listMessage(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return rrm(innerCtx)
-			})
-		case "listNotice":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_listNotice(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return rrm(innerCtx)
-			})
-		case "getNotice":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_getNotice(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
@@ -11854,11 +10666,6 @@ func (ec *executionContext) unmarshalNCreateFastMessageInput2csᚑapiᚋpkgᚋgr
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateNoticeInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐCreateNoticeInput(ctx context.Context, v interface{}) (converter.CreateNoticeInput, error) {
-	res, err := ec.unmarshalInputCreateNoticeInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
 func (ec *executionContext) unmarshalNCreateRemindInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐCreateRemindInput(ctx context.Context, v interface{}) (converter.CreateRemindInput, error) {
 	res, err := ec.unmarshalInputCreateRemindInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -12145,20 +10952,6 @@ func (ec *executionContext) marshalNGetFastMessageResp2ᚖcsᚑapiᚋpkgᚋgraph
 	return ec._GetFastMessageResp(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNGetNoticeResp2csᚑapiᚋpkgᚋgraphᚋconverterᚐGetNoticeResp(ctx context.Context, sel ast.SelectionSet, v converter.GetNoticeResp) graphql.Marshaler {
-	return ec._GetNoticeResp(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNGetNoticeResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐGetNoticeResp(ctx context.Context, sel ast.SelectionSet, v *converter.GetNoticeResp) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._GetNoticeResp(ctx, sel, v)
-}
-
 func (ec *executionContext) marshalNGetRemindResp2csᚑapiᚋpkgᚋgraphᚋconverterᚐGetRemindResp(ctx context.Context, sel ast.SelectionSet, v converter.GetRemindResp) graphql.Marshaler {
 	return ec._GetRemindResp(ctx, sel, &v)
 }
@@ -12320,25 +11113,6 @@ func (ec *executionContext) marshalNListMessageResp2ᚖcsᚑapiᚋpkgᚋgraphᚋ
 	return ec._ListMessageResp(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNListNoticeInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListNoticeInput(ctx context.Context, v interface{}) (converter.ListNoticeInput, error) {
-	res, err := ec.unmarshalInputListNoticeInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNListNoticeResp2csᚑapiᚋpkgᚋgraphᚋconverterᚐListNoticeResp(ctx context.Context, sel ast.SelectionSet, v converter.ListNoticeResp) graphql.Marshaler {
-	return ec._ListNoticeResp(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNListNoticeResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐListNoticeResp(ctx context.Context, sel ast.SelectionSet, v *converter.ListNoticeResp) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._ListNoticeResp(ctx, sel, v)
-}
-
 func (ec *executionContext) unmarshalNListRemindInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListRemindInput(ctx context.Context, v interface{}) (converter.ListRemindInput, error) {
 	res, err := ec.unmarshalInputListRemindInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -12490,54 +11264,6 @@ func (ec *executionContext) unmarshalNMessageType2csᚑapiᚋpkgᚋgraphᚋconve
 
 func (ec *executionContext) marshalNMessageType2csᚑapiᚋpkgᚋgraphᚋconverterᚐMessageType(ctx context.Context, sel ast.SelectionSet, v converter.MessageType) graphql.Marshaler {
 	return v
-}
-
-func (ec *executionContext) marshalNNotice2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐNotice(ctx context.Context, sel ast.SelectionSet, v []*converter.Notice) graphql.Marshaler {
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalONotice2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐNotice(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	return ret
-}
-
-func (ec *executionContext) marshalNNotice2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐNotice(ctx context.Context, sel ast.SelectionSet, v *converter.Notice) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._Notice(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNPagination2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐPagination(ctx context.Context, sel ast.SelectionSet, v *converter.Pagination) graphql.Marshaler {
@@ -12778,11 +11504,6 @@ func (ec *executionContext) unmarshalNUpdateCsConfigInput2csᚑapiᚋpkgᚋgraph
 
 func (ec *executionContext) unmarshalNUpdateFastMessageInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐUpdateFastMessageInput(ctx context.Context, v interface{}) (converter.UpdateFastMessageInput, error) {
 	res, err := ec.unmarshalInputUpdateFastMessageInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalNUpdateNoticeInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐUpdateNoticeInput(ctx context.Context, v interface{}) (converter.UpdateNoticeInput, error) {
-	res, err := ec.unmarshalInputUpdateNoticeInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -13144,13 +11865,6 @@ func (ec *executionContext) marshalOMessageExtraInfo2ᚖcsᚑapiᚋpkgᚋgraph�
 		return graphql.Null
 	}
 	return ec._MessageExtraInfo(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalONotice2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐNotice(ctx context.Context, sel ast.SelectionSet, v *converter.Notice) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._Notice(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalORemind2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐRemind(ctx context.Context, sel ast.SelectionSet, v *converter.Remind) graphql.Marshaler {

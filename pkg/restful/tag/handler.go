@@ -146,7 +146,7 @@ func (h *handler) GetTag(c *gin.Context) {
 
 type ListTagParams struct {
 	Name   string       `form:"name" binding:""`
-	Status types.Status `form:"status" binding:"required"`
+	Status types.Status `form:"status" binding:"min=0,max=2"`
 	types.Pagination
 }
 

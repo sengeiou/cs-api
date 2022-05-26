@@ -85,13 +85,14 @@ type IRoleService interface {
 	DeleteRole(ctx context.Context, roleId int64) error
 }
 
+// INoticeService 會員通知訊息
 type INoticeService interface {
 	ListNotice(ctx context.Context, params model.ListNoticeParams, filterParams types.FilterNoticeParams) ([]model.Notice, int64, error)
 	GetNotice(ctx context.Context, noticeId int64) (model.Notice, error)
 	CreateNotice(ctx context.Context, params model.CreateNoticeParams) error
 	UpdateNotice(ctx context.Context, params model.UpdateNoticeParams) error
 	DeleteNotice(ctx context.Context, noticeId int64) error
-	GetAvailableNotice(ctx context.Context) (model.Notice, error)
+	GetLatestNotice(ctx context.Context) (model.Notice, error)
 }
 
 type IRemindService interface {

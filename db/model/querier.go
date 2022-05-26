@@ -49,10 +49,10 @@ type Querier interface {
 	DeleteTag(ctx context.Context, id int64) error
 	GetAllAvailableFastMessage(ctx context.Context) ([]GetAllAvailableFastMessageRow, error)
 	GetAllTag(ctx context.Context) ([]Tag, error)
-	GetAvailableNotice(ctx context.Context) (Notice, error)
 	GetCsConfig(ctx context.Context) (Constant, error)
 	GetFastMessage(ctx context.Context, id int64) (FastMessage, error)
 	GetGuestMember(ctx context.Context, deviceID string) (Member, error)
+	GetLatestNotice(ctx context.Context) (Notice, error)
 	// 獲取會員並未關閉的房間
 	GetMemberAvailableRoom(ctx context.Context, memberID int64) (Room, error)
 	GetNormalMember(ctx context.Context, name string) (Member, error)

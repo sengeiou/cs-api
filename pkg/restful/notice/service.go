@@ -3,9 +3,14 @@ package notice
 import (
 	"context"
 	"cs-api/db/model"
+	iface "cs-api/pkg/interface"
 	"cs-api/pkg/types"
 	"database/sql"
 )
+
+type service struct {
+	repo iface.IRepository
+}
 
 func (s *service) ListNotice(ctx context.Context, params model.ListNoticeParams, filterParams types.FilterNoticeParams) (notices []model.Notice, count int64, err error) {
 	notices = make([]model.Notice, 0)
@@ -54,6 +59,12 @@ func (s *service) DeleteNotice(ctx context.Context, noticeId int64) error {
 	return s.repo.DeleteNotice(ctx, noticeId)
 }
 
-func (s *service) GetAvailableNotice(ctx context.Context) (model.Notice, error) {
-	return s.repo.GetAvailableNotice(ctx)
+func (s *service) GetLatestNotice(ctx context.Context) (model.Notice, error) {
+	return s.repo.GetLatestNotice(ctx)
+}
+
+func NewService(Repo iface.IRepository) iface.INoticeService {
+	return &service{
+		repo: Repo,
+	}
 }

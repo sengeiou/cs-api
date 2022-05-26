@@ -36,7 +36,7 @@ from notice
 where IF(@content is null, 0, content) like IF(@content is null, 0, CONCAT('%', @content, '%'))
   and IF(@status is null, 0, status) = IF(@status is null, 0, @status);
 
--- name: GetAvailableNotice :one
+-- name: GetLatestNotice :one
 SELECT *
 FROM notice
 WHERE now() >= start_at

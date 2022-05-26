@@ -69,7 +69,7 @@ func (q *Queries) DeleteNotice(ctx context.Context, id int64) error {
 	return err
 }
 
-const getAvailableNotice = `-- name: GetAvailableNotice :one
+const getLatestNotice = `-- name: GetLatestNotice :one
 SELECT id, title, content, start_at, end_at, status, created_by, created_at, updated_by, updated_at
 FROM notice
 WHERE now() >= start_at
@@ -79,8 +79,8 @@ ORDER BY end_at
     LIMIT 1
 `
 
-func (q *Queries) GetAvailableNotice(ctx context.Context) (Notice, error) {
-	row := q.queryRow(ctx, q.getAvailableNoticeStmt, getAvailableNotice)
+func (q *Queries) GetLatestNotice(ctx context.Context) (Notice, error) {
+	row := q.queryRow(ctx, q.getLatestNoticeStmt, getLatestNotice)
 	var i Notice
 	err := row.Scan(
 		&i.ID,

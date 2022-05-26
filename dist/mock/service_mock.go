@@ -973,19 +973,19 @@ func (mr *MockINoticeServiceMockRecorder) DeleteNotice(ctx, noticeId interface{}
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteNotice", reflect.TypeOf((*MockINoticeService)(nil).DeleteNotice), ctx, noticeId)
 }
 
-// GetAvailableNotice mocks base method.
-func (m *MockINoticeService) GetAvailableNotice(ctx context.Context) (model.Notice, error) {
+// GetLatestNotice mocks base method.
+func (m *MockINoticeService) GetLatestNotice(ctx context.Context) (model.Notice, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetAvailableNotice", ctx)
+	ret := m.ctrl.Call(m, "GetLatestNotice", ctx)
 	ret0, _ := ret[0].(model.Notice)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetAvailableNotice indicates an expected call of GetAvailableNotice.
-func (mr *MockINoticeServiceMockRecorder) GetAvailableNotice(ctx interface{}) *gomock.Call {
+// GetLatestNotice indicates an expected call of GetLatestNotice.
+func (mr *MockINoticeServiceMockRecorder) GetLatestNotice(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAvailableNotice", reflect.TypeOf((*MockINoticeService)(nil).GetAvailableNotice), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLatestNotice", reflect.TypeOf((*MockINoticeService)(nil).GetLatestNotice), ctx)
 }
 
 // GetNotice mocks base method.

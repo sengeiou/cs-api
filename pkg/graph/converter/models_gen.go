@@ -24,14 +24,6 @@ type CreateFastMessageInput struct {
 	Status     Status `json:"status"`
 }
 
-type CreateNoticeInput struct {
-	Title   string `json:"title"`
-	Content string `json:"content"`
-	StartAt string `json:"startAt"`
-	EndAt   string `json:"endAt"`
-	Status  Status `json:"status"`
-}
-
 type CreateRemindInput struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
@@ -94,10 +86,6 @@ type GetFastMessageResp struct {
 	FastMessage *FastMessage `json:"fastMessage"`
 }
 
-type GetNoticeResp struct {
-	Notice *Notice `json:"notice"`
-}
-
 type GetRemindResp struct {
 	Remind *Remind `json:"remind"`
 }
@@ -157,16 +145,6 @@ type ListMessageInput struct {
 type ListMessageResp struct {
 	Pagination *Pagination `json:"pagination"`
 	Messages   []*Message  `json:"messages"`
-}
-
-type ListNoticeInput struct {
-	Content string `json:"content"`
-	Status  Status `json:"status"`
-}
-
-type ListNoticeResp struct {
-	Pagination *Pagination `json:"pagination"`
-	Notices    []*Notice   `json:"notices"`
 }
 
 type ListRemindInput struct {
@@ -234,15 +212,6 @@ type MessageExtraInfo struct {
 	ClientName *string `json:"clientName"`
 }
 
-type Notice struct {
-	ID      int64  `json:"id"`
-	Title   string `json:"title"`
-	Content string `json:"content"`
-	StartAt string `json:"startAt"`
-	EndAt   string `json:"endAt"`
-	Status  Status `json:"status"`
-}
-
 type Pagination struct {
 	Page     int64 `json:"page"`
 	PageSize int64 `json:"pageSize"`
@@ -303,15 +272,6 @@ type UpdateFastMessageInput struct {
 	Title      string `json:"title"`
 	Content    string `json:"content"`
 	Status     Status `json:"status"`
-}
-
-type UpdateNoticeInput struct {
-	ID      int64  `json:"id"`
-	Title   string `json:"title"`
-	Content string `json:"content"`
-	StartAt string `json:"startAt"`
-	EndAt   string `json:"endAt"`
-	Status  Status `json:"status"`
 }
 
 type UpdateRemindInput struct {
