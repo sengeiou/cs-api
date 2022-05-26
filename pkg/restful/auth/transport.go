@@ -20,6 +20,14 @@ type Params struct {
 func InitTransport(p Params) {
 	routes := p.Engine.Group("/api")
 
-	routes.POST("/auth/login", p.R.Op("Login"), p.H.Login)
-	routes.POST("/auth/logout", p.AuthSvc.SetClientInfo(pkg.ClientTypeStaff), p.R.Op("Logout"), p.H.Logout)
+	routes.POST("/auth/login",
+		p.R.Op("Login"),
+		p.H.Login,
+	)
+
+	routes.POST("/auth/logout",
+		p.AuthSvc.SetClientInfo(pkg.ClientTypeStaff),
+		p.R.Op("Logout"),
+		p.H.Logout,
+	)
 }
