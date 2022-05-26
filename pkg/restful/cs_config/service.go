@@ -4,12 +4,19 @@ import (
 	"context"
 	"cs-api/db/model"
 	"cs-api/pkg"
+	iface "cs-api/pkg/interface"
 	"cs-api/pkg/types"
 	"database/sql"
 	"encoding/json"
 	"errors"
+	ifaceTool "github.com/AndySu1021/go-util/interface"
 	"time"
 )
+
+type service struct {
+	redis ifaceTool.IRedis
+	repo  iface.IRepository
+}
 
 func (s *service) GetCsConfig(ctx context.Context) (config types.CsConfig, err error) {
 	constant, err := s.repo.GetCsConfig(ctx)
@@ -54,4 +61,11 @@ func (s *service) UpdateCsConfig(ctx context.Context, staffId int64, config type
 	}
 
 	return nil
+}
+
+func NewService(redis ifaceTool.IRedis, repo iface.IRepository) iface.ICsConfigService {
+	return &service{
+		redis: redis,
+		repo:  repo,
+	}
 }

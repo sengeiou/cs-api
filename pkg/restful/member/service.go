@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/md5"
 	"cs-api/db/model"
+	iface "cs-api/pkg/interface"
 	"cs-api/pkg/types"
 	"database/sql"
 	"errors"
@@ -11,6 +12,10 @@ import (
 	"github.com/rs/zerolog/log"
 	"time"
 )
+
+type service struct {
+	repo iface.IRepository
+}
 
 func (s *service) GetOrCreateMember(ctx context.Context, name string, deviceId string) (member model.Member, err error) {
 	if name == "" {
@@ -105,4 +110,10 @@ func (s *service) getOrCreateMemberByName(ctx context.Context, name string, devi
 	}
 
 	return result, nil
+}
+
+func NewService(Repo iface.IRepository) iface.IMemberService {
+	return &service{
+		repo: Repo,
+	}
 }

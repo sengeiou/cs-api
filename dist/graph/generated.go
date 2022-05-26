@@ -44,12 +44,6 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
-	CsConfig struct {
-		GreetingText        func(childComplexity int) int
-		MaxMember           func(childComplexity int) int
-		MemberPendingExpire func(childComplexity int) int
-	}
-
 	DailyGuestReportItem struct {
 		Date       func(childComplexity int) int
 		GuestCount func(childComplexity int) int
@@ -82,10 +76,6 @@ type ComplexityRoot struct {
 	FastMessageGroupItem struct {
 		Category func(childComplexity int) int
 		Items    func(childComplexity int) int
-	}
-
-	GetCsConfigResp struct {
-		Config func(childComplexity int) int
 	}
 
 	GetFastMessageResp struct {
@@ -170,7 +160,6 @@ type ComplexityRoot struct {
 		DeleteFastMessage         func(childComplexity int, id int64) int
 		DeleteStaff               func(childComplexity int, id int64) int
 		TransferRoom              func(childComplexity int, input converter.TransferRoomInput) int
-		UpdateCsConfig            func(childComplexity int, input converter.UpdateCsConfigInput) int
 		UpdateFastMessage         func(childComplexity int, input converter.UpdateFastMessageInput) int
 		UpdateRoomScore           func(childComplexity int, score int64) int
 		UpdateStaff               func(childComplexity int, input converter.UpdateStaffInput) int
@@ -186,7 +175,6 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		GetCsConfig             func(childComplexity int) int
 		GetFastMessage          func(childComplexity int, id int64) int
 		GetStaff                func(childComplexity int, id int64) int
 		ListAvailableStaff      func(childComplexity int) int
@@ -227,7 +215,6 @@ type ComplexityRoot struct {
 
 type MutationResolver interface {
 	Upload(ctx context.Context, file graphql.Upload) (string, error)
-	UpdateCsConfig(ctx context.Context, input converter.UpdateCsConfigInput) (bool, error)
 	CreateFastMessage(ctx context.Context, input converter.CreateFastMessageInput) (bool, error)
 	UpdateFastMessage(ctx context.Context, input converter.UpdateFastMessageInput) (bool, error)
 	DeleteFastMessage(ctx context.Context, id int64) (bool, error)
@@ -243,7 +230,6 @@ type MutationResolver interface {
 	UpdateStaffAvatar(ctx context.Context, avatar string) (bool, error)
 }
 type QueryResolver interface {
-	GetCsConfig(ctx context.Context) (*converter.GetCsConfigResp, error)
 	ListFastMessage(ctx context.Context, filter converter.ListFastMessageInput, pagination converter.PaginationInput) (*converter.ListFastMessageResp, error)
 	ListFastMessageCategory(ctx context.Context) (*converter.ListFastMessageCategoryResp, error)
 	ListFastMessageGroup(ctx context.Context) (*converter.ListFastMessageGroupResp, error)
@@ -273,27 +259,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	ec := executionContext{nil, e}
 	_ = ec
 	switch typeName + "." + field {
-
-	case "CsConfig.greetingText":
-		if e.complexity.CsConfig.GreetingText == nil {
-			break
-		}
-
-		return e.complexity.CsConfig.GreetingText(childComplexity), true
-
-	case "CsConfig.maxMember":
-		if e.complexity.CsConfig.MaxMember == nil {
-			break
-		}
-
-		return e.complexity.CsConfig.MaxMember(childComplexity), true
-
-	case "CsConfig.memberPendingExpire":
-		if e.complexity.CsConfig.MemberPendingExpire == nil {
-			break
-		}
-
-		return e.complexity.CsConfig.MemberPendingExpire(childComplexity), true
 
 	case "DailyGuestReportItem.date":
 		if e.complexity.DailyGuestReportItem.Date == nil {
@@ -406,13 +371,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.FastMessageGroupItem.Items(childComplexity), true
-
-	case "GetCsConfigResp.config":
-		if e.complexity.GetCsConfigResp.Config == nil {
-			break
-		}
-
-		return e.complexity.GetCsConfigResp.Config(childComplexity), true
 
 	case "GetFastMessageResp.fastMessage":
 		if e.complexity.GetFastMessageResp.FastMessage == nil {
@@ -706,18 +664,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.TransferRoom(childComplexity, args["input"].(converter.TransferRoomInput)), true
 
-	case "Mutation.updateCsConfig":
-		if e.complexity.Mutation.UpdateCsConfig == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateCsConfig_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.UpdateCsConfig(childComplexity, args["input"].(converter.UpdateCsConfigInput)), true
-
 	case "Mutation.updateFastMessage":
 		if e.complexity.Mutation.UpdateFastMessage == nil {
 			break
@@ -810,13 +756,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Pagination.Total(childComplexity), true
-
-	case "Query.getCsConfig":
-		if e.complexity.Query.GetCsConfig == nil {
-			break
-		}
-
-		return e.complexity.Query.GetCsConfig(childComplexity), true
 
 	case "Query.getFastMessage":
 		if e.complexity.Query.GetFastMessage == nil {
@@ -1137,32 +1076,6 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 var sources = []*ast.Source{
 	{Name: "pkg/graph/schema/common.graphqls", Input: `extend type Mutation {
     upload(file: Upload!): String!
-}`, BuiltIn: false},
-	{Name: "pkg/graph/schema/cs_config.graphqls", Input: `type CsConfig {
-    maxMember: Int64!
-    memberPendingExpire: Int64!
-    greetingText: String!
-}
-
-type GetCsConfigResp {
-    config: CsConfig!
-}
-
-extend type Query {
-    getCsConfig: GetCsConfigResp!
-}
-
-input UpdateCsConfigInput {
-    """每位客服最高服務客戶數"""
-    maxMember: Int64!
-    """用戶閒置自動過期時間，單位：分鐘"""
-    memberPendingExpire: Int64!
-    """問候語"""
-    greetingText: String!
-}
-
-extend type Mutation {
-    updateCsConfig(input: UpdateCsConfigInput!): Boolean!
 }`, BuiltIn: false},
 	{Name: "pkg/graph/schema/fast_message.graphqls", Input: `type FastMessage {
     id: Int64!
@@ -1623,21 +1536,6 @@ func (ec *executionContext) field_Mutation_transferRoom_args(ctx context.Context
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_updateCsConfig_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 converter.UpdateCsConfigInput
-	if tmp, ok := rawArgs["input"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNUpdateCsConfigInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐUpdateCsConfigInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["input"] = arg0
-	return args, nil
-}
-
 func (ec *executionContext) field_Mutation_updateFastMessage_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -1975,111 +1873,6 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 // endregion ************************** directives.gotpl **************************
 
 // region    **************************** field.gotpl *****************************
-
-func (ec *executionContext) _CsConfig_maxMember(ctx context.Context, field graphql.CollectedField, obj *converter.CsConfig) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "CsConfig",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.MaxMember, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int64)
-	fc.Result = res
-	return ec.marshalNInt642int64(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _CsConfig_memberPendingExpire(ctx context.Context, field graphql.CollectedField, obj *converter.CsConfig) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "CsConfig",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.MemberPendingExpire, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int64)
-	fc.Result = res
-	return ec.marshalNInt642int64(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _CsConfig_greetingText(ctx context.Context, field graphql.CollectedField, obj *converter.CsConfig) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "CsConfig",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.GreetingText, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
 
 func (ec *executionContext) _DailyGuestReportItem_date(ctx context.Context, field graphql.CollectedField, obj *converter.DailyGuestReportItem) (ret graphql.Marshaler) {
 	defer func() {
@@ -2636,41 +2429,6 @@ func (ec *executionContext) _FastMessageGroupItem_items(ctx context.Context, fie
 	res := resTmp.([]*converter.FastMessage)
 	fc.Result = res
 	return ec.marshalNFastMessage2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐFastMessage(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _GetCsConfigResp_config(ctx context.Context, field graphql.CollectedField, obj *converter.GetCsConfigResp) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "GetCsConfigResp",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Config, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*converter.CsConfig)
-	fc.Result = res
-	return ec.marshalNCsConfig2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐCsConfig(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _GetFastMessageResp_fastMessage(ctx context.Context, field graphql.CollectedField, obj *converter.GetFastMessageResp) (ret graphql.Marshaler) {
@@ -3689,48 +3447,6 @@ func (ec *executionContext) _Mutation_upload(ctx context.Context, field graphql.
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Mutation_updateCsConfig(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_updateCsConfig_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateCsConfig(rctx, args["input"].(converter.UpdateCsConfigInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(bool)
-	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _Mutation_createFastMessage(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -4380,41 +4096,6 @@ func (ec *executionContext) _Pagination_total(ctx context.Context, field graphql
 	res := resTmp.(int64)
 	fc.Result = res
 	return ec.marshalNInt642int64(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Query_getCsConfig(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetCsConfig(rctx)
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*converter.GetCsConfigResp)
-	fc.Result = res
-	return ec.marshalNGetCsConfigResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐGetCsConfigResp(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_listFastMessage(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7249,45 +6930,6 @@ func (ec *executionContext) unmarshalInputTransferRoomInput(ctx context.Context,
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputUpdateCsConfigInput(ctx context.Context, obj interface{}) (converter.UpdateCsConfigInput, error) {
-	var it converter.UpdateCsConfigInput
-	asMap := map[string]interface{}{}
-	for k, v := range obj.(map[string]interface{}) {
-		asMap[k] = v
-	}
-
-	for k, v := range asMap {
-		switch k {
-		case "maxMember":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxMember"))
-			it.MaxMember, err = ec.unmarshalNInt642int64(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "memberPendingExpire":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("memberPendingExpire"))
-			it.MemberPendingExpire, err = ec.unmarshalNInt642int64(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "greetingText":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("greetingText"))
-			it.GreetingText, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		}
-	}
-
-	return it, nil
-}
-
 func (ec *executionContext) unmarshalInputUpdateFastMessageInput(ctx context.Context, obj interface{}) (converter.UpdateFastMessageInput, error) {
 	var it converter.UpdateFastMessageInput
 	asMap := map[string]interface{}{}
@@ -7405,57 +7047,6 @@ func (ec *executionContext) unmarshalInputUpdateStaffInput(ctx context.Context, 
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
-
-var csConfigImplementors = []string{"CsConfig"}
-
-func (ec *executionContext) _CsConfig(ctx context.Context, sel ast.SelectionSet, obj *converter.CsConfig) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, csConfigImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("CsConfig")
-		case "maxMember":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._CsConfig_maxMember(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "memberPendingExpire":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._CsConfig_memberPendingExpire(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "greetingText":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._CsConfig_greetingText(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
 
 var dailyGuestReportItemImplementors = []string{"DailyGuestReportItem"}
 
@@ -7722,37 +7313,6 @@ func (ec *executionContext) _FastMessageGroupItem(ctx context.Context, sel ast.S
 		case "items":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._FastMessageGroupItem_items(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var getCsConfigRespImplementors = []string{"GetCsConfigResp"}
-
-func (ec *executionContext) _GetCsConfigResp(ctx context.Context, sel ast.SelectionSet, obj *converter.GetCsConfigResp) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, getCsConfigRespImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("GetCsConfigResp")
-		case "config":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._GetCsConfigResp_config(ctx, field, obj)
 			}
 
 			out.Values[i] = innerFunc(ctx)
@@ -8389,16 +7949,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "updateCsConfig":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateCsConfig(ctx, field)
-			}
-
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "createFastMessage":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createFastMessage(ctx, field)
@@ -8610,29 +8160,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Query")
-		case "getCsConfig":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_getCsConfig(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return rrm(innerCtx)
-			})
 		case "listFastMessage":
 			field := field
 
@@ -9627,16 +9154,6 @@ func (ec *executionContext) unmarshalNCreateStaffInput2csᚑapiᚋpkgᚋgraphᚋ
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNCsConfig2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐCsConfig(ctx context.Context, sel ast.SelectionSet, v *converter.CsConfig) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._CsConfig(ctx, sel, v)
-}
-
 func (ec *executionContext) marshalNDailyGuestReportItem2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐDailyGuestReportItem(ctx context.Context, sel ast.SelectionSet, v []*converter.DailyGuestReportItem) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
@@ -9873,20 +9390,6 @@ func (ec *executionContext) marshalNFastMessageGroupItem2ᚕᚖcsᚑapiᚋpkgᚋ
 	wg.Wait()
 
 	return ret
-}
-
-func (ec *executionContext) marshalNGetCsConfigResp2csᚑapiᚋpkgᚋgraphᚋconverterᚐGetCsConfigResp(ctx context.Context, sel ast.SelectionSet, v converter.GetCsConfigResp) graphql.Marshaler {
-	return ec._GetCsConfigResp(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNGetCsConfigResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐGetCsConfigResp(ctx context.Context, sel ast.SelectionSet, v *converter.GetCsConfigResp) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._GetCsConfigResp(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNGetFastMessageResp2csᚑapiᚋpkgᚋgraphᚋconverterᚐGetFastMessageResp(ctx context.Context, sel ast.SelectionSet, v converter.GetFastMessageResp) graphql.Marshaler {
@@ -10364,11 +9867,6 @@ func (ec *executionContext) marshalNString2ᚕstringᚄ(ctx context.Context, sel
 
 func (ec *executionContext) unmarshalNTransferRoomInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐTransferRoomInput(ctx context.Context, v interface{}) (converter.TransferRoomInput, error) {
 	res, err := ec.unmarshalInputTransferRoomInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalNUpdateCsConfigInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐUpdateCsConfigInput(ctx context.Context, v interface{}) (converter.UpdateCsConfigInput, error) {
-	res, err := ec.unmarshalInputUpdateCsConfigInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 

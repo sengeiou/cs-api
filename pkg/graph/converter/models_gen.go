@@ -32,12 +32,6 @@ type CreateStaffInput struct {
 	Status   Status `json:"status"`
 }
 
-type CsConfig struct {
-	MaxMember           int64  `json:"maxMember"`
-	MemberPendingExpire int64  `json:"memberPendingExpire"`
-	GreetingText        string `json:"greetingText"`
-}
-
 type DailyGuestReportItem struct {
 	Date       string `json:"date"`
 	GuestCount int64  `json:"guestCount"`
@@ -70,10 +64,6 @@ type FastMessageCategory struct {
 type FastMessageGroupItem struct {
 	Category *FastMessageCategory `json:"category"`
 	Items    []*FastMessage       `json:"items"`
-}
-
-type GetCsConfigResp struct {
-	Config *CsConfig `json:"config"`
 }
 
 type GetFastMessageResp struct {
@@ -228,15 +218,6 @@ type Staff struct {
 type TransferRoomInput struct {
 	ID      int64 `json:"id"`
 	StaffID int64 `json:"staffID"`
-}
-
-type UpdateCsConfigInput struct {
-	// 每位客服最高服務客戶數
-	MaxMember int64 `json:"maxMember"`
-	// 用戶閒置自動過期時間，單位：分鐘
-	MemberPendingExpire int64 `json:"memberPendingExpire"`
-	// 問候語
-	GreetingText string `json:"greetingText"`
 }
 
 type UpdateFastMessageInput struct {
