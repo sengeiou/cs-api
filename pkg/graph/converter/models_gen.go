@@ -32,21 +32,6 @@ type CreateStaffInput struct {
 	Status   Status `json:"status"`
 }
 
-type DailyGuestReportItem struct {
-	Date       string `json:"date"`
-	GuestCount int64  `json:"guestCount"`
-}
-
-type DailyTagReportColumn struct {
-	Label string `json:"label"`
-	Key   string `json:"key"`
-}
-
-type DailyTagReportItem struct {
-	Date     string `json:"date"`
-	JSONData string `json:"jsonData"`
-}
-
 type FastMessage struct {
 	ID         int64  `json:"id"`
 	Category   string `json:"category"`
@@ -76,25 +61,6 @@ type GetStaffResp struct {
 
 type ListAvailableStaffResp struct {
 	Staffs []*Staff `json:"staffs"`
-}
-
-type ListDailyGuestReportInput struct {
-	StartDate string `json:"startDate"`
-	EndDate   string `json:"endDate"`
-}
-
-type ListDailyGuestReportResp struct {
-	Items []*DailyGuestReportItem `json:"items"`
-}
-
-type ListDailyTagReportInput struct {
-	StartDate string `json:"startDate"`
-	EndDate   string `json:"endDate"`
-}
-
-type ListDailyTagReportResp struct {
-	Columns []*DailyTagReportColumn `json:"columns"`
-	Items   []*DailyTagReportItem   `json:"items"`
 }
 
 type ListFastMessageCategoryResp struct {

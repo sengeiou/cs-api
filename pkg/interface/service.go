@@ -7,6 +7,7 @@ import (
 	model2 "cs-api/pkg/model"
 	"cs-api/pkg/types"
 	"github.com/gin-gonic/gin"
+	"time"
 )
 
 type IAuthService interface {
@@ -64,8 +65,8 @@ type IFastMessageService interface {
 }
 
 type IReportService interface {
-	DailyTagReport(ctx context.Context, startDate string, endDate string) ([]pkg.DailyTagReportColumn, map[string]map[string]int32, error)
-	DailyGuestReport(ctx context.Context, startDate string, endDate string) (map[string]int32, error)
+	DailyTagReport(ctx context.Context, startDate, endDate time.Time) ([]pkg.DailyTagReportColumn, map[string]map[string]int32, error)
+	DailyGuestReport(ctx context.Context, startDate, endDate time.Time) (map[string]int32, error)
 }
 
 type ICsConfigService interface {

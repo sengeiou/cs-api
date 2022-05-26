@@ -5,7 +5,6 @@ import (
 	"cs-api/pkg"
 	iface "cs-api/pkg/interface"
 	"cs-api/pkg/types"
-	"fmt"
 	"github.com/AndySu1021/go-util/errors"
 	ginTool "github.com/AndySu1021/go-util/gin"
 	"github.com/gin-gonic/gin"
@@ -163,7 +162,6 @@ func (h *handler) ListRemind(c *gin.Context) {
 	)
 
 	if err = c.ShouldBindQuery(&requestParams); err != nil {
-		fmt.Println(err)
 		ginTool.Error(c, errors.ErrorValidation)
 		return
 	}

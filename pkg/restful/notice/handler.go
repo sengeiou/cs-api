@@ -5,7 +5,6 @@ import (
 	"cs-api/pkg"
 	iface "cs-api/pkg/interface"
 	"cs-api/pkg/types"
-	"fmt"
 	"github.com/AndySu1021/go-util/errors"
 	ginTool "github.com/AndySu1021/go-util/gin"
 	"github.com/gin-gonic/gin"
@@ -40,7 +39,6 @@ func (h *handler) CreateNotice(c *gin.Context) {
 	}
 
 	if err = c.ShouldBindJSON(&requestParams); err != nil {
-		fmt.Println(err)
 		ginTool.Error(c, errors.ErrorValidation)
 		return
 	}
@@ -173,7 +171,6 @@ func (h *handler) ListNotice(c *gin.Context) {
 	)
 
 	if err = c.ShouldBindQuery(&requestParams); err != nil {
-		fmt.Println(err)
 		ginTool.Error(c, errors.ErrorValidation)
 		return
 	}

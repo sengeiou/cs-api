@@ -6,6 +6,7 @@ import (
 	"cs-api/pkg/restful/member"
 	"cs-api/pkg/restful/notice"
 	"cs-api/pkg/restful/remind"
+	"cs-api/pkg/restful/report"
 	"cs-api/pkg/restful/role"
 	"cs-api/pkg/restful/tag"
 	"cs-api/pkg/restful/tool"
@@ -29,6 +30,7 @@ var Module = fx.Options(
 	remind.Module,
 	member.Module,
 	cs_config.Module,
+	report.Module,
 )
 
 func InitCommonHandler(engine *gin.Engine) {

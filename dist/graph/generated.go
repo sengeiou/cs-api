@@ -44,21 +44,6 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
-	DailyGuestReportItem struct {
-		Date       func(childComplexity int) int
-		GuestCount func(childComplexity int) int
-	}
-
-	DailyTagReportColumn struct {
-		Key   func(childComplexity int) int
-		Label func(childComplexity int) int
-	}
-
-	DailyTagReportItem struct {
-		Date     func(childComplexity int) int
-		JSONData func(childComplexity int) int
-	}
-
 	FastMessage struct {
 		Category   func(childComplexity int) int
 		CategoryID func(childComplexity int) int
@@ -88,15 +73,6 @@ type ComplexityRoot struct {
 
 	ListAvailableStaffResp struct {
 		Staffs func(childComplexity int) int
-	}
-
-	ListDailyGuestReportResp struct {
-		Items func(childComplexity int) int
-	}
-
-	ListDailyTagReportResp struct {
-		Columns func(childComplexity int) int
-		Items   func(childComplexity int) int
 	}
 
 	ListFastMessageCategoryResp struct {
@@ -178,8 +154,6 @@ type ComplexityRoot struct {
 		GetFastMessage          func(childComplexity int, id int64) int
 		GetStaff                func(childComplexity int, id int64) int
 		ListAvailableStaff      func(childComplexity int) int
-		ListDailyGuestReport    func(childComplexity int, filter converter.ListDailyGuestReportInput) int
-		ListDailyTagReport      func(childComplexity int, filter converter.ListDailyTagReportInput) int
 		ListFastMessage         func(childComplexity int, filter converter.ListFastMessageInput, pagination converter.PaginationInput) int
 		ListFastMessageCategory func(childComplexity int) int
 		ListFastMessageGroup    func(childComplexity int) int
@@ -236,8 +210,6 @@ type QueryResolver interface {
 	GetFastMessage(ctx context.Context, id int64) (*converter.GetFastMessageResp, error)
 	ListRoomMessage(ctx context.Context, filter converter.ListRoomMessageInput) (*converter.ListRoomMessageResp, error)
 	ListMessage(ctx context.Context, filter converter.ListMessageInput, pagination converter.PaginationInput) (*converter.ListMessageResp, error)
-	ListDailyTagReport(ctx context.Context, filter converter.ListDailyTagReportInput) (*converter.ListDailyTagReportResp, error)
-	ListDailyGuestReport(ctx context.Context, filter converter.ListDailyGuestReportInput) (*converter.ListDailyGuestReportResp, error)
 	ListStaffRoom(ctx context.Context, filter converter.ListStaffRoomInput, pagination converter.PaginationInput) (*converter.ListStaffRoomResp, error)
 	ListRoom(ctx context.Context, filter converter.ListRoomInput, pagination converter.PaginationInput) (*converter.ListRoomResp, error)
 	ListStaff(ctx context.Context, filter converter.ListStaffInput, pagination converter.PaginationInput) (*converter.ListStaffResp, error)
@@ -259,48 +231,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	ec := executionContext{nil, e}
 	_ = ec
 	switch typeName + "." + field {
-
-	case "DailyGuestReportItem.date":
-		if e.complexity.DailyGuestReportItem.Date == nil {
-			break
-		}
-
-		return e.complexity.DailyGuestReportItem.Date(childComplexity), true
-
-	case "DailyGuestReportItem.guestCount":
-		if e.complexity.DailyGuestReportItem.GuestCount == nil {
-			break
-		}
-
-		return e.complexity.DailyGuestReportItem.GuestCount(childComplexity), true
-
-	case "DailyTagReportColumn.key":
-		if e.complexity.DailyTagReportColumn.Key == nil {
-			break
-		}
-
-		return e.complexity.DailyTagReportColumn.Key(childComplexity), true
-
-	case "DailyTagReportColumn.label":
-		if e.complexity.DailyTagReportColumn.Label == nil {
-			break
-		}
-
-		return e.complexity.DailyTagReportColumn.Label(childComplexity), true
-
-	case "DailyTagReportItem.date":
-		if e.complexity.DailyTagReportItem.Date == nil {
-			break
-		}
-
-		return e.complexity.DailyTagReportItem.Date(childComplexity), true
-
-	case "DailyTagReportItem.jsonData":
-		if e.complexity.DailyTagReportItem.JSONData == nil {
-			break
-		}
-
-		return e.complexity.DailyTagReportItem.JSONData(childComplexity), true
 
 	case "FastMessage.category":
 		if e.complexity.FastMessage.Category == nil {
@@ -392,27 +322,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ListAvailableStaffResp.Staffs(childComplexity), true
-
-	case "ListDailyGuestReportResp.items":
-		if e.complexity.ListDailyGuestReportResp.Items == nil {
-			break
-		}
-
-		return e.complexity.ListDailyGuestReportResp.Items(childComplexity), true
-
-	case "ListDailyTagReportResp.columns":
-		if e.complexity.ListDailyTagReportResp.Columns == nil {
-			break
-		}
-
-		return e.complexity.ListDailyTagReportResp.Columns(childComplexity), true
-
-	case "ListDailyTagReportResp.items":
-		if e.complexity.ListDailyTagReportResp.Items == nil {
-			break
-		}
-
-		return e.complexity.ListDailyTagReportResp.Items(childComplexity), true
 
 	case "ListFastMessageCategoryResp.categories":
 		if e.complexity.ListFastMessageCategoryResp.Categories == nil {
@@ -787,30 +696,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.ListAvailableStaff(childComplexity), true
-
-	case "Query.listDailyGuestReport":
-		if e.complexity.Query.ListDailyGuestReport == nil {
-			break
-		}
-
-		args, err := ec.field_Query_listDailyGuestReport_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.ListDailyGuestReport(childComplexity, args["filter"].(converter.ListDailyGuestReportInput)), true
-
-	case "Query.listDailyTagReport":
-		if e.complexity.Query.ListDailyTagReport == nil {
-			break
-		}
-
-		args, err := ec.field_Query_listDailyTagReport_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.ListDailyTagReport(childComplexity, args["filter"].(converter.ListDailyTagReportInput)), true
 
 	case "Query.listFastMessage":
 		if e.complexity.Query.ListFastMessage == nil {
@@ -1214,45 +1099,6 @@ extend type Query {
     listRoomMessage(filter: ListRoomMessageInput!): ListRoomMessageResp!
     listMessage(filter: ListMessageInput!, pagination: PaginationInput!): ListMessageResp!
 }`, BuiltIn: false},
-	{Name: "pkg/graph/schema/report.graphqls", Input: `type DailyTagReportColumn {
-    label: String!
-    key: String!
-}
-
-type DailyTagReportItem {
-    date: String!
-    jsonData: String!
-}
-
-input ListDailyTagReportInput {
-    startDate: String!
-    endDate: String!
-}
-
-type ListDailyTagReportResp {
-    columns: [DailyTagReportColumn]!
-    items: [DailyTagReportItem]!
-}
-
-input ListDailyGuestReportInput {
-    startDate: String!
-    endDate: String!
-}
-
-type DailyGuestReportItem {
-    date: String!
-    guestCount: Int64!
-}
-
-type ListDailyGuestReportResp {
-    items: [DailyGuestReportItem]!
-}
-
-extend type Query {
-    listDailyTagReport(filter: ListDailyTagReportInput!): ListDailyTagReportResp!
-    listDailyGuestReport(filter: ListDailyGuestReportInput!): ListDailyGuestReportResp!
-}
-`, BuiltIn: false},
 	{Name: "pkg/graph/schema/room.graphqls", Input: `enum RoomStatus {
     """全部"""
     All
@@ -1671,36 +1517,6 @@ func (ec *executionContext) field_Query_getStaff_args(ctx context.Context, rawAr
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_listDailyGuestReport_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 converter.ListDailyGuestReportInput
-	if tmp, ok := rawArgs["filter"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
-		arg0, err = ec.unmarshalNListDailyGuestReportInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListDailyGuestReportInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["filter"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_listDailyTagReport_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 converter.ListDailyTagReportInput
-	if tmp, ok := rawArgs["filter"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
-		arg0, err = ec.unmarshalNListDailyTagReportInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListDailyTagReportInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["filter"] = arg0
-	return args, nil
-}
-
 func (ec *executionContext) field_Query_listFastMessage_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -1873,216 +1689,6 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 // endregion ************************** directives.gotpl **************************
 
 // region    **************************** field.gotpl *****************************
-
-func (ec *executionContext) _DailyGuestReportItem_date(ctx context.Context, field graphql.CollectedField, obj *converter.DailyGuestReportItem) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "DailyGuestReportItem",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Date, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _DailyGuestReportItem_guestCount(ctx context.Context, field graphql.CollectedField, obj *converter.DailyGuestReportItem) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "DailyGuestReportItem",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.GuestCount, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int64)
-	fc.Result = res
-	return ec.marshalNInt642int64(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _DailyTagReportColumn_label(ctx context.Context, field graphql.CollectedField, obj *converter.DailyTagReportColumn) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "DailyTagReportColumn",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Label, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _DailyTagReportColumn_key(ctx context.Context, field graphql.CollectedField, obj *converter.DailyTagReportColumn) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "DailyTagReportColumn",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Key, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _DailyTagReportItem_date(ctx context.Context, field graphql.CollectedField, obj *converter.DailyTagReportItem) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "DailyTagReportItem",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Date, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _DailyTagReportItem_jsonData(ctx context.Context, field graphql.CollectedField, obj *converter.DailyTagReportItem) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "DailyTagReportItem",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.JSONData, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
 
 func (ec *executionContext) _FastMessage_id(ctx context.Context, field graphql.CollectedField, obj *converter.FastMessage) (ret graphql.Marshaler) {
 	defer func() {
@@ -2534,111 +2140,6 @@ func (ec *executionContext) _ListAvailableStaffResp_staffs(ctx context.Context, 
 	res := resTmp.([]*converter.Staff)
 	fc.Result = res
 	return ec.marshalNStaff2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐStaff(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _ListDailyGuestReportResp_items(ctx context.Context, field graphql.CollectedField, obj *converter.ListDailyGuestReportResp) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "ListDailyGuestReportResp",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Items, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.([]*converter.DailyGuestReportItem)
-	fc.Result = res
-	return ec.marshalNDailyGuestReportItem2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐDailyGuestReportItem(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _ListDailyTagReportResp_columns(ctx context.Context, field graphql.CollectedField, obj *converter.ListDailyTagReportResp) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "ListDailyTagReportResp",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Columns, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.([]*converter.DailyTagReportColumn)
-	fc.Result = res
-	return ec.marshalNDailyTagReportColumn2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐDailyTagReportColumn(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _ListDailyTagReportResp_items(ctx context.Context, field graphql.CollectedField, obj *converter.ListDailyTagReportResp) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "ListDailyTagReportResp",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Items, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.([]*converter.DailyTagReportItem)
-	fc.Result = res
-	return ec.marshalNDailyTagReportItem2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐDailyTagReportItem(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _ListFastMessageCategoryResp_categories(ctx context.Context, field graphql.CollectedField, obj *converter.ListFastMessageCategoryResp) (ret graphql.Marshaler) {
@@ -4334,90 +3835,6 @@ func (ec *executionContext) _Query_listMessage(ctx context.Context, field graphq
 	res := resTmp.(*converter.ListMessageResp)
 	fc.Result = res
 	return ec.marshalNListMessageResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐListMessageResp(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Query_listDailyTagReport(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Query_listDailyTagReport_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ListDailyTagReport(rctx, args["filter"].(converter.ListDailyTagReportInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*converter.ListDailyTagReportResp)
-	fc.Result = res
-	return ec.marshalNListDailyTagReportResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐListDailyTagReportResp(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Query_listDailyGuestReport(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Query_listDailyGuestReport_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ListDailyGuestReport(rctx, args["filter"].(converter.ListDailyGuestReportInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*converter.ListDailyGuestReportResp)
-	fc.Result = res
-	return ec.marshalNListDailyGuestReportResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐListDailyGuestReportResp(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_listStaffRoom(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -6596,68 +6013,6 @@ func (ec *executionContext) unmarshalInputCreateStaffInput(ctx context.Context, 
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputListDailyGuestReportInput(ctx context.Context, obj interface{}) (converter.ListDailyGuestReportInput, error) {
-	var it converter.ListDailyGuestReportInput
-	asMap := map[string]interface{}{}
-	for k, v := range obj.(map[string]interface{}) {
-		asMap[k] = v
-	}
-
-	for k, v := range asMap {
-		switch k {
-		case "startDate":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("startDate"))
-			it.StartDate, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "endDate":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endDate"))
-			it.EndDate, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		}
-	}
-
-	return it, nil
-}
-
-func (ec *executionContext) unmarshalInputListDailyTagReportInput(ctx context.Context, obj interface{}) (converter.ListDailyTagReportInput, error) {
-	var it converter.ListDailyTagReportInput
-	asMap := map[string]interface{}{}
-	for k, v := range obj.(map[string]interface{}) {
-		asMap[k] = v
-	}
-
-	for k, v := range asMap {
-		switch k {
-		case "startDate":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("startDate"))
-			it.StartDate, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "endDate":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endDate"))
-			it.EndDate, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		}
-	}
-
-	return it, nil
-}
-
 func (ec *executionContext) unmarshalInputListFastMessageInput(ctx context.Context, obj interface{}) (converter.ListFastMessageInput, error) {
 	var it converter.ListFastMessageInput
 	asMap := map[string]interface{}{}
@@ -7048,129 +6403,6 @@ func (ec *executionContext) unmarshalInputUpdateStaffInput(ctx context.Context, 
 
 // region    **************************** object.gotpl ****************************
 
-var dailyGuestReportItemImplementors = []string{"DailyGuestReportItem"}
-
-func (ec *executionContext) _DailyGuestReportItem(ctx context.Context, sel ast.SelectionSet, obj *converter.DailyGuestReportItem) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, dailyGuestReportItemImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("DailyGuestReportItem")
-		case "date":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._DailyGuestReportItem_date(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "guestCount":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._DailyGuestReportItem_guestCount(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var dailyTagReportColumnImplementors = []string{"DailyTagReportColumn"}
-
-func (ec *executionContext) _DailyTagReportColumn(ctx context.Context, sel ast.SelectionSet, obj *converter.DailyTagReportColumn) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, dailyTagReportColumnImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("DailyTagReportColumn")
-		case "label":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._DailyTagReportColumn_label(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "key":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._DailyTagReportColumn_key(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var dailyTagReportItemImplementors = []string{"DailyTagReportItem"}
-
-func (ec *executionContext) _DailyTagReportItem(ctx context.Context, sel ast.SelectionSet, obj *converter.DailyTagReportItem) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, dailyTagReportItemImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("DailyTagReportItem")
-		case "date":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._DailyTagReportItem_date(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "jsonData":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._DailyTagReportItem_jsonData(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
 var fastMessageImplementors = []string{"FastMessage"}
 
 func (ec *executionContext) _FastMessage(ctx context.Context, sel ast.SelectionSet, obj *converter.FastMessage) graphql.Marshaler {
@@ -7406,78 +6638,6 @@ func (ec *executionContext) _ListAvailableStaffResp(ctx context.Context, sel ast
 		case "staffs":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._ListAvailableStaffResp_staffs(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var listDailyGuestReportRespImplementors = []string{"ListDailyGuestReportResp"}
-
-func (ec *executionContext) _ListDailyGuestReportResp(ctx context.Context, sel ast.SelectionSet, obj *converter.ListDailyGuestReportResp) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, listDailyGuestReportRespImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("ListDailyGuestReportResp")
-		case "items":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._ListDailyGuestReportResp_items(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var listDailyTagReportRespImplementors = []string{"ListDailyTagReportResp"}
-
-func (ec *executionContext) _ListDailyTagReportResp(ctx context.Context, sel ast.SelectionSet, obj *converter.ListDailyTagReportResp) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, listDailyTagReportRespImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("ListDailyTagReportResp")
-		case "columns":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._ListDailyTagReportResp_columns(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "items":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._ListDailyTagReportResp_items(ctx, field, obj)
 			}
 
 			out.Values[i] = innerFunc(ctx)
@@ -8285,52 +7445,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_listMessage(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return rrm(innerCtx)
-			})
-		case "listDailyTagReport":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_listDailyTagReport(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return rrm(innerCtx)
-			})
-		case "listDailyGuestReport":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_listDailyGuestReport(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
@@ -9154,120 +8268,6 @@ func (ec *executionContext) unmarshalNCreateStaffInput2csᚑapiᚋpkgᚋgraphᚋ
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNDailyGuestReportItem2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐDailyGuestReportItem(ctx context.Context, sel ast.SelectionSet, v []*converter.DailyGuestReportItem) graphql.Marshaler {
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalODailyGuestReportItem2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐDailyGuestReportItem(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	return ret
-}
-
-func (ec *executionContext) marshalNDailyTagReportColumn2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐDailyTagReportColumn(ctx context.Context, sel ast.SelectionSet, v []*converter.DailyTagReportColumn) graphql.Marshaler {
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalODailyTagReportColumn2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐDailyTagReportColumn(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	return ret
-}
-
-func (ec *executionContext) marshalNDailyTagReportItem2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐDailyTagReportItem(ctx context.Context, sel ast.SelectionSet, v []*converter.DailyTagReportItem) graphql.Marshaler {
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalODailyTagReportItem2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐDailyTagReportItem(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	return ret
-}
-
 func (ec *executionContext) marshalNFastMessage2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐFastMessage(ctx context.Context, sel ast.SelectionSet, v []*converter.FastMessage) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
@@ -9447,44 +8447,6 @@ func (ec *executionContext) marshalNListAvailableStaffResp2ᚖcsᚑapiᚋpkgᚋg
 		return graphql.Null
 	}
 	return ec._ListAvailableStaffResp(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalNListDailyGuestReportInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListDailyGuestReportInput(ctx context.Context, v interface{}) (converter.ListDailyGuestReportInput, error) {
-	res, err := ec.unmarshalInputListDailyGuestReportInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNListDailyGuestReportResp2csᚑapiᚋpkgᚋgraphᚋconverterᚐListDailyGuestReportResp(ctx context.Context, sel ast.SelectionSet, v converter.ListDailyGuestReportResp) graphql.Marshaler {
-	return ec._ListDailyGuestReportResp(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNListDailyGuestReportResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐListDailyGuestReportResp(ctx context.Context, sel ast.SelectionSet, v *converter.ListDailyGuestReportResp) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._ListDailyGuestReportResp(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalNListDailyTagReportInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListDailyTagReportInput(ctx context.Context, v interface{}) (converter.ListDailyTagReportInput, error) {
-	res, err := ec.unmarshalInputListDailyTagReportInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNListDailyTagReportResp2csᚑapiᚋpkgᚋgraphᚋconverterᚐListDailyTagReportResp(ctx context.Context, sel ast.SelectionSet, v converter.ListDailyTagReportResp) graphql.Marshaler {
-	return ec._ListDailyTagReportResp(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNListDailyTagReportResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐListDailyTagReportResp(ctx context.Context, sel ast.SelectionSet, v *converter.ListDailyTagReportResp) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._ListDailyTagReportResp(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNListFastMessageCategoryResp2csᚑapiᚋpkgᚋgraphᚋconverterᚐListFastMessageCategoryResp(ctx context.Context, sel ast.SelectionSet, v converter.ListFastMessageCategoryResp) graphql.Marshaler {
@@ -10172,27 +9134,6 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	}
 	res := graphql.MarshalBoolean(*v)
 	return res
-}
-
-func (ec *executionContext) marshalODailyGuestReportItem2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐDailyGuestReportItem(ctx context.Context, sel ast.SelectionSet, v *converter.DailyGuestReportItem) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._DailyGuestReportItem(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalODailyTagReportColumn2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐDailyTagReportColumn(ctx context.Context, sel ast.SelectionSet, v *converter.DailyTagReportColumn) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._DailyTagReportColumn(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalODailyTagReportItem2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐDailyTagReportItem(ctx context.Context, sel ast.SelectionSet, v *converter.DailyTagReportItem) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._DailyTagReportItem(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOFastMessage2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐFastMessage(ctx context.Context, sel ast.SelectionSet, v *converter.FastMessage) graphql.Marshaler {
