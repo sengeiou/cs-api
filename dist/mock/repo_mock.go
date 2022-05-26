@@ -725,10 +725,10 @@ func (mr *MockIRepositoryMockRecorder) GetStaffRoom(ctx, staffID interface{}) *g
 }
 
 // GetTag mocks base method.
-func (m *MockIRepository) GetTag(ctx context.Context, id int64) (model.Tag, error) {
+func (m *MockIRepository) GetTag(ctx context.Context, id int64) (model.GetTagRow, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetTag", ctx, id)
-	ret0, _ := ret[0].(model.Tag)
+	ret0, _ := ret[0].(model.GetTagRow)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -905,10 +905,10 @@ func (mr *MockIRepositoryMockRecorder) ListStaffRoom(ctx, arg interface{}) *gomo
 }
 
 // ListTag mocks base method.
-func (m *MockIRepository) ListTag(ctx context.Context, arg model.ListTagParams) ([]model.Tag, error) {
+func (m *MockIRepository) ListTag(ctx context.Context, arg model.ListTagParams) ([]model.ListTagRow, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListTag", ctx, arg)
-	ret0, _ := ret[0].([]model.Tag)
+	ret0, _ := ret[0].([]model.ListTagRow)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

@@ -63,7 +63,7 @@ type Querier interface {
 	GetStaff(ctx context.Context, id int64) (GetStaffRow, error)
 	GetStaffCountByRoleId(ctx context.Context, roleID int64) (int64, error)
 	GetStaffRoom(ctx context.Context, staffID int64) ([]int64, error)
-	GetTag(ctx context.Context, id int64) (Tag, error)
+	GetTag(ctx context.Context, id int64) (GetTagRow, error)
 	ListAvailableStaff(ctx context.Context, id int64) ([]Staff, error)
 	ListFastMessage(ctx context.Context, arg ListFastMessageParams) ([]ListFastMessageRow, error)
 	ListFastMessageCategory(ctx context.Context) ([]Constant, error)
@@ -75,7 +75,7 @@ type Querier interface {
 	ListRoom(ctx context.Context, arg ListRoomParams) ([]ListRoomRow, error)
 	ListStaff(ctx context.Context, arg ListStaffParams) ([]ListStaffRow, error)
 	ListStaffRoom(ctx context.Context, arg ListStaffRoomParams) ([]ListStaffRoomRow, error)
-	ListTag(ctx context.Context, arg ListTagParams) ([]Tag, error)
+	ListTag(ctx context.Context, arg ListTagParams) ([]ListTagRow, error)
 	RoleSeeder(ctx context.Context) error
 	StaffLogin(ctx context.Context, arg StaffLoginParams) (Staff, error)
 	StaffSeeder(ctx context.Context, password string) error

@@ -108,10 +108,6 @@ type ComplexityRoot struct {
 		Staff func(childComplexity int) int
 	}
 
-	GetTagResp struct {
-		Tag func(childComplexity int) int
-	}
-
 	ListAvailableStaffResp struct {
 		Staffs func(childComplexity int) int
 	}
@@ -177,11 +173,6 @@ type ComplexityRoot struct {
 		Rooms      func(childComplexity int) int
 	}
 
-	ListTagResp struct {
-		Pagination func(childComplexity int) int
-		Tags       func(childComplexity int) int
-	}
-
 	Message struct {
 		Content     func(childComplexity int) int
 		ContentType func(childComplexity int) int
@@ -206,13 +197,11 @@ type ComplexityRoot struct {
 		CreateRemind              func(childComplexity int, input converter.CreateRemindInput) int
 		CreateRole                func(childComplexity int, input converter.CreateRoleInput) int
 		CreateStaff               func(childComplexity int, input converter.CreateStaffInput) int
-		CreateTag                 func(childComplexity int, input converter.CreateTagInput) int
 		DeleteFastMessage         func(childComplexity int, id int64) int
 		DeleteNotice              func(childComplexity int, id int64) int
 		DeleteRemind              func(childComplexity int, id int64) int
 		DeleteRole                func(childComplexity int, id int64) int
 		DeleteStaff               func(childComplexity int, id int64) int
-		DeleteTag                 func(childComplexity int, id int64) int
 		Logout                    func(childComplexity int) int
 		TransferRoom              func(childComplexity int, input converter.TransferRoomInput) int
 		UpdateCsConfig            func(childComplexity int, input converter.UpdateCsConfigInput) int
@@ -224,7 +213,6 @@ type ComplexityRoot struct {
 		UpdateStaff               func(childComplexity int, input converter.UpdateStaffInput) int
 		UpdateStaffAvatar         func(childComplexity int, avatar string) int
 		UpdateStaffServingStatus  func(childComplexity int, servingStatus converter.StaffServingStatus) int
-		UpdateTag                 func(childComplexity int, input converter.UpdateTagInput) int
 		Upload                    func(childComplexity int, file graphql.Upload) int
 	}
 
@@ -250,7 +238,6 @@ type ComplexityRoot struct {
 		GetRemind               func(childComplexity int, id int64) int
 		GetRole                 func(childComplexity int, id int64) int
 		GetStaff                func(childComplexity int, id int64) int
-		GetTag                  func(childComplexity int, id int64) int
 		ListAvailableStaff      func(childComplexity int) int
 		ListDailyGuestReport    func(childComplexity int, filter converter.ListDailyGuestReportInput) int
 		ListDailyTagReport      func(childComplexity int, filter converter.ListDailyTagReportInput) int
@@ -265,7 +252,6 @@ type ComplexityRoot struct {
 		ListRoomMessage         func(childComplexity int, filter converter.ListRoomMessageInput) int
 		ListStaff               func(childComplexity int, filter converter.ListStaffInput, pagination converter.PaginationInput) int
 		ListStaffRoom           func(childComplexity int, filter converter.ListStaffRoomInput, pagination converter.PaginationInput) int
-		ListTag                 func(childComplexity int, filter converter.ListTagInput, pagination converter.PaginationInput) int
 	}
 
 	Remind struct {
@@ -302,12 +288,6 @@ type ComplexityRoot struct {
 		Status        func(childComplexity int) int
 		Username      func(childComplexity int) int
 	}
-
-	Tag struct {
-		ID     func(childComplexity int) int
-		Name   func(childComplexity int) int
-		Status func(childComplexity int) int
-	}
 }
 
 type MutationResolver interface {
@@ -336,9 +316,6 @@ type MutationResolver interface {
 	DeleteStaff(ctx context.Context, id int64) (bool, error)
 	UpdateStaffServingStatus(ctx context.Context, servingStatus converter.StaffServingStatus) (bool, error)
 	UpdateStaffAvatar(ctx context.Context, avatar string) (bool, error)
-	CreateTag(ctx context.Context, input converter.CreateTagInput) (bool, error)
-	UpdateTag(ctx context.Context, input converter.UpdateTagInput) (bool, error)
-	DeleteTag(ctx context.Context, id int64) (bool, error)
 }
 type QueryResolver interface {
 	GetCsConfig(ctx context.Context) (*converter.GetCsConfigResp, error)
@@ -361,8 +338,6 @@ type QueryResolver interface {
 	ListStaff(ctx context.Context, filter converter.ListStaffInput, pagination converter.PaginationInput) (*converter.ListStaffResp, error)
 	ListAvailableStaff(ctx context.Context) (*converter.ListAvailableStaffResp, error)
 	GetStaff(ctx context.Context, id int64) (*converter.GetStaffResp, error)
-	ListTag(ctx context.Context, filter converter.ListTagInput, pagination converter.PaginationInput) (*converter.ListTagResp, error)
-	GetTag(ctx context.Context, id int64) (*converter.GetTagResp, error)
 }
 
 type executableSchema struct {
@@ -555,13 +530,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.GetStaffResp.Staff(childComplexity), true
 
-	case "GetTagResp.tag":
-		if e.complexity.GetTagResp.Tag == nil {
-			break
-		}
-
-		return e.complexity.GetTagResp.Tag(childComplexity), true
-
 	case "ListAvailableStaffResp.staffs":
 		if e.complexity.ListAvailableStaffResp.Staffs == nil {
 			break
@@ -723,20 +691,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ListStaffRoomResp.Rooms(childComplexity), true
 
-	case "ListTagResp.pagination":
-		if e.complexity.ListTagResp.Pagination == nil {
-			break
-		}
-
-		return e.complexity.ListTagResp.Pagination(childComplexity), true
-
-	case "ListTagResp.tags":
-		if e.complexity.ListTagResp.Tags == nil {
-			break
-		}
-
-		return e.complexity.ListTagResp.Tags(childComplexity), true
-
 	case "Message.content":
 		if e.complexity.Message.Content == nil {
 			break
@@ -896,18 +850,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateStaff(childComplexity, args["input"].(converter.CreateStaffInput)), true
 
-	case "Mutation.createTag":
-		if e.complexity.Mutation.CreateTag == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createTag_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateTag(childComplexity, args["input"].(converter.CreateTagInput)), true
-
 	case "Mutation.deleteFastMessage":
 		if e.complexity.Mutation.DeleteFastMessage == nil {
 			break
@@ -967,18 +909,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.DeleteStaff(childComplexity, args["id"].(int64)), true
-
-	case "Mutation.deleteTag":
-		if e.complexity.Mutation.DeleteTag == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteTag_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.DeleteTag(childComplexity, args["id"].(int64)), true
 
 	case "Mutation.logout":
 		if e.complexity.Mutation.Logout == nil {
@@ -1106,18 +1036,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.UpdateStaffServingStatus(childComplexity, args["servingStatus"].(converter.StaffServingStatus)), true
-
-	case "Mutation.updateTag":
-		if e.complexity.Mutation.UpdateTag == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateTag_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.UpdateTag(childComplexity, args["input"].(converter.UpdateTagInput)), true
 
 	case "Mutation.upload":
 		if e.complexity.Mutation.Upload == nil {
@@ -1260,18 +1178,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.GetStaff(childComplexity, args["id"].(int64)), true
-
-	case "Query.getTag":
-		if e.complexity.Query.GetTag == nil {
-			break
-		}
-
-		args, err := ec.field_Query_getTag_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.GetTag(childComplexity, args["id"].(int64)), true
 
 	case "Query.listAvailableStaff":
 		if e.complexity.Query.ListAvailableStaff == nil {
@@ -1425,18 +1331,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.ListStaffRoom(childComplexity, args["filter"].(converter.ListStaffRoomInput), args["pagination"].(converter.PaginationInput)), true
-
-	case "Query.listTag":
-		if e.complexity.Query.ListTag == nil {
-			break
-		}
-
-		args, err := ec.field_Query_listTag_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.ListTag(childComplexity, args["filter"].(converter.ListTagInput), args["pagination"].(converter.PaginationInput)), true
 
 	case "Remind.content":
 		if e.complexity.Remind.Content == nil {
@@ -1598,27 +1492,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Staff.Username(childComplexity), true
-
-	case "Tag.id":
-		if e.complexity.Tag.ID == nil {
-			break
-		}
-
-		return e.complexity.Tag.ID(childComplexity), true
-
-	case "Tag.name":
-		if e.complexity.Tag.Name == nil {
-			break
-		}
-
-		return e.complexity.Tag.Name(childComplexity), true
-
-	case "Tag.status":
-		if e.complexity.Tag.Status == nil {
-			break
-		}
-
-		return e.complexity.Tag.Status(childComplexity), true
 
 	}
 	return 0, false
@@ -2182,47 +2055,6 @@ extend type Mutation {
     updateStaffServingStatus(servingStatus: StaffServingStatus!): Boolean!
     updateStaffAvatar(avatar: String!): Boolean!
 }`, BuiltIn: false},
-	{Name: "pkg/graph/schema/tag.graphqls", Input: `type Tag {
-    id: Int64!
-    name: String!
-    status: Status!
-}
-
-input ListTagInput {
-    name: String!
-    status: Status!
-}
-
-type ListTagResp {
-    pagination: Pagination!
-    tags: [Tag]!
-}
-
-type GetTagResp {
-    tag: Tag!
-}
-
-extend type Query {
-    listTag(filter: ListTagInput!, pagination: PaginationInput!): ListTagResp!
-    getTag(id: Int64!): GetTagResp!
-}
-
-input CreateTagInput {
-    name: String!
-    status: Status!
-}
-
-input UpdateTagInput {
-    id: Int64!
-    name: String!
-    status: Status!
-}
-
-extend type Mutation {
-    createTag(input: CreateTagInput!): Boolean!
-    updateTag(input: UpdateTagInput!): Boolean!
-    deleteTag(id: Int64!): Boolean!
-}`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
@@ -2350,21 +2182,6 @@ func (ec *executionContext) field_Mutation_createStaff_args(ctx context.Context,
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_createTag_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 converter.CreateTagInput
-	if tmp, ok := rawArgs["input"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateTagInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐCreateTagInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["input"] = arg0
-	return args, nil
-}
-
 func (ec *executionContext) field_Mutation_deleteFastMessage_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -2426,21 +2243,6 @@ func (ec *executionContext) field_Mutation_deleteRole_args(ctx context.Context, 
 }
 
 func (ec *executionContext) field_Mutation_deleteStaff_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 int64
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNInt642int64(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["id"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_deleteTag_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 int64
@@ -2605,21 +2407,6 @@ func (ec *executionContext) field_Mutation_updateStaff_args(ctx context.Context,
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_updateTag_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 converter.UpdateTagInput
-	if tmp, ok := rawArgs["input"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNUpdateTagInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐUpdateTagInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["input"] = arg0
-	return args, nil
-}
-
 func (ec *executionContext) field_Mutation_upload_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -2711,21 +2498,6 @@ func (ec *executionContext) field_Query_getRole_args(ctx context.Context, rawArg
 }
 
 func (ec *executionContext) field_Query_getStaff_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 int64
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNInt642int64(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["id"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_getTag_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 int64
@@ -2960,30 +2732,6 @@ func (ec *executionContext) field_Query_listStaff_args(ctx context.Context, rawA
 	if tmp, ok := rawArgs["filter"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
 		arg0, err = ec.unmarshalNListStaffInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListStaffInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["filter"] = arg0
-	var arg1 converter.PaginationInput
-	if tmp, ok := rawArgs["pagination"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pagination"))
-		arg1, err = ec.unmarshalNPaginationInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐPaginationInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["pagination"] = arg1
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_listTag_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 converter.ListTagInput
-	if tmp, ok := rawArgs["filter"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
-		arg0, err = ec.unmarshalNListTagInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListTagInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3911,41 +3659,6 @@ func (ec *executionContext) _GetStaffResp_staff(ctx context.Context, field graph
 	return ec.marshalNStaff2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐStaff(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _GetTagResp_tag(ctx context.Context, field graphql.CollectedField, obj *converter.GetTagResp) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "GetTagResp",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Tag, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*converter.Tag)
-	fc.Result = res
-	return ec.marshalNTag2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐTag(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _ListAvailableStaffResp_staffs(ctx context.Context, field graphql.CollectedField, obj *converter.ListAvailableStaffResp) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -4749,76 +4462,6 @@ func (ec *executionContext) _ListStaffRoomResp_rooms(ctx context.Context, field 
 	res := resTmp.([]*converter.Room)
 	fc.Result = res
 	return ec.marshalNRoom2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐRoom(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _ListTagResp_pagination(ctx context.Context, field graphql.CollectedField, obj *converter.ListTagResp) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "ListTagResp",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Pagination, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*converter.Pagination)
-	fc.Result = res
-	return ec.marshalNPagination2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐPagination(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _ListTagResp_tags(ctx context.Context, field graphql.CollectedField, obj *converter.ListTagResp) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "ListTagResp",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Tags, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.([]*converter.Tag)
-	fc.Result = res
-	return ec.marshalNTag2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐTag(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Message_id(ctx context.Context, field graphql.CollectedField, obj *converter.Message) (ret graphql.Marshaler) {
@@ -6173,132 +5816,6 @@ func (ec *executionContext) _Mutation_updateStaffAvatar(ctx context.Context, fie
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Mutation_createTag(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_createTag_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateTag(rctx, args["input"].(converter.CreateTagInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(bool)
-	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Mutation_updateTag(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_updateTag_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateTag(rctx, args["input"].(converter.UpdateTagInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(bool)
-	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Mutation_deleteTag(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_deleteTag_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().DeleteTag(rctx, args["id"].(int64))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(bool)
-	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _Notice_id(ctx context.Context, field graphql.CollectedField, obj *converter.Notice) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -7426,90 +6943,6 @@ func (ec *executionContext) _Query_getStaff(ctx context.Context, field graphql.C
 	return ec.marshalNGetStaffResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐGetStaffResp(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Query_listTag(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Query_listTag_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ListTag(rctx, args["filter"].(converter.ListTagInput), args["pagination"].(converter.PaginationInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*converter.ListTagResp)
-	fc.Result = res
-	return ec.marshalNListTagResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐListTagResp(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Query_getTag(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Query_getTag_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetTag(rctx, args["id"].(int64))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*converter.GetTagResp)
-	fc.Result = res
-	return ec.marshalNGetTagResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐGetTagResp(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -8384,111 +7817,6 @@ func (ec *executionContext) _Staff_avatar(ctx context.Context, field graphql.Col
 	res := resTmp.(string)
 	fc.Result = res
 	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Tag_id(ctx context.Context, field graphql.CollectedField, obj *converter.Tag) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Tag",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int64)
-	fc.Result = res
-	return ec.marshalNInt642int64(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Tag_name(ctx context.Context, field graphql.CollectedField, obj *converter.Tag) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Tag",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Name, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Tag_status(ctx context.Context, field graphql.CollectedField, obj *converter.Tag) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Tag",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Status, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(converter.Status)
-	fc.Result = res
-	return ec.marshalNStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐStatus(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) ___Directive_name(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) (ret graphql.Marshaler) {
@@ -9958,37 +9286,6 @@ func (ec *executionContext) unmarshalInputCreateStaffInput(ctx context.Context, 
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputCreateTagInput(ctx context.Context, obj interface{}) (converter.CreateTagInput, error) {
-	var it converter.CreateTagInput
-	asMap := map[string]interface{}{}
-	for k, v := range obj.(map[string]interface{}) {
-		asMap[k] = v
-	}
-
-	for k, v := range asMap {
-		switch k {
-		case "name":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-			it.Name, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "status":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-			it.Status, err = ec.unmarshalNStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐStatus(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		}
-	}
-
-	return it, nil
-}
-
 func (ec *executionContext) unmarshalInputListDailyGuestReportInput(ctx context.Context, obj interface{}) (converter.ListDailyGuestReportInput, error) {
 	var it converter.ListDailyGuestReportInput
 	asMap := map[string]interface{}{}
@@ -10346,37 +9643,6 @@ func (ec *executionContext) unmarshalInputListStaffRoomInput(ctx context.Context
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputListTagInput(ctx context.Context, obj interface{}) (converter.ListTagInput, error) {
-	var it converter.ListTagInput
-	asMap := map[string]interface{}{}
-	for k, v := range obj.(map[string]interface{}) {
-		asMap[k] = v
-	}
-
-	for k, v := range asMap {
-		switch k {
-		case "name":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-			it.Name, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "status":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-			it.Status, err = ec.unmarshalNStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐStatus(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		}
-	}
-
-	return it, nil
-}
-
 func (ec *executionContext) unmarshalInputPaginationInput(ctx context.Context, obj interface{}) (converter.PaginationInput, error) {
 	var it converter.PaginationInput
 	asMap := map[string]interface{}{}
@@ -10720,45 +9986,6 @@ func (ec *executionContext) unmarshalInputUpdateStaffInput(ctx context.Context, 
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
 			it.Password, err = ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "status":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-			it.Status, err = ec.unmarshalNStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐStatus(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		}
-	}
-
-	return it, nil
-}
-
-func (ec *executionContext) unmarshalInputUpdateTagInput(ctx context.Context, obj interface{}) (converter.UpdateTagInput, error) {
-	var it converter.UpdateTagInput
-	asMap := map[string]interface{}{}
-	for k, v := range obj.(map[string]interface{}) {
-		asMap[k] = v
-	}
-
-	for k, v := range asMap {
-		switch k {
-		case "id":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-			it.ID, err = ec.unmarshalNInt642int64(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "name":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-			it.Name, err = ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -11304,37 +10531,6 @@ func (ec *executionContext) _GetStaffResp(ctx context.Context, sel ast.Selection
 	return out
 }
 
-var getTagRespImplementors = []string{"GetTagResp"}
-
-func (ec *executionContext) _GetTagResp(ctx context.Context, sel ast.SelectionSet, obj *converter.GetTagResp) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, getTagRespImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("GetTagResp")
-		case "tag":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._GetTagResp_tag(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
 var listAvailableStaffRespImplementors = []string{"ListAvailableStaffResp"}
 
 func (ec *executionContext) _ListAvailableStaffResp(ctx context.Context, sel ast.SelectionSet, obj *converter.ListAvailableStaffResp) graphql.Marshaler {
@@ -11859,47 +11055,6 @@ func (ec *executionContext) _ListStaffRoomResp(ctx context.Context, sel ast.Sele
 	return out
 }
 
-var listTagRespImplementors = []string{"ListTagResp"}
-
-func (ec *executionContext) _ListTagResp(ctx context.Context, sel ast.SelectionSet, obj *converter.ListTagResp) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, listTagRespImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("ListTagResp")
-		case "pagination":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._ListTagResp_pagination(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "tags":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._ListTagResp_tags(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
 var messageImplementors = []string{"Message"}
 
 func (ec *executionContext) _Message(ctx context.Context, sel ast.SelectionSet, obj *converter.Message) graphql.Marshaler {
@@ -12288,36 +11443,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "updateStaffAvatar":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updateStaffAvatar(ctx, field)
-			}
-
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "createTag":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createTag(ctx, field)
-			}
-
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "updateTag":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateTag(ctx, field)
-			}
-
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "deleteTag":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_deleteTag(ctx, field)
 			}
 
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
@@ -12947,52 +12072,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Concurrently(i, func() graphql.Marshaler {
 				return rrm(innerCtx)
 			})
-		case "listTag":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_listTag(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return rrm(innerCtx)
-			})
-		case "getTag":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_getTag(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return rrm(innerCtx)
-			})
 		case "__type":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Query___type(ctx, field)
@@ -13314,57 +12393,6 @@ func (ec *executionContext) _Staff(ctx context.Context, sel ast.SelectionSet, ob
 		case "avatar":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Staff_avatar(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var tagImplementors = []string{"Tag"}
-
-func (ec *executionContext) _Tag(ctx context.Context, sel ast.SelectionSet, obj *converter.Tag) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, tagImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("Tag")
-		case "id":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Tag_id(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "name":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Tag_name(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "status":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Tag_status(ctx, field, obj)
 			}
 
 			out.Values[i] = innerFunc(ctx)
@@ -13866,11 +12894,6 @@ func (ec *executionContext) unmarshalNCreateStaffInput2csᚑapiᚋpkgᚋgraphᚋ
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateTagInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐCreateTagInput(ctx context.Context, v interface{}) (converter.CreateTagInput, error) {
-	res, err := ec.unmarshalInputCreateTagInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
 func (ec *executionContext) marshalNCsConfig2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐCsConfig(ctx context.Context, sel ast.SelectionSet, v *converter.CsConfig) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -14203,20 +13226,6 @@ func (ec *executionContext) marshalNGetStaffResp2ᚖcsᚑapiᚋpkgᚋgraphᚋcon
 	return ec._GetStaffResp(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNGetTagResp2csᚑapiᚋpkgᚋgraphᚋconverterᚐGetTagResp(ctx context.Context, sel ast.SelectionSet, v converter.GetTagResp) graphql.Marshaler {
-	return ec._GetTagResp(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNGetTagResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐGetTagResp(ctx context.Context, sel ast.SelectionSet, v *converter.GetTagResp) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._GetTagResp(ctx, sel, v)
-}
-
 func (ec *executionContext) unmarshalNInt642int64(ctx context.Context, v interface{}) (int64, error) {
 	res, err := helper.UnmarshalInt64(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -14481,25 +13490,6 @@ func (ec *executionContext) marshalNListStaffRoomResp2ᚖcsᚑapiᚋpkgᚋgraph�
 		return graphql.Null
 	}
 	return ec._ListStaffRoomResp(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalNListTagInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListTagInput(ctx context.Context, v interface{}) (converter.ListTagInput, error) {
-	res, err := ec.unmarshalInputListTagInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNListTagResp2csᚑapiᚋpkgᚋgraphᚋconverterᚐListTagResp(ctx context.Context, sel ast.SelectionSet, v converter.ListTagResp) graphql.Marshaler {
-	return ec._ListTagResp(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNListTagResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐListTagResp(ctx context.Context, sel ast.SelectionSet, v *converter.ListTagResp) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._ListTagResp(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNMessage2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐMessage(ctx context.Context, sel ast.SelectionSet, v []*converter.Message) graphql.Marshaler {
@@ -14882,54 +13872,6 @@ func (ec *executionContext) marshalNString2ᚕstringᚄ(ctx context.Context, sel
 	return ret
 }
 
-func (ec *executionContext) marshalNTag2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐTag(ctx context.Context, sel ast.SelectionSet, v []*converter.Tag) graphql.Marshaler {
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalOTag2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐTag(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	return ret
-}
-
-func (ec *executionContext) marshalNTag2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐTag(ctx context.Context, sel ast.SelectionSet, v *converter.Tag) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._Tag(ctx, sel, v)
-}
-
 func (ec *executionContext) unmarshalNTransferRoomInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐTransferRoomInput(ctx context.Context, v interface{}) (converter.TransferRoomInput, error) {
 	res, err := ec.unmarshalInputTransferRoomInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -14962,11 +13904,6 @@ func (ec *executionContext) unmarshalNUpdateRoleInput2csᚑapiᚋpkgᚋgraphᚋc
 
 func (ec *executionContext) unmarshalNUpdateStaffInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐUpdateStaffInput(ctx context.Context, v interface{}) (converter.UpdateStaffInput, error) {
 	res, err := ec.unmarshalInputUpdateStaffInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalNUpdateTagInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐUpdateTagInput(ctx context.Context, v interface{}) (converter.UpdateTagInput, error) {
-	res, err := ec.unmarshalInputUpdateTagInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -15369,13 +14306,6 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	}
 	res := graphql.MarshalString(*v)
 	return res
-}
-
-func (ec *executionContext) marshalOTag2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐTag(ctx context.Context, sel ast.SelectionSet, v *converter.Tag) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._Tag(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalO__EnumValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐEnumValueᚄ(ctx context.Context, sel ast.SelectionSet, v []introspection.EnumValue) graphql.Marshaler {

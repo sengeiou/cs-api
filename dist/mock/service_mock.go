@@ -39,6 +39,20 @@ func (m *MockIAuthService) EXPECT() *MockIAuthServiceMockRecorder {
 	return m.recorder
 }
 
+// CheckPermission mocks base method.
+func (m *MockIAuthService) CheckPermission(permission string) gin.HandlerFunc {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CheckPermission", permission)
+	ret0, _ := ret[0].(gin.HandlerFunc)
+	return ret0
+}
+
+// CheckPermission indicates an expected call of CheckPermission.
+func (mr *MockIAuthServiceMockRecorder) CheckPermission(permission interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckPermission", reflect.TypeOf((*MockIAuthService)(nil).CheckPermission), permission)
+}
+
 // GetClientInfo mocks base method.
 func (m *MockIAuthService) GetClientInfo(ctx context.Context, clientType pkg.ClientType) (pkg.ClientInfo, error) {
 	m.ctrl.T.Helper()
@@ -418,7 +432,7 @@ func (mr *MockIMessageServiceMockRecorder) ListMessage(ctx, params interface{}) 
 }
 
 // ListRoomMessage mocks base method.
-func (m *MockIMessageService) ListRoomMessage(ctx context.Context, roomId int64, clientType string) ([]model0.Message, error) {
+func (m *MockIMessageService) ListRoomMessage(ctx context.Context, roomId int64, clientType pkg.ClientType) ([]model0.Message, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListRoomMessage", ctx, roomId, clientType)
 	ret0, _ := ret[0].([]model0.Message)
@@ -484,10 +498,10 @@ func (mr *MockITagServiceMockRecorder) DeleteTag(ctx, tagId interface{}) *gomock
 }
 
 // GetTag mocks base method.
-func (m *MockITagService) GetTag(ctx context.Context, tagId int64) (model.Tag, error) {
+func (m *MockITagService) GetTag(ctx context.Context, tagId int64) (model.GetTagRow, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetTag", ctx, tagId)
-	ret0, _ := ret[0].(model.Tag)
+	ret0, _ := ret[0].(model.GetTagRow)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -499,10 +513,10 @@ func (mr *MockITagServiceMockRecorder) GetTag(ctx, tagId interface{}) *gomock.Ca
 }
 
 // ListTag mocks base method.
-func (m *MockITagService) ListTag(ctx context.Context, params model.ListTagParams, filterParams types.FilterTagParams) ([]model.Tag, int64, error) {
+func (m *MockITagService) ListTag(ctx context.Context, params model.ListTagParams, filterParams types.FilterTagParams) ([]model.ListTagRow, int64, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListTag", ctx, params, filterParams)
-	ret0, _ := ret[0].([]model.Tag)
+	ret0, _ := ret[0].([]model.ListTagRow)
 	ret1, _ := ret[1].(int64)
 	ret2, _ := ret[2].(error)
 	return ret0, ret1, ret2

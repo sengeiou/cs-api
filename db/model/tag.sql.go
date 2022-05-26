@@ -99,28 +99,25 @@ func (q *Queries) GetAllTag(ctx context.Context) ([]Tag, error) {
 }
 
 const getTag = `-- name: GetTag :one
-SELECT id, name, status, created_by, created_at, updated_by, updated_at
+SELECT name, status
 FROM tag
 WHERE id = ? LIMIT 1
 `
 
-func (q *Queries) GetTag(ctx context.Context, id int64) (Tag, error) {
+type GetTagRow struct {
+	Name   string       `db:"name" json:"name"`
+	Status types.Status `db:"status" json:"status"`
+}
+
+func (q *Queries) GetTag(ctx context.Context, id int64) (GetTagRow, error) {
 	row := q.queryRow(ctx, q.getTagStmt, getTag, id)
-	var i Tag
-	err := row.Scan(
-		&i.ID,
-		&i.Name,
-		&i.Status,
-		&i.CreatedBy,
-		&i.CreatedAt,
-		&i.UpdatedBy,
-		&i.UpdatedAt,
-	)
+	var i GetTagRow
+	err := row.Scan(&i.Name, &i.Status)
 	return i, err
 }
 
 const listTag = `-- name: ListTag :many
-select id, name, status, created_by, created_at, updated_by, updated_at
+select id, name, status
 from tag
 where IF(@name is null, 0, name) like IF(@name is null, 0, CONCAT('%', @name, '%'))
   and IF(@status is null, 0, status) = IF(@status is null, 0, @status) limit ?
@@ -132,24 +129,22 @@ type ListTagParams struct {
 	Offset int32 `db:"offset" json:"offset"`
 }
 
-func (q *Queries) ListTag(ctx context.Context, arg ListTagParams) ([]Tag, error) {
+type ListTagRow struct {
+	ID     int64        `db:"id" json:"id"`
+	Name   string       `db:"name" json:"name"`
+	Status types.Status `db:"status" json:"status"`
+}
+
+func (q *Queries) ListTag(ctx context.Context, arg ListTagParams) ([]ListTagRow, error) {
 	rows, err := q.query(ctx, q.listTagStmt, listTag, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Tag{}
+	items := []ListTagRow{}
 	for rows.Next() {
-		var i Tag
-		if err := rows.Scan(
-			&i.ID,
-			&i.Name,
-			&i.Status,
-			&i.CreatedBy,
-			&i.CreatedAt,
-			&i.UpdatedBy,
-			&i.UpdatedAt,
-		); err != nil {
+		var i ListTagRow
+		if err := rows.Scan(&i.ID, &i.Name, &i.Status); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

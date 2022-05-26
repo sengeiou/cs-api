@@ -51,11 +51,6 @@ type CreateStaffInput struct {
 	Status   Status `json:"status"`
 }
 
-type CreateTagInput struct {
-	Name   string `json:"name"`
-	Status Status `json:"status"`
-}
-
 type CsConfig struct {
 	MaxMember           int64  `json:"maxMember"`
 	MemberPendingExpire int64  `json:"memberPendingExpire"`
@@ -118,10 +113,6 @@ type GetRoleResp struct {
 
 type GetStaffResp struct {
 	Staff *Staff `json:"staff"`
-}
-
-type GetTagResp struct {
-	Tag *Tag `json:"tag"`
 }
 
 type ListAvailableStaffResp struct {
@@ -246,16 +237,6 @@ type ListStaffRoomResp struct {
 	Rooms      []*Room     `json:"rooms"`
 }
 
-type ListTagInput struct {
-	Name   string `json:"name"`
-	Status Status `json:"status"`
-}
-
-type ListTagResp struct {
-	Pagination *Pagination `json:"pagination"`
-	Tags       []*Tag      `json:"tags"`
-}
-
 type Message struct {
 	ID          string             `json:"id"`
 	MessageType MessageType        `json:"messageType"`
@@ -326,12 +307,6 @@ type Staff struct {
 	Avatar        string             `json:"avatar"`
 }
 
-type Tag struct {
-	ID     int64  `json:"id"`
-	Name   string `json:"name"`
-	Status Status `json:"status"`
-}
-
 type TransferRoomInput struct {
 	ID      int64 `json:"id"`
 	StaffID int64 `json:"staffID"`
@@ -382,12 +357,6 @@ type UpdateStaffInput struct {
 	Name     string  `json:"name"`
 	Password *string `json:"password"`
 	Status   Status  `json:"status"`
-}
-
-type UpdateTagInput struct {
-	ID     int64  `json:"id"`
-	Name   string `json:"name"`
-	Status Status `json:"status"`
 }
 
 type ClientType string

@@ -17,7 +17,7 @@ func NewRepository(t *testing.T) iface.IRepository {
 	mock.EXPECT().Transaction(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
 
 	// Tag
-	mock.EXPECT().GetTag(gomock.Any(), gomock.Any()).AnyTimes().Return(model.Tag{}, nil)
+	mock.EXPECT().GetTag(gomock.Any(), gomock.Any()).AnyTimes().Return(model.GetTagRow{}, nil)
 	mock.EXPECT().CreateTag(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
 	mock.EXPECT().UpdateTag(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
 	mock.EXPECT().DeleteTag(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)

@@ -12,13 +12,11 @@ import (
 	"cs-api/pkg/service/role"
 	"cs-api/pkg/service/room"
 	"cs-api/pkg/service/staff"
-	"cs-api/pkg/service/tag"
 	"go.uber.org/fx"
 )
 
 var Module = fx.Options(
 	fx.Provide(
-		tag.NewTagService,
 		role.NewRoleService,
 		staff.NewStaffService,
 		room.NewRoomService,

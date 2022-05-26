@@ -3,7 +3,7 @@ INSERT INTO tag (name, status, created_by, created_at, updated_by, updated_at)
 VALUES (?, ?, ?, ?, ?, ?);
 
 -- name: GetTag :one
-SELECT *
+SELECT name, status
 FROM tag
 WHERE id = ? LIMIT 1;
 
@@ -21,7 +21,7 @@ FROM tag
 WHERE id = ?;
 
 -- name: ListTag :many
-select *
+select id, name, status
 from tag
 where IF(@name is null, 0, name) like IF(@name is null, 0, CONCAT('%', @name, '%'))
   and IF(@status is null, 0, status) = IF(@status is null, 0, @status) limit ?

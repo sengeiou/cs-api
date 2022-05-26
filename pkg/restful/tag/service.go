@@ -3,12 +3,17 @@ package tag
 import (
 	"context"
 	"cs-api/db/model"
+	iface "cs-api/pkg/interface"
 	"cs-api/pkg/types"
 	"database/sql"
 )
 
-func (s *service) ListTag(ctx context.Context, params model.ListTagParams, filterParams types.FilterTagParams) (tags []model.Tag, count int64, err error) {
-	tags = make([]model.Tag, 0)
+type service struct {
+	repo iface.IRepository
+}
+
+func (s *service) ListTag(ctx context.Context, params model.ListTagParams, filterParams types.FilterTagParams) (tags []model.ListTagRow, count int64, err error) {
+	tags = make([]model.ListTagRow, 0)
 	err = s.repo.Transaction(ctx, func(ctx context.Context, tx *sql.Tx) error {
 		var err2 error
 
@@ -38,7 +43,7 @@ func (s *service) ListTag(ctx context.Context, params model.ListTagParams, filte
 	return
 }
 
-func (s *service) GetTag(ctx context.Context, tagId int64) (tag model.Tag, err error) {
+func (s *service) GetTag(ctx context.Context, tagId int64) (tag model.GetTagRow, err error) {
 	return s.repo.GetTag(ctx, tagId)
 }
 
@@ -52,4 +57,10 @@ func (s *service) UpdateTag(ctx context.Context, params model.UpdateTagParams) e
 
 func (s *service) DeleteTag(ctx context.Context, tagId int64) error {
 	return s.repo.DeleteTag(ctx, tagId)
+}
+
+func NewService(Repo iface.IRepository) iface.ITagService {
+	return &service{
+		repo: Repo,
+	}
 }

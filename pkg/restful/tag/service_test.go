@@ -23,7 +23,7 @@ func Test_service_ListTag(t *testing.T) {
 		name      string
 		fields    fields
 		args      args
-		wantTags  []model.Tag
+		wantTags  []model.ListTagRow
 		wantCount int64
 		wantErr   bool
 	}{
@@ -35,7 +35,7 @@ func Test_service_ListTag(t *testing.T) {
 				params:       model.ListTagParams{},
 				filterParams: types.FilterTagParams{},
 			},
-			wantTags:  make([]model.Tag, 0),
+			wantTags:  make([]model.ListTagRow, 0),
 			wantCount: 0,
 			wantErr:   false,
 		},
@@ -72,7 +72,7 @@ func Test_service_GetTag(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		wantTag model.Tag
+		wantTag model.GetTagRow
 		wantErr bool
 	}{
 		{
@@ -82,7 +82,7 @@ func Test_service_GetTag(t *testing.T) {
 				ctx:   context.Background(),
 				tagId: 1,
 			},
-			wantTag: model.Tag{},
+			wantTag: model.GetTagRow{},
 			wantErr: false,
 		},
 	}

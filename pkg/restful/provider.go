@@ -4,7 +4,6 @@ import (
 	iface "cs-api/pkg/interface"
 	iface2 "github.com/AndySu1021/go-util/interface"
 	"github.com/gin-gonic/gin"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/fx"
 )
 
@@ -17,14 +16,14 @@ type Handler struct {
 	storage iface.IStorage
 }
 
-var Module = fx.Options(
-	fx.Provide(
-		NewHandler,
-	),
-	fx.Invoke(
-		InitHandler,
-	),
-)
+//var Module = fx.Options(
+//	fx.Provide(
+//		NewHandler,
+//	),
+//	fx.Invoke(
+//		InitHandler,
+//	),
+//)
 
 type Params struct {
 	fx.In
@@ -49,7 +48,6 @@ func NewHandler(p Params) *Handler {
 }
 
 func InitHandler(engine *gin.Engine, h *Handler) {
-	engine.GET("/metrics", gin.WrapH(promhttp.Handler()))
 	engine.POST("/api/auth/login", h.Login)
 	engine.POST("/api/member/room", h.CreateRoom)
 }

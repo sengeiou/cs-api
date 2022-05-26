@@ -14,6 +14,7 @@ type IAuthService interface {
 	Logout(ctx context.Context, userInfo pkg.ClientInfo) error
 	SetClientInfo(clientType pkg.ClientType) gin.HandlerFunc
 	GetClientInfo(ctx context.Context, clientType pkg.ClientType) (pkg.ClientInfo, error)
+	CheckPermission(permission string) gin.HandlerFunc
 }
 
 type IStaffService interface {
@@ -44,8 +45,8 @@ type IMessageService interface {
 }
 
 type ITagService interface {
-	ListTag(ctx context.Context, params model.ListTagParams, filterParams types.FilterTagParams) ([]model.Tag, int64, error)
-	GetTag(ctx context.Context, tagId int64) (model.Tag, error)
+	ListTag(ctx context.Context, params model.ListTagParams, filterParams types.FilterTagParams) ([]model.ListTagRow, int64, error)
+	GetTag(ctx context.Context, tagId int64) (model.GetTagRow, error)
 	CreateTag(ctx context.Context, params model.CreateTagParams) error
 	UpdateTag(ctx context.Context, params model.UpdateTagParams) error
 	DeleteTag(ctx context.Context, tagId int64) error

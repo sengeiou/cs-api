@@ -129,6 +129,13 @@ func (s *service) GetClientInfo(ctx context.Context, clientType pkg.ClientType) 
 	return clientInfo, nil
 }
 
+func (s *service) CheckPermission(permission string) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// TODO: need to be implemented
+		c.Next()
+	}
+}
+
 func getRedisKey(token string, clientType pkg.ClientType) string {
 	return fmt.Sprintf("token:%s:%s", clientType, token)
 }
