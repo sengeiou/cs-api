@@ -66,30 +66,10 @@ type ListFastMessageResp struct {
 	FastMessages []*FastMessage `json:"fastMessages"`
 }
 
-type ListMessageInput struct {
-	RoomID  int64  `json:"roomID"`
-	StaffID int64  `json:"staffID"`
-	Content string `json:"content"`
-}
-
-type ListMessageResp struct {
-	Pagination *Pagination `json:"pagination"`
-	Messages   []*Message  `json:"messages"`
-}
-
 type ListRoomInput struct {
 	RoomID  int64      `json:"roomID"`
 	StaffID int64      `json:"staffID"`
 	Status  RoomStatus `json:"status"`
-}
-
-type ListRoomMessageInput struct {
-	RoomID     int64      `json:"roomID"`
-	ClientType ClientType `json:"clientType"`
-}
-
-type ListRoomMessageResp struct {
-	Messages []*Message `json:"messages"`
 }
 
 type ListRoomResp struct {
@@ -104,21 +84,6 @@ type ListStaffRoomInput struct {
 type ListStaffRoomResp struct {
 	Pagination *Pagination `json:"pagination"`
 	Rooms      []*Room     `json:"rooms"`
-}
-
-type Message struct {
-	ID          string             `json:"id"`
-	MessageType MessageType        `json:"messageType"`
-	RoomID      int64              `json:"roomID"`
-	SenderName  string             `json:"senderName"`
-	ContentType MessageContentType `json:"contentType"`
-	Content     string             `json:"content"`
-	ExtraInfo   *MessageExtraInfo  `json:"extraInfo"`
-	Timestamp   int64              `json:"timestamp"`
-}
-
-type MessageExtraInfo struct {
-	ClientName *string `json:"clientName"`
 }
 
 type Pagination struct {
@@ -153,145 +118,6 @@ type UpdateFastMessageInput struct {
 	Title      string `json:"title"`
 	Content    string `json:"content"`
 	Status     Status `json:"status"`
-}
-
-type ClientType string
-
-const (
-	ClientTypeStaff  ClientType = "Staff"
-	ClientTypeMember ClientType = "Member"
-)
-
-var AllClientType = []ClientType{
-	ClientTypeStaff,
-	ClientTypeMember,
-}
-
-func (e ClientType) IsValid() bool {
-	switch e {
-	case ClientTypeStaff, ClientTypeMember:
-		return true
-	}
-	return false
-}
-
-func (e ClientType) String() string {
-	return string(e)
-}
-
-func (e *ClientType) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = ClientType(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid ClientType", str)
-	}
-	return nil
-}
-
-func (e ClientType) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
-}
-
-type MessageContentType string
-
-const (
-	MessageContentTypeTyping       MessageContentType = "Typing"
-	MessageContentTypeText         MessageContentType = "Text"
-	MessageContentTypeImage        MessageContentType = "Image"
-	MessageContentTypeScore        MessageContentType = "Score"
-	MessageContentTypeJoin         MessageContentType = "Join"
-	MessageContentTypeLeave        MessageContentType = "Leave"
-	MessageContentTypeNoStaff      MessageContentType = "NoStaff"
-	MessageContentTypeRoomClosed   MessageContentType = "RoomClosed"
-	MessageContentTypeRoomAccepted MessageContentType = "RoomAccepted"
-)
-
-var AllMessageContentType = []MessageContentType{
-	MessageContentTypeTyping,
-	MessageContentTypeText,
-	MessageContentTypeImage,
-	MessageContentTypeScore,
-	MessageContentTypeJoin,
-	MessageContentTypeLeave,
-	MessageContentTypeNoStaff,
-	MessageContentTypeRoomClosed,
-	MessageContentTypeRoomAccepted,
-}
-
-func (e MessageContentType) IsValid() bool {
-	switch e {
-	case MessageContentTypeTyping, MessageContentTypeText, MessageContentTypeImage, MessageContentTypeScore, MessageContentTypeJoin, MessageContentTypeLeave, MessageContentTypeNoStaff, MessageContentTypeRoomClosed, MessageContentTypeRoomAccepted:
-		return true
-	}
-	return false
-}
-
-func (e MessageContentType) String() string {
-	return string(e)
-}
-
-func (e *MessageContentType) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = MessageContentType(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid MessageContentType", str)
-	}
-	return nil
-}
-
-func (e MessageContentType) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
-}
-
-type MessageType string
-
-const (
-	MessageTypeSystem MessageType = "System"
-	MessageTypeMember MessageType = "Member"
-	MessageTypeStaff  MessageType = "Staff"
-)
-
-var AllMessageType = []MessageType{
-	MessageTypeSystem,
-	MessageTypeMember,
-	MessageTypeStaff,
-}
-
-func (e MessageType) IsValid() bool {
-	switch e {
-	case MessageTypeSystem, MessageTypeMember, MessageTypeStaff:
-		return true
-	}
-	return false
-}
-
-func (e MessageType) String() string {
-	return string(e)
-}
-
-func (e *MessageType) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = MessageType(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid MessageType", str)
-	}
-	return nil
-}
-
-func (e MessageType) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 type RoomStatus string

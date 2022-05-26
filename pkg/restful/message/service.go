@@ -3,11 +3,18 @@ package message
 import (
 	"context"
 	"cs-api/pkg"
+	iface2 "cs-api/pkg/interface"
 	"cs-api/pkg/model"
+	"cs-api/pkg/types"
+	iface "github.com/AndySu1021/go-util/interface"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
 const Collection = "messages"
+
+type service struct {
+	repo iface.IMongoRepository
+}
 
 func (s *service) CreateMessage(ctx context.Context, message model.Message) error {
 	return s.repo.InsertOne(ctx, Collection, message)
@@ -28,7 +35,7 @@ func (s *service) ListRoomMessage(ctx context.Context, roomId int64, clientType 
 	return
 }
 
-func (s *service) ListMessage(ctx context.Context, params pkg.ListMessageParams) (messages []model.Message, count int64, err error) {
+func (s *service) ListMessage(ctx context.Context, params types.ListMessageParams) (messages []model.Message, count int64, err error) {
 	messages = make([]model.Message, 0)
 
 	filter := bson.M{}
@@ -49,4 +56,10 @@ func (s *service) ListMessage(ctx context.Context, params pkg.ListMessageParams)
 	}
 
 	return
+}
+
+func NewService(Repo iface.IMongoRepository) iface2.IMessageService {
+	return &service{
+		repo: Repo,
+	}
 }

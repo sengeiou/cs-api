@@ -4,6 +4,7 @@ import (
 	"context"
 	"cs-api/pkg"
 	"cs-api/pkg/model"
+	"cs-api/pkg/types"
 	iface "github.com/AndySu1021/go-util/interface"
 	mockTool "github.com/AndySu1021/go-util/mock"
 	"reflect"
@@ -97,7 +98,7 @@ func Test_service_ListMessage(t *testing.T) {
 	}
 	type args struct {
 		ctx    context.Context
-		params pkg.ListMessageParams
+		params types.ListMessageParams
 	}
 	tests := []struct {
 		name         string
@@ -112,7 +113,7 @@ func Test_service_ListMessage(t *testing.T) {
 			fields: fields{repo: mockTool.NewMongoRepository(t)},
 			args: args{
 				ctx:    context.Background(),
-				params: pkg.ListMessageParams{},
+				params: types.ListMessageParams{},
 			},
 			wantMessages: make([]model.Message, 0),
 			wantCount:    0,

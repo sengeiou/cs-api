@@ -417,7 +417,7 @@ func (mr *MockIMessageServiceMockRecorder) CreateMessage(ctx, message interface{
 }
 
 // ListMessage mocks base method.
-func (m *MockIMessageService) ListMessage(ctx context.Context, params pkg.ListMessageParams) ([]model0.Message, int64, error) {
+func (m *MockIMessageService) ListMessage(ctx context.Context, params types.ListMessageParams) ([]model0.Message, int64, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListMessage", ctx, params)
 	ret0, _ := ret[0].([]model0.Message)
