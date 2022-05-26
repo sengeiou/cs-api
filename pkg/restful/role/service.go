@@ -3,10 +3,15 @@ package role
 import (
 	"context"
 	"cs-api/db/model"
+	iface "cs-api/pkg/interface"
 	"cs-api/pkg/types"
 	"database/sql"
 	"errors"
 )
+
+type service struct {
+	repo iface.IRepository
+}
 
 func (s *service) ListRole(ctx context.Context, params model.ListRoleParams, filterParams types.FilterRoleParams) (roles []model.Role, count int64, err error) {
 	roles = make([]model.Role, 0)
@@ -56,4 +61,10 @@ func (s *service) DeleteRole(ctx context.Context, roleId int64) error {
 	}
 
 	return s.repo.DeleteRole(ctx, roleId)
+}
+
+func NewService(Repo iface.IRepository) iface.IRoleService {
+	return &service{
+		repo: Repo,
+	}
 }

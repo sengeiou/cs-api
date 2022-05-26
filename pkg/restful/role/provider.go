@@ -1,4 +1,4 @@
-package tag
+package role
 
 import (
 	"go.uber.org/fx"

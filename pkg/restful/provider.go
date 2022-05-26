@@ -16,15 +16,6 @@ type Handler struct {
 	storage iface.IStorage
 }
 
-//var Module = fx.Options(
-//	fx.Provide(
-//		NewHandler,
-//	),
-//	fx.Invoke(
-//		InitHandler,
-//	),
-//)
-
 type Params struct {
 	fx.In
 
@@ -48,6 +39,5 @@ func NewHandler(p Params) *Handler {
 }
 
 func InitHandler(engine *gin.Engine, h *Handler) {
-	engine.POST("/api/auth/login", h.Login)
 	engine.POST("/api/member/room", h.CreateRoom)
 }

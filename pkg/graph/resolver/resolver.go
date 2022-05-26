@@ -31,7 +31,6 @@ type Resolver struct {
 	fastMessageSvc iface.IFastMessageService
 	reportSvc      iface.IReportService
 	csConfigSvc    iface.ICsConfigService
-	roleSvc        iface.IRoleService
 	noticeSvc      iface.INoticeService
 	remindSvc      iface.IRemindService
 	redis          ifaceTool.IRedis
@@ -60,7 +59,6 @@ type Params struct {
 	FastMessageSvc iface.IFastMessageService
 	ReportSvc      iface.IReportService
 	CsConfigSvc    iface.ICsConfigService
-	RoleSvc        iface.IRoleService
 	NoticeSvc      iface.INoticeService
 	RemindSvc      iface.IRemindService
 	Redis          ifaceTool.IRedis
@@ -78,7 +76,6 @@ func NewResolver(p Params) *Resolver {
 		fastMessageSvc: p.FastMessageSvc,
 		reportSvc:      p.ReportSvc,
 		csConfigSvc:    p.CsConfigSvc,
-		roleSvc:        p.RoleSvc,
 		noticeSvc:      p.NoticeSvc,
 		remindSvc:      p.RemindSvc,
 		redis:          p.Redis,

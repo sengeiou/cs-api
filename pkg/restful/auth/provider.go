@@ -1,4 +1,4 @@
-package tag
+package auth
 
 import (
 	"go.uber.org/fx"

@@ -38,11 +38,6 @@ type CreateRemindInput struct {
 	Status  Status `json:"status"`
 }
 
-type CreateRoleInput struct {
-	Name        string   `json:"name"`
-	Permissions []string `json:"permissions"`
-}
-
 type CreateStaffInput struct {
 	RoleID   int64  `json:"roleID"`
 	Name     string `json:"name"`
@@ -105,10 +100,6 @@ type GetNoticeResp struct {
 
 type GetRemindResp struct {
 	Remind *Remind `json:"remind"`
-}
-
-type GetRoleResp struct {
-	Role *Role `json:"role"`
 }
 
 type GetStaffResp struct {
@@ -186,15 +177,6 @@ type ListRemindInput struct {
 type ListRemindResp struct {
 	Pagination *Pagination `json:"pagination"`
 	Reminds    []*Remind   `json:"reminds"`
-}
-
-type ListRoleInput struct {
-	Name string `json:"name"`
-}
-
-type ListRoleResp struct {
-	Pagination *Pagination `json:"pagination"`
-	Roles      []*Role     `json:"roles"`
 }
 
 type ListRoomInput struct {
@@ -279,12 +261,6 @@ type Remind struct {
 	Status  Status `json:"status"`
 }
 
-type Role struct {
-	ID          int64    `json:"id"`
-	Name        string   `json:"name"`
-	Permissions []string `json:"permissions"`
-}
-
 type Room struct {
 	ID         int64      `json:"id"`
 	MemberName string     `json:"memberName"`
@@ -343,12 +319,6 @@ type UpdateRemindInput struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
 	Status  Status `json:"status"`
-}
-
-type UpdateRoleInput struct {
-	ID          int64    `json:"id"`
-	Name        string   `json:"name"`
-	Permissions []string `json:"permissions"`
 }
 
 type UpdateStaffInput struct {

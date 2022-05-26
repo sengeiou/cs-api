@@ -1,10 +1,11 @@
-package tag
+package role
 
 import (
 	"cs-api/db/model"
 	"cs-api/pkg"
 	iface "cs-api/pkg/interface"
 	"cs-api/pkg/types"
+	"encoding/json"
 	"github.com/AndySu1021/go-util/errors"
 	ginTool "github.com/AndySu1021/go-util/gin"
 	"github.com/gin-gonic/gin"
@@ -14,18 +15,18 @@ import (
 
 type handler struct {
 	authSvc iface.IAuthService
-	tagSvc  iface.ITagService
+	roleSvc iface.IRoleService
 }
 
-type CreateTagParams struct {
-	Name   string       `json:"name" binding:"required"`
-	Status types.Status `json:"status" binding:"required,oneof=1 2"`
+type CreateRoleParams struct {
+	Name        string   `json:"name" binding:"required"`
+	Permissions []string `json:"permissions" binding:"required"`
 }
 
-func (h *handler) CreateTag(c *gin.Context) {
+func (h *handler) CreateRole(c *gin.Context) {
 	var (
 		err           error
-		requestParams CreateTagParams
+		requestParams CreateRoleParams
 		ctx           = c.Request.Context()
 	)
 
@@ -41,16 +42,17 @@ func (h *handler) CreateTag(c *gin.Context) {
 	}
 
 	now := time.Now().UTC()
-	params := model.CreateTagParams{
-		Name:      requestParams.Name,
-		Status:    requestParams.Status,
-		CreatedBy: staffInfo.ID,
-		CreatedAt: now,
-		UpdatedBy: staffInfo.ID,
-		UpdatedAt: now,
+	result, _ := json.Marshal(requestParams.Permissions)
+	params := model.CreateRoleParams{
+		Name:        requestParams.Name,
+		Permissions: result,
+		CreatedBy:   staffInfo.ID,
+		CreatedAt:   now,
+		UpdatedBy:   staffInfo.ID,
+		UpdatedAt:   now,
 	}
 
-	if err = h.tagSvc.CreateTag(ctx, params); err != nil {
+	if err = h.roleSvc.CreateRole(ctx, params); err != nil {
 		ginTool.Error(c, err)
 		return
 	}
@@ -58,15 +60,15 @@ func (h *handler) CreateTag(c *gin.Context) {
 	ginTool.Success(c)
 }
 
-type UpdateTagParams struct {
-	Name   string       `json:"name" binding:"required"`
-	Status types.Status `json:"status" binding:"required,oneof=1 2"`
+type UpdateRoleParams struct {
+	Name        string   `json:"name" binding:"required"`
+	Permissions []string `json:"permissions" binding:"required"`
 }
 
-func (h *handler) UpdateTag(c *gin.Context) {
+func (h *handler) UpdateRole(c *gin.Context) {
 	var (
 		err           error
-		requestParams UpdateTagParams
+		requestParams UpdateRoleParams
 		ctx           = c.Request.Context()
 	)
 
@@ -87,15 +89,16 @@ func (h *handler) UpdateTag(c *gin.Context) {
 		return
 	}
 
-	params := model.UpdateTagParams{
-		Name:      requestParams.Name,
-		Status:    requestParams.Status,
-		UpdatedBy: staffInfo.ID,
-		UpdatedAt: time.Now().UTC(),
-		ID:        id,
+	result, _ := json.Marshal(requestParams.Permissions)
+	params := model.UpdateRoleParams{
+		Name:        requestParams.Name,
+		Permissions: result,
+		UpdatedBy:   staffInfo.ID,
+		UpdatedAt:   time.Now().UTC(),
+		ID:          id,
 	}
 
-	if err = h.tagSvc.UpdateTag(ctx, params); err != nil {
+	if err = h.roleSvc.UpdateRole(ctx, params); err != nil {
 		ginTool.Error(c, err)
 		return
 	}
@@ -103,7 +106,7 @@ func (h *handler) UpdateTag(c *gin.Context) {
 	ginTool.Success(c)
 }
 
-func (h *handler) DeleteTag(c *gin.Context) {
+func (h *handler) DeleteRole(c *gin.Context) {
 	var (
 		err error
 		ctx = c.Request.Context()
@@ -115,7 +118,7 @@ func (h *handler) DeleteTag(c *gin.Context) {
 		return
 	}
 
-	if err = h.tagSvc.DeleteTag(ctx, id); err != nil {
+	if err = h.roleSvc.DeleteRole(ctx, id); err != nil {
 		ginTool.Error(c, err)
 		return
 	}
@@ -123,7 +126,7 @@ func (h *handler) DeleteTag(c *gin.Context) {
 	ginTool.Success(c)
 }
 
-func (h *handler) GetTag(c *gin.Context) {
+func (h *handler) GetRole(c *gin.Context) {
 	var (
 		err error
 		ctx = c.Request.Context()
@@ -135,25 +138,24 @@ func (h *handler) GetTag(c *gin.Context) {
 		return
 	}
 
-	tag, err := h.tagSvc.GetTag(ctx, id)
+	role, err := h.roleSvc.GetRole(ctx, id)
 	if err != nil {
 		ginTool.Error(c, err)
 		return
 	}
 
-	ginTool.SuccessWithData(c, tag)
+	ginTool.SuccessWithData(c, role)
 }
 
-type ListTagParams struct {
-	Name   string       `form:"name" binding:""`
-	Status types.Status `form:"status" binding:"required"`
+type ListRoleParams struct {
+	Name string `form:"name" binding:""`
 	types.Pagination
 }
 
-func (h *handler) ListTag(c *gin.Context) {
+func (h *handler) ListRole(c *gin.Context) {
 	var (
 		err           error
-		requestParams ListTagParams
+		requestParams ListRoleParams
 		ctx           = c.Request.Context()
 	)
 
@@ -162,9 +164,9 @@ func (h *handler) ListTag(c *gin.Context) {
 		return
 	}
 
-	params, filterParams := formatListTagParams(requestParams)
+	params, filterParams := formatListRoleParams(requestParams)
 
-	tags, count, err := h.tagSvc.ListTag(ctx, params, filterParams)
+	tags, count, err := h.roleSvc.ListRole(ctx, params, filterParams)
 	if err != nil {
 		ginTool.Error(c, err)
 		return
@@ -175,35 +177,30 @@ func (h *handler) ListTag(c *gin.Context) {
 	ginTool.SuccessWithPagination(c, tags, requestParams.Pagination)
 }
 
-func formatListTagParams(requestParams ListTagParams) (model.ListTagParams, types.FilterTagParams) {
-	params := model.ListTagParams{
-		Limit:  requestParams.Pagination.PageSize,
+func formatListRoleParams(requestParams ListRoleParams) (model.ListRoleParams, types.FilterRoleParams) {
+	params := model.ListRoleParams{
+		Limit:  requestParams.PageSize,
 		Offset: 0,
 	}
 
-	filterParams := types.FilterTagParams{
-		Name:   nil,
-		Status: nil,
+	filterParams := types.FilterRoleParams{
+		Name: nil,
 	}
 
 	if requestParams.Name != "" {
 		filterParams.Name = &requestParams.Name
 	}
 
-	if requestParams.Status != types.StatusAll {
-		filterParams.Status = &requestParams.Status
-	}
-
-	if requestParams.Pagination.Page > 0 {
-		params.Offset = (requestParams.Pagination.Page - 1) * requestParams.Pagination.PageSize
+	if requestParams.Page > 0 {
+		params.Offset = (requestParams.Page - 1) * requestParams.PageSize
 	}
 
 	return params, filterParams
 }
 
-func NewHandler(authSvc iface.IAuthService, tagSvc iface.ITagService) *handler {
+func NewHandler(authSvc iface.IAuthService, roleSvc iface.IRoleService) *handler {
 	return &handler{
 		authSvc: authSvc,
-		tagSvc:  tagSvc,
+		roleSvc: roleSvc,
 	}
 }

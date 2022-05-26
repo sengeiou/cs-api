@@ -3,15 +3,26 @@ package tag
 import (
 	"cs-api/pkg"
 	iface "cs-api/pkg/interface"
+	"cs-api/pkg/restful/tool"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/fx"
 )
 
-func InitTransport(engine *gin.Engine, authSvc iface.IAuthService, h ITagHandler) {
-	routes := engine.Group("/api", authSvc.SetClientInfo(pkg.ClientTypeStaff))
+type Params struct {
+	fx.In
 
-	routes.GET("/tags", authSvc.CheckPermission("Tag.List"), h.ListTag)
-	routes.POST("/tag", authSvc.CheckPermission("Tag.Create"), h.CreateTag)
-	routes.GET("/tag/:id", authSvc.CheckPermission("Tag.GET"), h.GetTag)
-	routes.PUT("/tag/:id", authSvc.CheckPermission("Tag.Update"), h.UpdateTag)
-	routes.DELETE("/tag/:id", authSvc.CheckPermission("Tag.Delete"), h.DeleteTag)
+	Engine  *gin.Engine
+	AuthSvc iface.IAuthService
+	H       *handler
+	R       *tool.RequestInstrument
+}
+
+func InitTransport(p Params) {
+	routes := p.Engine.Group("/api", p.AuthSvc.SetClientInfo(pkg.ClientTypeStaff))
+
+	routes.GET("/tags", p.AuthSvc.CheckPermission("Tag.List"), p.R.Op("ListTag"), p.H.ListTag)
+	routes.POST("/tag", p.AuthSvc.CheckPermission("Tag.Create"), p.R.Op("CreateTag"), p.H.CreateTag)
+	routes.GET("/tag/:id", p.AuthSvc.CheckPermission("Tag.Get"), p.R.Op("GetTag"), p.H.GetTag)
+	routes.PUT("/tag/:id", p.AuthSvc.CheckPermission("Tag.Update"), p.R.Op("UpdateTag"), p.H.UpdateTag)
+	routes.DELETE("/tag/:id", p.AuthSvc.CheckPermission("Tag.Delete"), p.R.Op("DeleteTag"), p.H.DeleteTag)
 }

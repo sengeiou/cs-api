@@ -1,7 +1,6 @@
 package service
 
 import (
-	"cs-api/pkg/service/auth"
 	"cs-api/pkg/service/cs_config"
 	"cs-api/pkg/service/fast_message"
 	"cs-api/pkg/service/member"
@@ -9,7 +8,6 @@ import (
 	"cs-api/pkg/service/notice"
 	"cs-api/pkg/service/remind"
 	"cs-api/pkg/service/report"
-	"cs-api/pkg/service/role"
 	"cs-api/pkg/service/room"
 	"cs-api/pkg/service/staff"
 	"go.uber.org/fx"
@@ -17,7 +15,6 @@ import (
 
 var Module = fx.Options(
 	fx.Provide(
-		role.NewRoleService,
 		staff.NewStaffService,
 		room.NewRoomService,
 		member.NewMemberService,
@@ -25,7 +22,6 @@ var Module = fx.Options(
 		fast_message.NewFastMessageService,
 		report.NewReportService,
 		message.NewMessageService,
-		auth.NewAuthService,
 		notice.NewNoticeService,
 		remind.NewRemindService,
 	),

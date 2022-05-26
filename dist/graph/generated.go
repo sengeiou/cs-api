@@ -100,10 +100,6 @@ type ComplexityRoot struct {
 		Remind func(childComplexity int) int
 	}
 
-	GetRoleResp struct {
-		Role func(childComplexity int) int
-	}
-
 	GetStaffResp struct {
 		Staff func(childComplexity int) int
 	}
@@ -149,11 +145,6 @@ type ComplexityRoot struct {
 		Reminds    func(childComplexity int) int
 	}
 
-	ListRoleResp struct {
-		Pagination func(childComplexity int) int
-		Roles      func(childComplexity int) int
-	}
-
 	ListRoomMessageResp struct {
 		Messages func(childComplexity int) int
 	}
@@ -195,20 +186,16 @@ type ComplexityRoot struct {
 		CreateFastMessageCategory func(childComplexity int, input converter.CreateFastMessageCategoryInput) int
 		CreateNotice              func(childComplexity int, input converter.CreateNoticeInput) int
 		CreateRemind              func(childComplexity int, input converter.CreateRemindInput) int
-		CreateRole                func(childComplexity int, input converter.CreateRoleInput) int
 		CreateStaff               func(childComplexity int, input converter.CreateStaffInput) int
 		DeleteFastMessage         func(childComplexity int, id int64) int
 		DeleteNotice              func(childComplexity int, id int64) int
 		DeleteRemind              func(childComplexity int, id int64) int
-		DeleteRole                func(childComplexity int, id int64) int
 		DeleteStaff               func(childComplexity int, id int64) int
-		Logout                    func(childComplexity int) int
 		TransferRoom              func(childComplexity int, input converter.TransferRoomInput) int
 		UpdateCsConfig            func(childComplexity int, input converter.UpdateCsConfigInput) int
 		UpdateFastMessage         func(childComplexity int, input converter.UpdateFastMessageInput) int
 		UpdateNotice              func(childComplexity int, input converter.UpdateNoticeInput) int
 		UpdateRemind              func(childComplexity int, input converter.UpdateRemindInput) int
-		UpdateRole                func(childComplexity int, input converter.UpdateRoleInput) int
 		UpdateRoomScore           func(childComplexity int, score int64) int
 		UpdateStaff               func(childComplexity int, input converter.UpdateStaffInput) int
 		UpdateStaffAvatar         func(childComplexity int, avatar string) int
@@ -236,7 +223,6 @@ type ComplexityRoot struct {
 		GetFastMessage          func(childComplexity int, id int64) int
 		GetNotice               func(childComplexity int, id int64) int
 		GetRemind               func(childComplexity int, id int64) int
-		GetRole                 func(childComplexity int, id int64) int
 		GetStaff                func(childComplexity int, id int64) int
 		ListAvailableStaff      func(childComplexity int) int
 		ListDailyGuestReport    func(childComplexity int, filter converter.ListDailyGuestReportInput) int
@@ -247,7 +233,6 @@ type ComplexityRoot struct {
 		ListMessage             func(childComplexity int, filter converter.ListMessageInput, pagination converter.PaginationInput) int
 		ListNotice              func(childComplexity int, filter converter.ListNoticeInput, pagination converter.PaginationInput) int
 		ListRemind              func(childComplexity int, filter converter.ListRemindInput, pagination converter.PaginationInput) int
-		ListRole                func(childComplexity int, filter converter.ListRoleInput, pagination converter.PaginationInput) int
 		ListRoom                func(childComplexity int, filter converter.ListRoomInput, pagination converter.PaginationInput) int
 		ListRoomMessage         func(childComplexity int, filter converter.ListRoomMessageInput) int
 		ListStaff               func(childComplexity int, filter converter.ListStaffInput, pagination converter.PaginationInput) int
@@ -259,12 +244,6 @@ type ComplexityRoot struct {
 		ID      func(childComplexity int) int
 		Status  func(childComplexity int) int
 		Title   func(childComplexity int) int
-	}
-
-	Role struct {
-		ID          func(childComplexity int) int
-		Name        func(childComplexity int) int
-		Permissions func(childComplexity int) int
 	}
 
 	Room struct {
@@ -291,7 +270,6 @@ type ComplexityRoot struct {
 }
 
 type MutationResolver interface {
-	Logout(ctx context.Context) (bool, error)
 	Upload(ctx context.Context, file graphql.Upload) (string, error)
 	UpdateCsConfig(ctx context.Context, input converter.UpdateCsConfigInput) (bool, error)
 	CreateFastMessage(ctx context.Context, input converter.CreateFastMessageInput) (bool, error)
@@ -304,9 +282,6 @@ type MutationResolver interface {
 	CreateRemind(ctx context.Context, input converter.CreateRemindInput) (bool, error)
 	UpdateRemind(ctx context.Context, input converter.UpdateRemindInput) (bool, error)
 	DeleteRemind(ctx context.Context, id int64) (bool, error)
-	CreateRole(ctx context.Context, input converter.CreateRoleInput) (bool, error)
-	UpdateRole(ctx context.Context, input converter.UpdateRoleInput) (bool, error)
-	DeleteRole(ctx context.Context, id int64) (bool, error)
 	AcceptRoom(ctx context.Context, id int64) (bool, error)
 	CloseRoom(ctx context.Context, input converter.CloseRoomInput) (bool, error)
 	TransferRoom(ctx context.Context, input converter.TransferRoomInput) (bool, error)
@@ -331,8 +306,6 @@ type QueryResolver interface {
 	GetRemind(ctx context.Context, id int64) (*converter.GetRemindResp, error)
 	ListDailyTagReport(ctx context.Context, filter converter.ListDailyTagReportInput) (*converter.ListDailyTagReportResp, error)
 	ListDailyGuestReport(ctx context.Context, filter converter.ListDailyGuestReportInput) (*converter.ListDailyGuestReportResp, error)
-	ListRole(ctx context.Context, filter converter.ListRoleInput, pagination converter.PaginationInput) (*converter.ListRoleResp, error)
-	GetRole(ctx context.Context, id int64) (*converter.GetRoleResp, error)
 	ListStaffRoom(ctx context.Context, filter converter.ListStaffRoomInput, pagination converter.PaginationInput) (*converter.ListStaffRoomResp, error)
 	ListRoom(ctx context.Context, filter converter.ListRoomInput, pagination converter.PaginationInput) (*converter.ListRoomResp, error)
 	ListStaff(ctx context.Context, filter converter.ListStaffInput, pagination converter.PaginationInput) (*converter.ListStaffResp, error)
@@ -516,13 +489,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.GetRemindResp.Remind(childComplexity), true
 
-	case "GetRoleResp.role":
-		if e.complexity.GetRoleResp.Role == nil {
-			break
-		}
-
-		return e.complexity.GetRoleResp.Role(childComplexity), true
-
 	case "GetStaffResp.staff":
 		if e.complexity.GetStaffResp.Staff == nil {
 			break
@@ -627,20 +593,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ListRemindResp.Reminds(childComplexity), true
-
-	case "ListRoleResp.pagination":
-		if e.complexity.ListRoleResp.Pagination == nil {
-			break
-		}
-
-		return e.complexity.ListRoleResp.Pagination(childComplexity), true
-
-	case "ListRoleResp.roles":
-		if e.complexity.ListRoleResp.Roles == nil {
-			break
-		}
-
-		return e.complexity.ListRoleResp.Roles(childComplexity), true
 
 	case "ListRoomMessageResp.messages":
 		if e.complexity.ListRoomMessageResp.Messages == nil {
@@ -826,18 +778,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateRemind(childComplexity, args["input"].(converter.CreateRemindInput)), true
 
-	case "Mutation.createRole":
-		if e.complexity.Mutation.CreateRole == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createRole_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateRole(childComplexity, args["input"].(converter.CreateRoleInput)), true
-
 	case "Mutation.createStaff":
 		if e.complexity.Mutation.CreateStaff == nil {
 			break
@@ -886,18 +826,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.DeleteRemind(childComplexity, args["id"].(int64)), true
 
-	case "Mutation.deleteRole":
-		if e.complexity.Mutation.DeleteRole == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteRole_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.DeleteRole(childComplexity, args["id"].(int64)), true
-
 	case "Mutation.deleteStaff":
 		if e.complexity.Mutation.DeleteStaff == nil {
 			break
@@ -909,13 +837,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.DeleteStaff(childComplexity, args["id"].(int64)), true
-
-	case "Mutation.logout":
-		if e.complexity.Mutation.Logout == nil {
-			break
-		}
-
-		return e.complexity.Mutation.Logout(childComplexity), true
 
 	case "Mutation.transferRoom":
 		if e.complexity.Mutation.TransferRoom == nil {
@@ -976,18 +897,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.UpdateRemind(childComplexity, args["input"].(converter.UpdateRemindInput)), true
-
-	case "Mutation.updateRole":
-		if e.complexity.Mutation.UpdateRole == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateRole_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.UpdateRole(childComplexity, args["input"].(converter.UpdateRoleInput)), true
 
 	case "Mutation.updateRoomScore":
 		if e.complexity.Mutation.UpdateRoomScore == nil {
@@ -1155,18 +1064,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.GetRemind(childComplexity, args["id"].(int64)), true
 
-	case "Query.getRole":
-		if e.complexity.Query.GetRole == nil {
-			break
-		}
-
-		args, err := ec.field_Query_getRole_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.GetRole(childComplexity, args["id"].(int64)), true
-
 	case "Query.getStaff":
 		if e.complexity.Query.GetStaff == nil {
 			break
@@ -1272,18 +1169,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.ListRemind(childComplexity, args["filter"].(converter.ListRemindInput), args["pagination"].(converter.PaginationInput)), true
 
-	case "Query.listRole":
-		if e.complexity.Query.ListRole == nil {
-			break
-		}
-
-		args, err := ec.field_Query_listRole_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.ListRole(childComplexity, args["filter"].(converter.ListRoleInput), args["pagination"].(converter.PaginationInput)), true
-
 	case "Query.listRoom":
 		if e.complexity.Query.ListRoom == nil {
 			break
@@ -1359,27 +1244,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Remind.Title(childComplexity), true
-
-	case "Role.id":
-		if e.complexity.Role.ID == nil {
-			break
-		}
-
-		return e.complexity.Role.ID(childComplexity), true
-
-	case "Role.name":
-		if e.complexity.Role.Name == nil {
-			break
-		}
-
-		return e.complexity.Role.Name(childComplexity), true
-
-	case "Role.permissions":
-		if e.complexity.Role.Permissions == nil {
-			break
-		}
-
-		return e.complexity.Role.Permissions(childComplexity), true
 
 	case "Room.endTime":
 		if e.complexity.Room.EndTime == nil {
@@ -1557,9 +1421,6 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "pkg/graph/schema/auth.graphqls", Input: `extend type Mutation {
-    logout: Boolean!
-}`, BuiltIn: false},
 	{Name: "pkg/graph/schema/common.graphqls", Input: `extend type Mutation {
     upload(file: Upload!): String!
 }`, BuiltIn: false},
@@ -1859,46 +1720,6 @@ extend type Query {
     listDailyGuestReport(filter: ListDailyGuestReportInput!): ListDailyGuestReportResp!
 }
 `, BuiltIn: false},
-	{Name: "pkg/graph/schema/role.graphqls", Input: `type Role {
-    id: Int64!
-    name: String!
-    permissions: [String!]!
-}
-
-input ListRoleInput {
-    name: String!
-}
-
-type ListRoleResp {
-    pagination: Pagination!
-    roles: [Role]!
-}
-
-type GetRoleResp {
-    role: Role!
-}
-
-extend type Query {
-    listRole(filter: ListRoleInput!, pagination: PaginationInput!): ListRoleResp!
-    getRole(id: Int64!): GetRoleResp!
-}
-
-input CreateRoleInput {
-    name: String!
-    permissions: [String!]!
-}
-
-input UpdateRoleInput {
-    id: Int64!
-    name: String!
-    permissions: [String!]!
-}
-
-extend type Mutation {
-    createRole(input: CreateRoleInput!): Boolean!
-    updateRole(input: UpdateRoleInput!): Boolean!
-    deleteRole(id: Int64!): Boolean!
-}`, BuiltIn: false},
 	{Name: "pkg/graph/schema/room.graphqls", Input: `enum RoomStatus {
     """全部"""
     All
@@ -2152,21 +1973,6 @@ func (ec *executionContext) field_Mutation_createRemind_args(ctx context.Context
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_createRole_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 converter.CreateRoleInput
-	if tmp, ok := rawArgs["input"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateRoleInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐCreateRoleInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["input"] = arg0
-	return args, nil
-}
-
 func (ec *executionContext) field_Mutation_createStaff_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -2213,21 +2019,6 @@ func (ec *executionContext) field_Mutation_deleteNotice_args(ctx context.Context
 }
 
 func (ec *executionContext) field_Mutation_deleteRemind_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 int64
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNInt642int64(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["id"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_deleteRole_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 int64
@@ -2324,21 +2115,6 @@ func (ec *executionContext) field_Mutation_updateRemind_args(ctx context.Context
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalNUpdateRemindInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐUpdateRemindInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["input"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_updateRole_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 converter.UpdateRoleInput
-	if tmp, ok := rawArgs["input"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNUpdateRoleInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐUpdateRoleInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2482,21 +2258,6 @@ func (ec *executionContext) field_Query_getRemind_args(ctx context.Context, rawA
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_getRole_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 int64
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNInt642int64(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["id"] = arg0
-	return args, nil
-}
-
 func (ec *executionContext) field_Query_getStaff_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -2621,30 +2382,6 @@ func (ec *executionContext) field_Query_listRemind_args(ctx context.Context, raw
 	if tmp, ok := rawArgs["filter"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
 		arg0, err = ec.unmarshalNListRemindInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListRemindInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["filter"] = arg0
-	var arg1 converter.PaginationInput
-	if tmp, ok := rawArgs["pagination"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pagination"))
-		arg1, err = ec.unmarshalNPaginationInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐPaginationInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["pagination"] = arg1
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_listRole_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 converter.ListRoleInput
-	if tmp, ok := rawArgs["filter"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
-		arg0, err = ec.unmarshalNListRoleInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListRoleInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3589,41 +3326,6 @@ func (ec *executionContext) _GetRemindResp_remind(ctx context.Context, field gra
 	return ec.marshalNRemind2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐRemind(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _GetRoleResp_role(ctx context.Context, field graphql.CollectedField, obj *converter.GetRoleResp) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "GetRoleResp",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Role, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*converter.Role)
-	fc.Result = res
-	return ec.marshalNRole2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐRole(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _GetStaffResp_staff(ctx context.Context, field graphql.CollectedField, obj *converter.GetStaffResp) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -4147,76 +3849,6 @@ func (ec *executionContext) _ListRemindResp_reminds(ctx context.Context, field g
 	res := resTmp.([]*converter.Remind)
 	fc.Result = res
 	return ec.marshalNRemind2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐRemind(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _ListRoleResp_pagination(ctx context.Context, field graphql.CollectedField, obj *converter.ListRoleResp) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "ListRoleResp",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Pagination, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*converter.Pagination)
-	fc.Result = res
-	return ec.marshalNPagination2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐPagination(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _ListRoleResp_roles(ctx context.Context, field graphql.CollectedField, obj *converter.ListRoleResp) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "ListRoleResp",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Roles, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.([]*converter.Role)
-	fc.Result = res
-	return ec.marshalNRole2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐRole(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _ListRoomMessageResp_messages(ctx context.Context, field graphql.CollectedField, obj *converter.ListRoomMessageResp) (ret graphql.Marshaler) {
@@ -4773,41 +4405,6 @@ func (ec *executionContext) _MessageExtraInfo_clientName(ctx context.Context, fi
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Mutation_logout(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().Logout(rctx)
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(bool)
-	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _Mutation_upload(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -5296,132 +4893,6 @@ func (ec *executionContext) _Mutation_deleteRemind(ctx context.Context, field gr
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteRemind(rctx, args["id"].(int64))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(bool)
-	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Mutation_createRole(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_createRole_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateRole(rctx, args["input"].(converter.CreateRoleInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(bool)
-	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Mutation_updateRole(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_updateRole_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateRole(rctx, args["input"].(converter.UpdateRoleInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(bool)
-	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Mutation_deleteRole(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_deleteRole_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().DeleteRole(rctx, args["id"].(int64))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6656,90 +6127,6 @@ func (ec *executionContext) _Query_listDailyGuestReport(ctx context.Context, fie
 	return ec.marshalNListDailyGuestReportResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐListDailyGuestReportResp(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Query_listRole(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Query_listRole_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ListRole(rctx, args["filter"].(converter.ListRoleInput), args["pagination"].(converter.PaginationInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*converter.ListRoleResp)
-	fc.Result = res
-	return ec.marshalNListRoleResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐListRoleResp(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Query_getRole(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Query_getRole_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetRole(rctx, args["id"].(int64))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*converter.GetRoleResp)
-	fc.Result = res
-	return ec.marshalNGetRoleResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐGetRoleResp(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _Query_listStaffRoom(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -7152,111 +6539,6 @@ func (ec *executionContext) _Remind_status(ctx context.Context, field graphql.Co
 	res := resTmp.(converter.Status)
 	fc.Result = res
 	return ec.marshalNStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐStatus(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Role_id(ctx context.Context, field graphql.CollectedField, obj *converter.Role) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Role",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int64)
-	fc.Result = res
-	return ec.marshalNInt642int64(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Role_name(ctx context.Context, field graphql.CollectedField, obj *converter.Role) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Role",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Name, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Role_permissions(ctx context.Context, field graphql.CollectedField, obj *converter.Role) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Role",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Permissions, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.([]string)
-	fc.Result = res
-	return ec.marshalNString2ᚕstringᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Room_id(ctx context.Context, field graphql.CollectedField, obj *converter.Room) (ret graphql.Marshaler) {
@@ -9200,37 +8482,6 @@ func (ec *executionContext) unmarshalInputCreateRemindInput(ctx context.Context,
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputCreateRoleInput(ctx context.Context, obj interface{}) (converter.CreateRoleInput, error) {
-	var it converter.CreateRoleInput
-	asMap := map[string]interface{}{}
-	for k, v := range obj.(map[string]interface{}) {
-		asMap[k] = v
-	}
-
-	for k, v := range asMap {
-		switch k {
-		case "name":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-			it.Name, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "permissions":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("permissions"))
-			it.Permissions, err = ec.unmarshalNString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		}
-	}
-
-	return it, nil
-}
-
 func (ec *executionContext) unmarshalInputCreateStaffInput(ctx context.Context, obj interface{}) (converter.CreateStaffInput, error) {
 	var it converter.CreateStaffInput
 	asMap := map[string]interface{}{}
@@ -9479,29 +8730,6 @@ func (ec *executionContext) unmarshalInputListRemindInput(ctx context.Context, o
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
 			it.Status, err = ec.unmarshalNStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐStatus(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		}
-	}
-
-	return it, nil
-}
-
-func (ec *executionContext) unmarshalInputListRoleInput(ctx context.Context, obj interface{}) (converter.ListRoleInput, error) {
-	var it converter.ListRoleInput
-	asMap := map[string]interface{}{}
-	for k, v := range obj.(map[string]interface{}) {
-		asMap[k] = v
-	}
-
-	for k, v := range asMap {
-		switch k {
-		case "name":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-			it.Name, err = ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9900,45 +9128,6 @@ func (ec *executionContext) unmarshalInputUpdateRemindInput(ctx context.Context,
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
 			it.Status, err = ec.unmarshalNStatus2csᚑapiᚋpkgᚋgraphᚋconverterᚐStatus(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		}
-	}
-
-	return it, nil
-}
-
-func (ec *executionContext) unmarshalInputUpdateRoleInput(ctx context.Context, obj interface{}) (converter.UpdateRoleInput, error) {
-	var it converter.UpdateRoleInput
-	asMap := map[string]interface{}{}
-	for k, v := range obj.(map[string]interface{}) {
-		asMap[k] = v
-	}
-
-	for k, v := range asMap {
-		switch k {
-		case "id":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-			it.ID, err = ec.unmarshalNInt642int64(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "name":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-			it.Name, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "permissions":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("permissions"))
-			it.Permissions, err = ec.unmarshalNString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10469,37 +9658,6 @@ func (ec *executionContext) _GetRemindResp(ctx context.Context, sel ast.Selectio
 	return out
 }
 
-var getRoleRespImplementors = []string{"GetRoleResp"}
-
-func (ec *executionContext) _GetRoleResp(ctx context.Context, sel ast.SelectionSet, obj *converter.GetRoleResp) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, getRoleRespImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("GetRoleResp")
-		case "role":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._GetRoleResp_role(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
 var getStaffRespImplementors = []string{"GetStaffResp"}
 
 func (ec *executionContext) _GetStaffResp(ctx context.Context, sel ast.SelectionSet, obj *converter.GetStaffResp) graphql.Marshaler {
@@ -10860,47 +10018,6 @@ func (ec *executionContext) _ListRemindResp(ctx context.Context, sel ast.Selecti
 	return out
 }
 
-var listRoleRespImplementors = []string{"ListRoleResp"}
-
-func (ec *executionContext) _ListRoleResp(ctx context.Context, sel ast.SelectionSet, obj *converter.ListRoleResp) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, listRoleRespImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("ListRoleResp")
-		case "pagination":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._ListRoleResp_pagination(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "roles":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._ListRoleResp_roles(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
 var listRoomMessageRespImplementors = []string{"ListRoomMessageResp"}
 
 func (ec *executionContext) _ListRoomMessageResp(ctx context.Context, sel ast.SelectionSet, obj *converter.ListRoomMessageResp) graphql.Marshaler {
@@ -11200,16 +10317,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Mutation")
-		case "logout":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_logout(ctx, field)
-			}
-
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "upload":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_upload(ctx, field)
@@ -11323,36 +10430,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteRemind":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteRemind(ctx, field)
-			}
-
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "createRole":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createRole(ctx, field)
-			}
-
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "updateRole":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateRole(ctx, field)
-			}
-
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "deleteRole":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_deleteRole(ctx, field)
 			}
 
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
@@ -11911,52 +10988,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Concurrently(i, func() graphql.Marshaler {
 				return rrm(innerCtx)
 			})
-		case "listRole":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_listRole(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return rrm(innerCtx)
-			})
-		case "getRole":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_getRole(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return rrm(innerCtx)
-			})
 		case "listStaffRoom":
 			field := field
 
@@ -12140,57 +11171,6 @@ func (ec *executionContext) _Remind(ctx context.Context, sel ast.SelectionSet, o
 		case "status":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Remind_status(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var roleImplementors = []string{"Role"}
-
-func (ec *executionContext) _Role(ctx context.Context, sel ast.SelectionSet, obj *converter.Role) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, roleImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("Role")
-		case "id":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Role_id(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "name":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Role_name(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "permissions":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Role_permissions(ctx, field, obj)
 			}
 
 			out.Values[i] = innerFunc(ctx)
@@ -12884,11 +11864,6 @@ func (ec *executionContext) unmarshalNCreateRemindInput2csᚑapiᚋpkgᚋgraph�
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateRoleInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐCreateRoleInput(ctx context.Context, v interface{}) (converter.CreateRoleInput, error) {
-	res, err := ec.unmarshalInputCreateRoleInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
 func (ec *executionContext) unmarshalNCreateStaffInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐCreateStaffInput(ctx context.Context, v interface{}) (converter.CreateStaffInput, error) {
 	res, err := ec.unmarshalInputCreateStaffInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -13198,20 +12173,6 @@ func (ec *executionContext) marshalNGetRemindResp2ᚖcsᚑapiᚋpkgᚋgraphᚋco
 	return ec._GetRemindResp(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNGetRoleResp2csᚑapiᚋpkgᚋgraphᚋconverterᚐGetRoleResp(ctx context.Context, sel ast.SelectionSet, v converter.GetRoleResp) graphql.Marshaler {
-	return ec._GetRoleResp(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNGetRoleResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐGetRoleResp(ctx context.Context, sel ast.SelectionSet, v *converter.GetRoleResp) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._GetRoleResp(ctx, sel, v)
-}
-
 func (ec *executionContext) marshalNGetStaffResp2csᚑapiᚋpkgᚋgraphᚋconverterᚐGetStaffResp(ctx context.Context, sel ast.SelectionSet, v converter.GetStaffResp) graphql.Marshaler {
 	return ec._GetStaffResp(ctx, sel, &v)
 }
@@ -13395,25 +12356,6 @@ func (ec *executionContext) marshalNListRemindResp2ᚖcsᚑapiᚋpkgᚋgraphᚋc
 		return graphql.Null
 	}
 	return ec._ListRemindResp(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalNListRoleInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListRoleInput(ctx context.Context, v interface{}) (converter.ListRoleInput, error) {
-	res, err := ec.unmarshalInputListRoleInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNListRoleResp2csᚑapiᚋpkgᚋgraphᚋconverterᚐListRoleResp(ctx context.Context, sel ast.SelectionSet, v converter.ListRoleResp) graphql.Marshaler {
-	return ec._ListRoleResp(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNListRoleResp2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐListRoleResp(ctx context.Context, sel ast.SelectionSet, v *converter.ListRoleResp) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._ListRoleResp(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNListRoomInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐListRoomInput(ctx context.Context, v interface{}) (converter.ListRoomInput, error) {
@@ -13661,54 +12603,6 @@ func (ec *executionContext) marshalNRemind2ᚖcsᚑapiᚋpkgᚋgraphᚋconverter
 	return ec._Remind(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNRole2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐRole(ctx context.Context, sel ast.SelectionSet, v []*converter.Role) graphql.Marshaler {
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalORole2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐRole(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	return ret
-}
-
-func (ec *executionContext) marshalNRole2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐRole(ctx context.Context, sel ast.SelectionSet, v *converter.Role) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._Role(ctx, sel, v)
-}
-
 func (ec *executionContext) marshalNRoom2ᚕᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐRoom(ctx context.Context, sel ast.SelectionSet, v []*converter.Room) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
@@ -13894,11 +12788,6 @@ func (ec *executionContext) unmarshalNUpdateNoticeInput2csᚑapiᚋpkgᚋgraph�
 
 func (ec *executionContext) unmarshalNUpdateRemindInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐUpdateRemindInput(ctx context.Context, v interface{}) (converter.UpdateRemindInput, error) {
 	res, err := ec.unmarshalInputUpdateRemindInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalNUpdateRoleInput2csᚑapiᚋpkgᚋgraphᚋconverterᚐUpdateRoleInput(ctx context.Context, v interface{}) (converter.UpdateRoleInput, error) {
-	res, err := ec.unmarshalInputUpdateRoleInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -14269,13 +13158,6 @@ func (ec *executionContext) marshalORemind2ᚖcsᚑapiᚋpkgᚋgraphᚋconverter
 		return graphql.Null
 	}
 	return ec._Remind(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalORole2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐRole(ctx context.Context, sel ast.SelectionSet, v *converter.Role) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._Role(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalORoom2ᚖcsᚑapiᚋpkgᚋgraphᚋconverterᚐRoom(ctx context.Context, sel ast.SelectionSet, v *converter.Room) graphql.Marshaler {

@@ -3,8 +3,10 @@ package auth
 import (
 	"context"
 	"crypto/md5"
+	"cs-api/config"
 	"cs-api/db/model"
 	"cs-api/pkg"
+	iface "cs-api/pkg/interface"
 	"cs-api/pkg/types"
 	"database/sql"
 	"encoding/json"
@@ -12,11 +14,19 @@ import (
 	"github.com/AndySu1021/go-util/errors"
 	ginTool "github.com/AndySu1021/go-util/gin"
 	"github.com/AndySu1021/go-util/helper"
+	ifaceTool "github.com/AndySu1021/go-util/interface"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/xid"
 	"github.com/rs/zerolog/log"
 	"time"
 )
+
+type service struct {
+	redis  ifaceTool.IRedis
+	lua    iface.ILusScript
+	repo   iface.IRepository
+	config *config.Config
+}
 
 func (s *service) Login(ctx context.Context, username, password string) (pkg.ClientInfo, error) {
 	staff, err := s.repo.StaffLogin(ctx, model.StaffLoginParams{
@@ -144,4 +154,13 @@ func genToken() string {
 	str := time.Now().String() + xid.New().String()
 	str = fmt.Sprintf("%x", md5.Sum([]byte(str)))
 	return str
+}
+
+func NewService(redis ifaceTool.IRedis, lua iface.ILusScript, repo iface.IRepository, config *config.Config) iface.IAuthService {
+	return &service{
+		redis:  redis,
+		lua:    lua,
+		repo:   repo,
+		config: config,
+	}
 }
