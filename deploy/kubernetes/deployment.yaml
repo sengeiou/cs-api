@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cs-api
+  namespace: cs-system
+spec:
+  selector:
+    matchLabels:
+      app: cs-api
+  template:
+    metadata:
+      labels:
+        app: cs-api
+    spec:
+      containers:
+        - image: cs-api:sample
+          imagePullPolicy: Always
+          name: cs-api
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              scheme: HTTP
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 20
