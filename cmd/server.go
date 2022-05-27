@@ -4,13 +4,9 @@ import (
 	"context"
 	"cs-api/config"
 	"cs-api/db/model"
-	"cs-api/pkg/graph/resolver"
 	"cs-api/pkg/lua"
 	"cs-api/pkg/repository"
 	"cs-api/pkg/restful"
-	"cs-api/pkg/service"
-	"cs-api/pkg/storage"
-	"cs-api/pkg/ws"
 	"database/sql"
 	"errors"
 	"github.com/AndySu1021/go-util/db"
@@ -18,6 +14,7 @@ import (
 	"github.com/AndySu1021/go-util/helper"
 	"github.com/AndySu1021/go-util/mongo"
 	"github.com/AndySu1021/go-util/redis"
+	"github.com/AndySu1021/go-util/storage"
 	zlog "github.com/AndySu1021/go-util/zerolog"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/golang-migrate/migrate"
@@ -68,10 +65,8 @@ func runServer(_ *cobra.Command, _ []string) {
 		fx.Logger(&logger),
 		commonModule,
 		redis.Module,
-		service.Module,
-		resolver.Module,
 		restful.Module,
-		ws.Module,
+		//ws.Module,
 	)
 
 	exitCode := 0

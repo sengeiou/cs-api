@@ -3,7 +3,7 @@ app:
   salt: abcde12345
 
 ## Disk storage
-disk:
+storage:
   driver: local
   base_url: http://static.local.cs.com/upload
 

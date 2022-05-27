@@ -1,24 +1,17 @@
 package config
 
 import (
-	"cs-api/pkg/types"
 	"github.com/AndySu1021/go-util/db"
 	"github.com/AndySu1021/go-util/gin"
 	"github.com/AndySu1021/go-util/redis"
+	"github.com/AndySu1021/go-util/storage"
 	zlog "github.com/AndySu1021/go-util/zerolog"
 	"github.com/spf13/viper"
 	"go.uber.org/fx"
 )
 
 type Config struct {
-	Salt        string           `mapstructure:"salt"`
-	DiskDriver  types.DiskDriver `mapstructure:"disk_driver"`
-	DiskBaseUrl string           `mapstructure:"disk_base_url"`
-}
-
-type DiskConfig struct {
-	Driver  types.DiskDriver `mapstructure:"driver"`
-	BaseUrl string           `mapstructure:"base_url"`
+	Salt string `mapstructure:"salt"`
 }
 
 // AppConfig APP設定
@@ -26,7 +19,7 @@ type AppConfig struct {
 	fx.Out
 
 	App      *Config         `mapstructure:"app"`
-	Disk     *DiskConfig     `mapstructure:"disk"`
+	Storage  *storage.Config `mapstructure:"storage"`
 	Http     *gin.Config     `mapstructure:"http"`
 	Log      *zlog.Config    `mapstructure:"log"`
 	Database *db.Config      `mapstructure:"database"`

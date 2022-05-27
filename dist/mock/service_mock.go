@@ -275,17 +275,17 @@ func (mr *MockIRoomServiceMockRecorder) AcceptRoom(ctx, staffId, roomId interfac
 }
 
 // CloseRoom mocks base method.
-func (m *MockIRoomService) CloseRoom(ctx context.Context, roomId, tagId int64) error {
+func (m *MockIRoomService) CloseRoom(ctx context.Context, staffId, roomId, tagId int64) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CloseRoom", ctx, roomId, tagId)
+	ret := m.ctrl.Call(m, "CloseRoom", ctx, staffId, roomId, tagId)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // CloseRoom indicates an expected call of CloseRoom.
-func (mr *MockIRoomServiceMockRecorder) CloseRoom(ctx, roomId, tagId interface{}) *gomock.Call {
+func (mr *MockIRoomServiceMockRecorder) CloseRoom(ctx, staffId, roomId, tagId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CloseRoom", reflect.TypeOf((*MockIRoomService)(nil).CloseRoom), ctx, roomId, tagId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CloseRoom", reflect.TypeOf((*MockIRoomService)(nil).CloseRoom), ctx, staffId, roomId, tagId)
 }
 
 // CreateRoom mocks base method.
@@ -352,17 +352,17 @@ func (mr *MockIRoomServiceMockRecorder) ListStaffRoom(ctx, params, filterParams 
 }
 
 // TransferRoom mocks base method.
-func (m *MockIRoomService) TransferRoom(ctx context.Context, roomId, staffId int64) error {
+func (m *MockIRoomService) TransferRoom(ctx context.Context, staffId, roomId, toStaffId int64) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "TransferRoom", ctx, roomId, staffId)
+	ret := m.ctrl.Call(m, "TransferRoom", ctx, staffId, roomId, toStaffId)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // TransferRoom indicates an expected call of TransferRoom.
-func (mr *MockIRoomServiceMockRecorder) TransferRoom(ctx, roomId, staffId interface{}) *gomock.Call {
+func (mr *MockIRoomServiceMockRecorder) TransferRoom(ctx, staffId, roomId, toStaffId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "TransferRoom", reflect.TypeOf((*MockIRoomService)(nil).TransferRoom), ctx, roomId, staffId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "TransferRoom", reflect.TypeOf((*MockIRoomService)(nil).TransferRoom), ctx, staffId, roomId, toStaffId)
 }
 
 // UpdateRoomScore mocks base method.
@@ -567,11 +567,12 @@ func (m *MockIFastReplyService) EXPECT() *MockIFastReplyServiceMockRecorder {
 }
 
 // CheckCategory mocks base method.
-func (m *MockIFastReplyService) CheckCategory(ctx context.Context, id int64) error {
+func (m *MockIFastReplyService) CheckCategory(ctx context.Context, id int64) (interface{}, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CheckCategory", ctx, id)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(interface{})
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // CheckCategory indicates an expected call of CheckCategory.

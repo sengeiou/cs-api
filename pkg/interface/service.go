@@ -31,8 +31,8 @@ type IStaffService interface {
 type IRoomService interface {
 	CreateRoom(ctx context.Context, deviceId string, name string) (model.Room, model.Member, error)
 	AcceptRoom(ctx context.Context, staffId int64, roomId int64) error
-	CloseRoom(ctx context.Context, roomId int64, tagId int64) error
-	TransferRoom(ctx context.Context, roomId int64, staffId int64) error
+	CloseRoom(ctx context.Context, staffId, roomId, tagId int64) error
+	TransferRoom(ctx context.Context, staffId, roomId, toStaffId int64) error
 	UpdateRoomScore(ctx context.Context, roomId int64, score int32) error
 	ListStaffRoom(ctx context.Context, params model.ListStaffRoomParams, filterParams types.FilterStaffRoomParams) ([]model.ListStaffRoomRow, int64, error)
 	ListRoom(ctx context.Context, params model.ListRoomParams, filterParams types.FilterRoomParams) ([]model.ListRoomRow, int64, error)

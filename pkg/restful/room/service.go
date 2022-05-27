@@ -4,14 +4,24 @@ import (
 	"context"
 	"cs-api/db/model"
 	"cs-api/pkg"
+	iface "cs-api/pkg/interface"
 	"cs-api/pkg/types"
 	"database/sql"
 	_ "embed"
 	"encoding/json"
 	"errors"
+	ifaceTool "github.com/AndySu1021/go-util/interface"
 	"github.com/rs/zerolog/log"
+	"go.uber.org/fx"
 	"time"
 )
+
+type service struct {
+	redis     ifaceTool.IRedis
+	lua       iface.ILusScript
+	memberSvc iface.IMemberService
+	repo      iface.IRepository
+}
 
 // CreateRoom 如果 name 有傳入則尋找該會員名是否已經存在，不存在則創建。
 // 如果 name 沒有傳入，則尋找是否有相同 deviceId 的訪客，不存在則創建。
@@ -94,7 +104,7 @@ func (s *service) AcceptRoom(ctx context.Context, staffId int64, roomId int64) e
 	})
 }
 
-func (s *service) CloseRoom(ctx context.Context, roomId int64, tagId int64) error {
+func (s *service) CloseRoom(ctx context.Context, staffId int64, roomId int64, tagId int64) error {
 	var (
 		err  error
 		room model.GetRoomRow
@@ -103,6 +113,10 @@ func (s *service) CloseRoom(ctx context.Context, roomId int64, tagId int64) erro
 	room, err = s.repo.GetRoom(ctx, roomId)
 	if err != nil {
 		return err
+	}
+
+	if room.StaffID != staffId {
+		return errors.New("operation error")
 	}
 
 	if room.Status != types.RoomStatusServing {
@@ -210,8 +224,21 @@ func (s *service) GetStaffRooms(ctx context.Context, staffId int64) ([]int64, er
 	return s.repo.GetStaffRoom(ctx, staffId)
 }
 
-func (s *service) TransferRoom(ctx context.Context, roomId int64, staffId int64) error {
-	staff, err := s.repo.GetStaff(ctx, staffId)
+func (s *service) TransferRoom(ctx context.Context, staffId, roomId, toStaffId int64) error {
+	room, err := s.repo.GetRoom(ctx, roomId)
+	if err != nil {
+		return err
+	}
+
+	if room.StaffID != staffId {
+		return errors.New("operation error")
+	}
+
+	if room.StaffID == toStaffId {
+		return errors.New("no need to transfer")
+	}
+
+	staff, err := s.repo.GetStaff(ctx, toStaffId)
 	if err != nil {
 		return err
 	}
@@ -220,17 +247,8 @@ func (s *service) TransferRoom(ctx context.Context, roomId int64, staffId int64)
 		return errors.New("staff not available")
 	}
 
-	room, err := s.repo.GetRoom(ctx, roomId)
-	if err != nil {
-		return err
-	}
-
-	if room.StaffID == staffId {
-		return errors.New("no need to transfer")
-	}
-
 	if err = s.repo.UpdateRoomStaff(ctx, model.UpdateRoomStaffParams{
-		StaffID: staffId,
+		StaffID: toStaffId,
 		ID:      roomId,
 	}); err != nil {
 		return err
@@ -239,7 +257,7 @@ func (s *service) TransferRoom(ctx context.Context, roomId int64, staffId int64)
 	event := pkg.StaffEventInfo{
 		Event: pkg.StaffEventTransferRoom,
 		Payload: pkg.StaffEventPayload{
-			StaffID: &staffId,
+			StaffID: &toStaffId,
 			RoomID:  &roomId,
 		},
 	}
@@ -247,4 +265,22 @@ func (s *service) TransferRoom(ctx context.Context, roomId int64, staffId int64)
 	payload, _ := json.Marshal(event)
 
 	return s.redis.Publish(ctx, "event:staff", payload)
+}
+
+type ServiceParams struct {
+	fx.In
+
+	Redis     ifaceTool.IRedis
+	Lua       iface.ILusScript
+	MemberSvc iface.IMemberService
+	Repo      iface.IRepository
+}
+
+func NewService(p ServiceParams) iface.IRoomService {
+	return &service{
+		redis:     p.Redis,
+		lua:       p.Lua,
+		memberSvc: p.MemberSvc,
+		repo:      p.Repo,
+	}
 }

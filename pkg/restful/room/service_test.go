@@ -163,9 +163,10 @@ func Test_service_CloseRoom(t *testing.T) {
 		repo      iface.IRepository
 	}
 	type args struct {
-		ctx    context.Context
-		roomId int64
-		tagId  int64
+		ctx     context.Context
+		staffId int64
+		roomId  int64
+		tagId   int64
 	}
 	tests := []struct {
 		name    string
@@ -182,9 +183,10 @@ func Test_service_CloseRoom(t *testing.T) {
 				repo:      mock.NewRepository(t),
 			},
 			args: args{
-				ctx:    context.Background(),
-				roomId: 2,
-				tagId:  1,
+				ctx:     context.Background(),
+				staffId: 1,
+				roomId:  2,
+				tagId:   1,
 			},
 			wantErr: false,
 		},
@@ -197,9 +199,10 @@ func Test_service_CloseRoom(t *testing.T) {
 				repo:      mock.NewRepository(t),
 			},
 			args: args{
-				ctx:    context.Background(),
-				roomId: 1,
-				tagId:  1,
+				ctx:     context.Background(),
+				staffId: 1,
+				roomId:  1,
+				tagId:   1,
 			},
 			wantErr: true,
 		},
@@ -212,7 +215,7 @@ func Test_service_CloseRoom(t *testing.T) {
 				memberSvc: tt.fields.memberSvc,
 				repo:      tt.fields.repo,
 			}
-			if err := s.CloseRoom(tt.args.ctx, tt.args.roomId, tt.args.tagId); (err != nil) != tt.wantErr {
+			if err := s.CloseRoom(tt.args.ctx, tt.args.staffId, tt.args.roomId, tt.args.tagId); (err != nil) != tt.wantErr {
 				t.Errorf("CloseRoom() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -452,9 +455,10 @@ func Test_service_TransferRoom(t *testing.T) {
 		repo      iface.IRepository
 	}
 	type args struct {
-		ctx     context.Context
-		roomId  int64
-		staffId int64
+		ctx       context.Context
+		staffId   int64
+		roomId    int64
+		toStaffId int64
 	}
 	tests := []struct {
 		name    string
@@ -471,9 +475,10 @@ func Test_service_TransferRoom(t *testing.T) {
 				repo:      mock.NewRepository(t),
 			},
 			args: args{
-				ctx:     context.Background(),
-				roomId:  1,
-				staffId: 2,
+				ctx:       context.Background(),
+				staffId:   1,
+				roomId:    1,
+				toStaffId: 2,
 			},
 			wantErr: false,
 		},
@@ -486,9 +491,10 @@ func Test_service_TransferRoom(t *testing.T) {
 				repo:      mock.NewRepository(t),
 			},
 			args: args{
-				ctx:     context.Background(),
-				roomId:  1,
-				staffId: 1,
+				ctx:       context.Background(),
+				staffId:   1,
+				roomId:    1,
+				toStaffId: 1,
 			},
 			wantErr: true,
 		},
@@ -501,9 +507,10 @@ func Test_service_TransferRoom(t *testing.T) {
 				repo:      mock.NewRepository(t),
 			},
 			args: args{
-				ctx:     context.Background(),
-				roomId:  3,
-				staffId: 2,
+				ctx:       context.Background(),
+				staffId:   1,
+				roomId:    3,
+				toStaffId: 2,
 			},
 			wantErr: true,
 		},
@@ -516,7 +523,7 @@ func Test_service_TransferRoom(t *testing.T) {
 				memberSvc: tt.fields.memberSvc,
 				repo:      tt.fields.repo,
 			}
-			if err := s.TransferRoom(tt.args.ctx, tt.args.roomId, tt.args.staffId); (err != nil) != tt.wantErr {
+			if err := s.TransferRoom(tt.args.ctx, tt.args.staffId, tt.args.roomId, tt.args.toStaffId); (err != nil) != tt.wantErr {
 				t.Errorf("TransferRoom() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

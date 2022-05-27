@@ -3,9 +3,10 @@ package types
 type RoomStatus int8
 
 const (
-	RoomStatusPending RoomStatus = 1
-	RoomStatusServing RoomStatus = 2
-	RoomStatusClosed  RoomStatus = 3
+	RoomStatusAll RoomStatus = iota
+	RoomStatusPending
+	RoomStatusServing
+	RoomStatusClosed
 )
 
 type FilterRoomParams struct {

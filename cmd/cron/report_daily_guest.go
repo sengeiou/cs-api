@@ -4,7 +4,6 @@ import (
 	"context"
 	"cs-api/config"
 	"cs-api/db/model"
-	"cs-api/pkg/service"
 	"database/sql"
 	"errors"
 	"github.com/AndySu1021/go-util/db"
@@ -50,7 +49,7 @@ func runReportDailyGuest(_ *cobra.Command, _ []string) {
 		fx.Logger(&logger),
 	}
 
-	fxOption = append(fxOption, commonModule1, service.Module)
+	fxOption = append(fxOption, commonModule1)
 
 	app := fx.New(
 		fxOption...,

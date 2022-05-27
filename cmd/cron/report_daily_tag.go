@@ -4,7 +4,6 @@ import (
 	"context"
 	"cs-api/config"
 	"cs-api/db/model"
-	"cs-api/pkg/service"
 	"database/sql"
 	"github.com/AndySu1021/go-util/db"
 	"github.com/AndySu1021/go-util/helper"
@@ -49,7 +48,7 @@ func runReportDailyTag(_ *cobra.Command, _ []string) {
 		fx.Logger(&logger),
 	}
 
-	fxOption = append(fxOption, commonModule, service.Module)
+	fxOption = append(fxOption, commonModule)
 
 	app := fx.New(
 		fxOption...,
