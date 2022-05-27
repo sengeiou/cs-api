@@ -3,6 +3,7 @@ package ws
 import (
 	"cs-api/pkg"
 	"encoding/json"
+	"fmt"
 	ginTool "github.com/AndySu1021/go-util/gin"
 	iface "github.com/AndySu1021/go-util/interface"
 	"github.com/gin-gonic/gin"
@@ -22,13 +23,7 @@ func (h *Handler) ChatHandler(c *gin.Context) {
 		return
 	}
 
-	var redisKey string
-	if req.Type == pkg.ClientTypeStaff {
-		redisKey = "token:staff:" + req.SID
-	} else if req.Type == pkg.ClientTypeMember {
-		redisKey = "token:member:" + req.SID
-	}
-
+	redisKey := fmt.Sprintf("token:%s:%s", req.Type, req.SID)
 	payload, err := h.redis.Get(c.Request.Context(), redisKey)
 	if err != nil {
 		ginTool.Error(c, err)

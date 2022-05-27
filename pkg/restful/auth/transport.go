@@ -25,6 +25,12 @@ func InitTransport(p Params) {
 		p.H.Login,
 	)
 
+	routes.GET("/auth/staff-info",
+		p.AuthSvc.SetClientInfo(pkg.ClientTypeStaff),
+		p.R.Op("GetStaffInfo"),
+		p.H.GetStaffInfo,
+	)
+
 	routes.POST("/auth/logout",
 		p.AuthSvc.SetClientInfo(pkg.ClientTypeStaff),
 		p.R.Op("Logout"),

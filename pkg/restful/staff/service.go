@@ -131,7 +131,7 @@ func (s *service) UpdateStaffServingStatus(ctx context.Context, staffInfo pkg.Cl
 	return nil
 }
 
-func (s *service) ListAvailableStaff(ctx context.Context, staffId int64) ([]model.Staff, error) {
+func (s *service) ListAvailableStaff(ctx context.Context, staffId int64) ([]model.ListAvailableStaffRow, error) {
 	return s.repo.ListAvailableStaff(ctx, staffId)
 }
 

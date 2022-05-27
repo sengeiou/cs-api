@@ -39,6 +39,10 @@ func (s *service) ListRole(ctx context.Context, params model.ListRoleParams, fil
 	return
 }
 
+func (s *service) GetAllRoles(ctx context.Context) ([]model.GetAllRolesRow, error) {
+	return s.repo.GetAllRoles(ctx)
+}
+
 func (s *service) GetRole(ctx context.Context, roleId int64) (model.Role, error) {
 	return s.repo.GetRole(ctx, roleId)
 }

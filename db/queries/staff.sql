@@ -3,11 +3,9 @@ INSERT INTO staff (role_id, name, username, password, status, created_by, create
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 -- name: GetStaff :one
-SELECT staff.*, role.name AS role_name, role.permissions
+SELECT role_id, name, status, serving_status, avatar
 FROM staff
-         inner join role on role.id = staff.role_id
-WHERE staff.id = ?
-LIMIT 1;
+WHERE staff.id = ? LIMIT 1;
 
 -- name: UpdateStaff :exec
 UPDATE staff
@@ -79,7 +77,7 @@ SET serving_status  = ?,
 WHERE id = ?;
 
 -- name: ListAvailableStaff :many
-SELECT *
+SELECT id, name
 FROM staff
 WHERE serving_status = 2
   and id <> ?;

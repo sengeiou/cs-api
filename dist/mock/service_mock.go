@@ -69,6 +69,21 @@ func (mr *MockIAuthServiceMockRecorder) GetClientInfo(ctx, clientType interface{
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetClientInfo", reflect.TypeOf((*MockIAuthService)(nil).GetClientInfo), ctx, clientType)
 }
 
+// GetStaffInfo mocks base method.
+func (m *MockIAuthService) GetStaffInfo(ctx context.Context, staffId int64) (model.GetStaffRow, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetStaffInfo", ctx, staffId)
+	ret0, _ := ret[0].(model.GetStaffRow)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetStaffInfo indicates an expected call of GetStaffInfo.
+func (mr *MockIAuthServiceMockRecorder) GetStaffInfo(ctx, staffId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetStaffInfo", reflect.TypeOf((*MockIAuthService)(nil).GetStaffInfo), ctx, staffId)
+}
+
 // Login mocks base method.
 func (m *MockIAuthService) Login(ctx context.Context, username, password string) (pkg.ClientInfo, error) {
 	m.ctrl.T.Helper()
@@ -179,10 +194,10 @@ func (mr *MockIStaffServiceMockRecorder) GetStaff(ctx, staffId interface{}) *gom
 }
 
 // ListAvailableStaff mocks base method.
-func (m *MockIStaffService) ListAvailableStaff(ctx context.Context, staffId int64) ([]model.Staff, error) {
+func (m *MockIStaffService) ListAvailableStaff(ctx context.Context, staffId int64) ([]model.ListAvailableStaffRow, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListAvailableStaff", ctx, staffId)
-	ret0, _ := ret[0].([]model.Staff)
+	ret0, _ := ret[0].([]model.ListAvailableStaffRow)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -891,6 +906,21 @@ func (m *MockIRoleService) DeleteRole(ctx context.Context, roleId int64) error {
 func (mr *MockIRoleServiceMockRecorder) DeleteRole(ctx, roleId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteRole", reflect.TypeOf((*MockIRoleService)(nil).DeleteRole), ctx, roleId)
+}
+
+// GetAllRoles mocks base method.
+func (m *MockIRoleService) GetAllRoles(ctx context.Context) ([]model.GetAllRolesRow, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAllRoles", ctx)
+	ret0, _ := ret[0].([]model.GetAllRolesRow)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetAllRoles indicates an expected call of GetAllRoles.
+func (mr *MockIRoleServiceMockRecorder) GetAllRoles(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllRoles", reflect.TypeOf((*MockIRoleService)(nil).GetAllRoles), ctx)
 }
 
 // GetRole mocks base method.

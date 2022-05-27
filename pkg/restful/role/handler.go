@@ -177,6 +177,21 @@ func (h *handler) ListRole(c *gin.Context) {
 	ginTool.SuccessWithPagination(c, roles, requestParams.Pagination)
 }
 
+func (h *handler) GetAllRoles(c *gin.Context) {
+	var (
+		err error
+		ctx = c.Request.Context()
+	)
+
+	roles, err := h.roleSvc.GetAllRoles(ctx)
+	if err != nil {
+		ginTool.Error(c, err)
+		return
+	}
+
+	ginTool.SuccessWithData(c, roles)
+}
+
 func formatListRoleParams(requestParams ListRoleParams) (model.ListRoleParams, types.FilterRoleParams) {
 	params := model.ListRoleParams{
 		Limit:  requestParams.PageSize,

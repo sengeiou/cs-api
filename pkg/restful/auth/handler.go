@@ -40,6 +40,27 @@ func (h *handler) Login(c *gin.Context) {
 	})
 }
 
+func (h *handler) GetStaffInfo(c *gin.Context) {
+	var (
+		err error
+		ctx = c.Request.Context()
+	)
+
+	staffInfo, err := h.authSvc.GetClientInfo(ctx, pkg.ClientTypeStaff)
+	if err != nil {
+		ginTool.Error(c, err)
+		return
+	}
+
+	info, err := h.authSvc.GetStaffInfo(ctx, staffInfo.ID)
+	if err != nil {
+		ginTool.Error(c, err)
+		return
+	}
+
+	ginTool.SuccessWithData(c, info)
+}
+
 func (h *handler) Logout(c *gin.Context) {
 	var (
 		err error

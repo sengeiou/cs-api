@@ -53,6 +53,10 @@ func (n *Notifier) MemberLeave(member *MemberClient, staff *StaffClient) {
 
 // Typing 通知用戶客服正在輸入
 func (n *Notifier) Typing(staffName string, member *MemberClient) {
+	if member == nil {
+		return
+	}
+
 	message := model.Message{
 		Type:        model.MessageTypeSystem,
 		RoomID:      member.RoomID,

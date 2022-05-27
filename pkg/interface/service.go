@@ -12,6 +12,7 @@ import (
 
 type IAuthService interface {
 	Login(ctx context.Context, username, password string) (pkg.ClientInfo, error)
+	GetStaffInfo(ctx context.Context, staffId int64) (model.GetStaffRow, error)
 	Logout(ctx context.Context, userInfo pkg.ClientInfo) error
 	SetClientInfo(clientType pkg.ClientType) gin.HandlerFunc
 	GetClientInfo(ctx context.Context, clientType pkg.ClientType) (pkg.ClientInfo, error)
@@ -25,7 +26,7 @@ type IStaffService interface {
 	UpdateStaff(ctx context.Context, params interface{}) error
 	DeleteStaff(ctx context.Context, staffId int64) error
 	UpdateStaffServingStatus(ctx context.Context, staffInfo pkg.ClientInfo, status types.StaffServingStatus) error
-	ListAvailableStaff(ctx context.Context, staffId int64) ([]model.Staff, error)
+	ListAvailableStaff(ctx context.Context, staffId int64) ([]model.ListAvailableStaffRow, error)
 }
 
 type IRoomService interface {
@@ -81,6 +82,7 @@ type IMemberService interface {
 
 type IRoleService interface {
 	ListRole(ctx context.Context, params model.ListRoleParams, filterParams types.FilterRoleParams) ([]model.Role, int64, error)
+	GetAllRoles(ctx context.Context) ([]model.GetAllRolesRow, error)
 	GetRole(ctx context.Context, roleId int64) (model.Role, error)
 	CreateRole(ctx context.Context, params model.CreateRoleParams) error
 	UpdateRole(ctx context.Context, params model.UpdateRoleParams) error

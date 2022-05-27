@@ -8,7 +8,6 @@ package model
 import (
 	"context"
 	"database/sql"
-	"encoding/json"
 	"time"
 
 	"cs-api/pkg/types"
@@ -74,50 +73,28 @@ func (q *Queries) DeleteStaff(ctx context.Context, id int64) error {
 }
 
 const getStaff = `-- name: GetStaff :one
-SELECT staff.id, staff.role_id, staff.name, staff.username, staff.password, staff.avatar, staff.status, staff.serving_status, staff.last_login_time, staff.created_by, staff.created_at, staff.updated_by, staff.updated_at, role.name AS role_name, role.permissions
+SELECT role_id, name, status, serving_status, avatar
 FROM staff
-         inner join role on role.id = staff.role_id
-WHERE staff.id = ?
-LIMIT 1
+WHERE staff.id = ? LIMIT 1
 `
 
 type GetStaffRow struct {
-	ID            int64                    `db:"id" json:"id"`
 	RoleID        int64                    `db:"role_id" json:"role_id"`
 	Name          string                   `db:"name" json:"name"`
-	Username      string                   `db:"username" json:"username"`
-	Password      string                   `db:"password" json:"password"`
-	Avatar        string                   `db:"avatar" json:"avatar"`
 	Status        types.Status             `db:"status" json:"status"`
 	ServingStatus types.StaffServingStatus `db:"serving_status" json:"serving_status"`
-	LastLoginTime sql.NullTime             `db:"last_login_time" json:"last_login_time"`
-	CreatedBy     int64                    `db:"created_by" json:"created_by"`
-	CreatedAt     time.Time                `db:"created_at" json:"created_at"`
-	UpdatedBy     int64                    `db:"updated_by" json:"updated_by"`
-	UpdatedAt     time.Time                `db:"updated_at" json:"updated_at"`
-	RoleName      string                   `db:"role_name" json:"role_name"`
-	Permissions   json.RawMessage          `db:"permissions" json:"permissions"`
+	Avatar        string                   `db:"avatar" json:"avatar"`
 }
 
 func (q *Queries) GetStaff(ctx context.Context, id int64) (GetStaffRow, error) {
 	row := q.queryRow(ctx, q.getStaffStmt, getStaff, id)
 	var i GetStaffRow
 	err := row.Scan(
-		&i.ID,
 		&i.RoleID,
 		&i.Name,
-		&i.Username,
-		&i.Password,
-		&i.Avatar,
 		&i.Status,
 		&i.ServingStatus,
-		&i.LastLoginTime,
-		&i.CreatedBy,
-		&i.CreatedAt,
-		&i.UpdatedBy,
-		&i.UpdatedAt,
-		&i.RoleName,
-		&i.Permissions,
+		&i.Avatar,
 	)
 	return i, err
 }
@@ -136,36 +113,27 @@ func (q *Queries) GetStaffCountByRoleId(ctx context.Context, roleID int64) (int6
 }
 
 const listAvailableStaff = `-- name: ListAvailableStaff :many
-SELECT id, role_id, name, username, password, avatar, status, serving_status, last_login_time, created_by, created_at, updated_by, updated_at
+SELECT id, name
 FROM staff
 WHERE serving_status = 2
   and id <> ?
 `
 
-func (q *Queries) ListAvailableStaff(ctx context.Context, id int64) ([]Staff, error) {
+type ListAvailableStaffRow struct {
+	ID   int64  `db:"id" json:"id"`
+	Name string `db:"name" json:"name"`
+}
+
+func (q *Queries) ListAvailableStaff(ctx context.Context, id int64) ([]ListAvailableStaffRow, error) {
 	rows, err := q.query(ctx, q.listAvailableStaffStmt, listAvailableStaff, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Staff{}
+	items := []ListAvailableStaffRow{}
 	for rows.Next() {
-		var i Staff
-		if err := rows.Scan(
-			&i.ID,
-			&i.RoleID,
-			&i.Name,
-			&i.Username,
-			&i.Password,
-			&i.Avatar,
-			&i.Status,
-			&i.ServingStatus,
-			&i.LastLoginTime,
-			&i.CreatedBy,
-			&i.CreatedAt,
-			&i.UpdatedBy,
-			&i.UpdatedAt,
-		); err != nil {
+		var i ListAvailableStaffRow
+		if err := rows.Scan(&i.ID, &i.Name); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

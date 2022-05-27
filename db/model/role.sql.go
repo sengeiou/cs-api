@@ -62,6 +62,39 @@ func (q *Queries) DeleteRole(ctx context.Context, id int64) error {
 	return err
 }
 
+const getAllRoles = `-- name: GetAllRoles :many
+select id, name
+from role
+`
+
+type GetAllRolesRow struct {
+	ID   int64  `db:"id" json:"id"`
+	Name string `db:"name" json:"name"`
+}
+
+func (q *Queries) GetAllRoles(ctx context.Context) ([]GetAllRolesRow, error) {
+	rows, err := q.query(ctx, q.getAllRolesStmt, getAllRoles)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetAllRolesRow{}
+	for rows.Next() {
+		var i GetAllRolesRow
+		if err := rows.Scan(&i.ID, &i.Name); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getRole = `-- name: GetRole :one
 SELECT id, name, permissions, created_by, created_at, updated_by, updated_at
 FROM role

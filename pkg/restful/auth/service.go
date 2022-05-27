@@ -78,6 +78,10 @@ func (s *service) Login(ctx context.Context, username, password string) (pkg.Cli
 	return staffInfo, nil
 }
 
+func (s *service) GetStaffInfo(ctx context.Context, staffId int64) (model.GetStaffRow, error) {
+	return s.repo.GetStaff(ctx, staffId)
+}
+
 func (s *service) Logout(ctx context.Context, staffInfo pkg.ClientInfo) error {
 	params := model.UpdateStaffServingStatusParams{
 		ServingStatus: types.StaffServingStatusClosed,

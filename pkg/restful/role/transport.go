@@ -26,6 +26,11 @@ func InitTransport(p Params) {
 		p.H.ListRole,
 	)
 
+	routes.GET("/roles/all",
+		p.R.Op("GetAllRoles"),
+		p.H.GetAllRoles,
+	)
+
 	routes.POST("/role",
 		p.AuthSvc.CheckPermission("CreateRole"),
 		p.R.Op("CreateRole"),

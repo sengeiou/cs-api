@@ -126,6 +126,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.getAllAvailableFastReplyStmt, err = db.PrepareContext(ctx, getAllAvailableFastReply); err != nil {
 		return nil, fmt.Errorf("error preparing query GetAllAvailableFastReply: %w", err)
 	}
+	if q.getAllRolesStmt, err = db.PrepareContext(ctx, getAllRoles); err != nil {
+		return nil, fmt.Errorf("error preparing query GetAllRoles: %w", err)
+	}
 	if q.getAllTagStmt, err = db.PrepareContext(ctx, getAllTag); err != nil {
 		return nil, fmt.Errorf("error preparing query GetAllTag: %w", err)
 	}
@@ -433,6 +436,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing getAllAvailableFastReplyStmt: %w", cerr)
 		}
 	}
+	if q.getAllRolesStmt != nil {
+		if cerr := q.getAllRolesStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getAllRolesStmt: %w", cerr)
+		}
+	}
 	if q.getAllTagStmt != nil {
 		if cerr := q.getAllTagStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getAllTagStmt: %w", cerr)
@@ -726,6 +734,7 @@ type Queries struct {
 	deleteStaffStmt              *sql.Stmt
 	deleteTagStmt                *sql.Stmt
 	getAllAvailableFastReplyStmt *sql.Stmt
+	getAllRolesStmt              *sql.Stmt
 	getAllTagStmt                *sql.Stmt
 	getCsConfigStmt              *sql.Stmt
 	getFastReplyStmt             *sql.Stmt
@@ -810,6 +819,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		deleteStaffStmt:              q.deleteStaffStmt,
 		deleteTagStmt:                q.deleteTagStmt,
 		getAllAvailableFastReplyStmt: q.getAllAvailableFastReplyStmt,
+		getAllRolesStmt:              q.getAllRolesStmt,
 		getAllTagStmt:                q.getAllTagStmt,
 		getCsConfigStmt:              q.getCsConfigStmt,
 		getFastReplyStmt:             q.getFastReplyStmt,

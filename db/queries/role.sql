@@ -32,3 +32,7 @@ select count(*)
 from role
 where IF(@name is null, 0, name) like IF(@name is null, 0, CONCAT('%', @name, '%'))
   and id > 1;
+
+-- name: GetAllRoles :many
+select id, name
+from role

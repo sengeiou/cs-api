@@ -49,6 +49,7 @@ type Querier interface {
 	DeleteStaff(ctx context.Context, id int64) error
 	DeleteTag(ctx context.Context, id int64) error
 	GetAllAvailableFastReply(ctx context.Context) ([]GetAllAvailableFastReplyRow, error)
+	GetAllRoles(ctx context.Context) ([]GetAllRolesRow, error)
 	GetAllTag(ctx context.Context) ([]Tag, error)
 	GetCsConfig(ctx context.Context) (Constant, error)
 	GetFastReply(ctx context.Context, id int64) (FastReply, error)
@@ -65,7 +66,7 @@ type Querier interface {
 	GetStaffCountByRoleId(ctx context.Context, roleID int64) (int64, error)
 	GetStaffRoom(ctx context.Context, staffID int64) ([]int64, error)
 	GetTag(ctx context.Context, id int64) (GetTagRow, error)
-	ListAvailableStaff(ctx context.Context, id int64) ([]Staff, error)
+	ListAvailableStaff(ctx context.Context, id int64) ([]ListAvailableStaffRow, error)
 	ListFastReply(ctx context.Context, arg ListFastReplyParams) ([]ListFastReplyRow, error)
 	ListFastReplyCategory(ctx context.Context) ([]Constant, error)
 	ListNotice(ctx context.Context, arg ListNoticeParams) ([]Notice, error)

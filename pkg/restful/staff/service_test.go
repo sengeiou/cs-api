@@ -94,7 +94,7 @@ func Test_service_GetStaff(t *testing.T) {
 				ctx:     context.Background(),
 				staffId: 1,
 			},
-			wantStaff: model.GetStaffRow{ID: 1, ServingStatus: 1},
+			wantStaff: model.GetStaffRow{ServingStatus: 1},
 			wantErr:   false,
 		},
 	}
@@ -295,7 +295,7 @@ func Test_service_ListAvailableStaff(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    []model.Staff
+		want    []model.ListAvailableStaffRow
 		wantErr bool
 	}{
 		{
@@ -308,7 +308,7 @@ func Test_service_ListAvailableStaff(t *testing.T) {
 				ctx:     context.Background(),
 				staffId: 1,
 			},
-			want:    make([]model.Staff, 0),
+			want:    make([]model.ListAvailableStaffRow, 0),
 			wantErr: false,
 		},
 	}

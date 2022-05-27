@@ -30,9 +30,9 @@ func NewRepository(t *testing.T) iface.IRepository {
 	mock.EXPECT().DeleteRole(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
 
 	// Staff
-	mock.EXPECT().GetStaff(gomock.Any(), int64(1)).AnyTimes().Return(model.GetStaffRow{ID: 1, ServingStatus: types.StaffServingStatusClosed}, nil)
-	mock.EXPECT().GetStaff(gomock.Any(), int64(2)).AnyTimes().Return(model.GetStaffRow{ID: 2, ServingStatus: types.StaffServingStatusServing}, nil)
-	mock.EXPECT().GetStaff(gomock.Any(), gomock.Any()).AnyTimes().Return(model.GetStaffRow{ID: 3}, nil)
+	mock.EXPECT().GetStaff(gomock.Any(), int64(1)).AnyTimes().Return(model.GetStaffRow{ServingStatus: types.StaffServingStatusClosed}, nil)
+	mock.EXPECT().GetStaff(gomock.Any(), int64(2)).AnyTimes().Return(model.GetStaffRow{ServingStatus: types.StaffServingStatusServing}, nil)
+	mock.EXPECT().GetStaff(gomock.Any(), gomock.Any()).AnyTimes().Return(model.GetStaffRow{}, nil)
 	mock.EXPECT().CreateStaff(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
 	mock.EXPECT().UpdateStaff(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
 	mock.EXPECT().UpdateStaffWithPassword(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
@@ -41,7 +41,7 @@ func NewRepository(t *testing.T) iface.IRepository {
 	mock.EXPECT().GetStaffCountByRoleId(gomock.Any(), int64(1)).AnyTimes().Return(int64(1), nil)
 	mock.EXPECT().GetStaffCountByRoleId(gomock.Any(), gomock.Any()).AnyTimes().Return(int64(0), nil)
 	mock.EXPECT().UpdateStaffServingStatus(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
-	mock.EXPECT().ListAvailableStaff(gomock.Any(), gomock.Any()).AnyTimes().Return(make([]model.Staff, 0), nil)
+	mock.EXPECT().ListAvailableStaff(gomock.Any(), gomock.Any()).AnyTimes().Return(make([]model.ListAvailableStaffRow, 0), nil)
 	mock.EXPECT().StaffLogin(gomock.Any(), gomock.Any()).AnyTimes().Return(model.Staff{ID: 1, Name: "user", Username: "user"}, nil)
 	mock.EXPECT().UpdateStaffLogin(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
 
