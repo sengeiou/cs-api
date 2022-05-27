@@ -2,9 +2,9 @@ package ws
 
 import (
 	"context"
-	"cs-api/pkg/graph/converter"
 	iface "cs-api/pkg/interface"
 	"cs-api/pkg/model"
+	"encoding/json"
 	"github.com/rs/zerolog/log"
 	"reflect"
 	"time"
@@ -199,7 +199,7 @@ func (n *Notifier) send(message model.Message, needStore bool, clients ...Client
 		}
 	}
 
-	byteMessage := converter.ConvertDtoMsgToGql(message)
+	byteMessage, _ := json.Marshal(message)
 	for _, client := range clients {
 		if reflect.ValueOf(client).IsNil() {
 			continue

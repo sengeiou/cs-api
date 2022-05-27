@@ -51,7 +51,3 @@ type Message struct {
 	Timestamp   int64              `bson:"timestamp" json:"timestamp,omitempty"`
 	CreatedAt   time.Time          `bson:"created_at" json:"created_at,omitempty"`
 }
-
-func (Message) GetCollection() string {
-	return "messages"
-}

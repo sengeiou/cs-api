@@ -7,6 +7,7 @@ import (
 	"cs-api/pkg/lua"
 	"cs-api/pkg/repository"
 	"cs-api/pkg/restful"
+	"cs-api/pkg/ws"
 	"database/sql"
 	"errors"
 	"github.com/AndySu1021/go-util/db"
@@ -66,7 +67,7 @@ func runServer(_ *cobra.Command, _ []string) {
 		commonModule,
 		redis.Module,
 		restful.Module,
-		//ws.Module,
+		ws.Module,
 	)
 
 	exitCode := 0
