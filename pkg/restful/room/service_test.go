@@ -477,7 +477,7 @@ func Test_service_TransferRoom(t *testing.T) {
 			args: args{
 				ctx:       context.Background(),
 				staffId:   1,
-				roomId:    1,
+				roomId:    2,
 				toStaffId: 2,
 			},
 			wantErr: false,

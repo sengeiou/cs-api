@@ -57,7 +57,7 @@ func NewRepository(t *testing.T) iface.IRepository {
 	mock.EXPECT().GetMemberAvailableRoom(gomock.Any(), gomock.Any()).AnyTimes().Return(model.Room{}, sql.ErrNoRows)
 	mock.EXPECT().CreateRoom(gomock.Any(), gomock.Any()).AnyTimes().Return(MockSqlResult{}, nil)
 	mock.EXPECT().GetRoom(gomock.Any(), int64(1)).AnyTimes().Return(model.GetRoomRow{ID: 1, Status: types.RoomStatusPending}, nil)
-	mock.EXPECT().GetRoom(gomock.Any(), int64(2)).AnyTimes().Return(model.GetRoomRow{ID: 2, Status: types.RoomStatusServing}, nil)
+	mock.EXPECT().GetRoom(gomock.Any(), int64(2)).AnyTimes().Return(model.GetRoomRow{ID: 2, StaffID: 1, Status: types.RoomStatusServing}, nil)
 	mock.EXPECT().GetRoom(gomock.Any(), int64(3)).AnyTimes().Return(model.GetRoomRow{ID: 3, StaffID: 2, Status: types.RoomStatusServing}, nil)
 	mock.EXPECT().GetRoom(gomock.Any(), gomock.Any()).AnyTimes().Return(model.GetRoomRow{ID: 4, Status: types.RoomStatusClosed}, nil)
 	mock.EXPECT().AcceptRoom(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
