@@ -49,16 +49,16 @@ type StaffEventInfo struct {
 }
 
 type FastReplyCategory struct {
-	ID   int64
-	Name string
+	ID   int64  `json:"id"`
+	Name string `json:"name"`
 }
 
 type FastReplyGroupItem struct {
-	Category FastReplyCategory
-	Items    []model.GetAllAvailableFastReplyRow
+	Category FastReplyCategory                   `json:"category"`
+	Items    []model.GetAllAvailableFastReplyRow `json:"items"`
 }
 
 type DailyTagReportColumn struct {
-	Label string
-	Key   string
+	Label string `json:"label"`
+	Key   string `json:"key"`
 }

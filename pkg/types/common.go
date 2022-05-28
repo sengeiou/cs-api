@@ -41,6 +41,7 @@ func (t *JSONTime) UnmarshalJSON(timeStr []byte) error {
 }
 
 func (t JSONTime) MarshalJSON() ([]byte, error) {
+	t.Time = t.Time.Add(8 * time.Hour)
 	stamp := fmt.Sprintf("\"%s\"", t.Format("2006-01-02 15:04:05"))
 	return []byte(stamp), nil
 }

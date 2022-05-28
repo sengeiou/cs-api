@@ -36,7 +36,7 @@ type IRoomService interface {
 	TransferRoom(ctx context.Context, staffId, roomId, toStaffId int64) error
 	UpdateRoomScore(ctx context.Context, roomId int64, score int32) error
 	ListStaffRoom(ctx context.Context, params model.ListStaffRoomParams, filterParams types.FilterStaffRoomParams) ([]model.ListStaffRoomRow, int64, error)
-	ListRoom(ctx context.Context, params model.ListRoomParams, filterParams types.FilterRoomParams) ([]model.ListRoomRow, int64, error)
+	ListRoom(ctx context.Context, params model.ListRoomParams, filterParams types.FilterRoomParams) ([]types.RoomList, int64, error)
 	GetStaffRooms(ctx context.Context, staffId int64) ([]int64, error)
 }
 

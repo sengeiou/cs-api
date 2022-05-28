@@ -287,7 +287,7 @@ func Test_service_ListRoom(t *testing.T) {
 		name      string
 		fields    fields
 		args      args
-		wantRooms []model.ListRoomRow
+		wantRooms []types.RoomList
 		wantCount int64
 		wantErr   bool
 	}{
@@ -304,7 +304,7 @@ func Test_service_ListRoom(t *testing.T) {
 				params:       model.ListRoomParams{},
 				filterParams: types.FilterRoomParams{},
 			},
-			wantRooms: make([]model.ListRoomRow, 0),
+			wantRooms: make([]types.RoomList, 0),
 			wantCount: 0,
 			wantErr:   false,
 		},

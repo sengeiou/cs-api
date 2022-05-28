@@ -22,7 +22,13 @@ UPDATE room SET tag_id = ?, closed_at = ?, status = 3 WHERE id = ?;
 UPDATE room SET score = ? WHERE id = ? and status = 2;
 
 -- name: ListRoom :many
-select room.*, COALESCE(staff.name, '') as staff_name, member.name as member_name, COALESCE(tag.name, '') as tag_name
+select room.id,
+       room.status,
+       room.created_at,
+       room.closed_at,
+       COALESCE(staff.name, '') as staff_name,
+       member.name              as member_name,
+       COALESCE(tag.name, '')   as tag_name
 from room
          left join staff on staff.id = room.staff_id
          left join tag on tag.id = room.tag_id

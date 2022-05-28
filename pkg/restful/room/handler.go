@@ -22,8 +22,8 @@ type handler struct {
 }
 
 type ListRoomParams struct {
-	RoomID  int64            `json:"room_id" binding:""`
-	StaffID int64            `json:"staff_id" binding:""`
+	RoomID  int64            `form:"room_id" binding:""`
+	StaffID int64            `form:"staff_id" binding:""`
 	Status  types.RoomStatus `form:"status" binding:"min=0,max=3"`
 	types.Pagination
 }

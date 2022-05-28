@@ -241,7 +241,13 @@ func (q *Queries) GetStaffRoom(ctx context.Context, staffID int64) ([]int64, err
 }
 
 const listRoom = `-- name: ListRoom :many
-select room.id, room.staff_id, room.member_id, room.tag_id, room.score, room.status, room.created_at, room.updated_at, room.closed_at, COALESCE(staff.name, '') as staff_name, member.name as member_name, COALESCE(tag.name, '') as tag_name
+select room.id,
+       room.status,
+       room.created_at,
+       room.closed_at,
+       COALESCE(staff.name, '') as staff_name,
+       member.name              as member_name,
+       COALESCE(tag.name, '')   as tag_name
 from room
          left join staff on staff.id = room.staff_id
          left join tag on tag.id = room.tag_id
@@ -259,13 +265,8 @@ type ListRoomParams struct {
 
 type ListRoomRow struct {
 	ID         int64            `db:"id" json:"id"`
-	StaffID    int64            `db:"staff_id" json:"staff_id"`
-	MemberID   int64            `db:"member_id" json:"member_id"`
-	TagID      int64            `db:"tag_id" json:"tag_id"`
-	Score      int32            `db:"score" json:"score"`
 	Status     types.RoomStatus `db:"status" json:"status"`
 	CreatedAt  time.Time        `db:"created_at" json:"created_at"`
-	UpdatedAt  time.Time        `db:"updated_at" json:"updated_at"`
 	ClosedAt   sql.NullTime     `db:"closed_at" json:"closed_at"`
 	StaffName  string           `db:"staff_name" json:"staff_name"`
 	MemberName string           `db:"member_name" json:"member_name"`
@@ -283,13 +284,8 @@ func (q *Queries) ListRoom(ctx context.Context, arg ListRoomParams) ([]ListRoomR
 		var i ListRoomRow
 		if err := rows.Scan(
 			&i.ID,
-			&i.StaffID,
-			&i.MemberID,
-			&i.TagID,
-			&i.Score,
 			&i.Status,
 			&i.CreatedAt,
-			&i.UpdatedAt,
 			&i.ClosedAt,
 			&i.StaffName,
 			&i.MemberName,
