@@ -23,7 +23,7 @@ func Test_service_ListNotice(t *testing.T) {
 		name        string
 		fields      fields
 		args        args
-		wantNotices []model.Notice
+		wantNotices []types.Notice
 		wantCount   int64
 		wantErr     bool
 	}{
@@ -35,7 +35,7 @@ func Test_service_ListNotice(t *testing.T) {
 				params:       model.ListNoticeParams{},
 				filterParams: types.FilterNoticeParams{},
 			},
-			wantNotices: make([]model.Notice, 0),
+			wantNotices: make([]types.Notice, 0),
 			wantCount:   0,
 			wantErr:     false,
 		},

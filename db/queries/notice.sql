@@ -24,7 +24,7 @@ FROM notice
 WHERE id = ?;
 
 -- name: ListNotice :many
-select *
+select id, title, content, start_at, end_at, status
 from notice
 where IF(@content is null, 0, content) like IF(@content is null, 0, CONCAT('%', @content, '%'))
   and IF(@status is null, 0, status) = IF(@status is null, 0, @status) limit ?

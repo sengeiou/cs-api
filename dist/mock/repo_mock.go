@@ -815,10 +815,10 @@ func (mr *MockIRepositoryMockRecorder) ListFastReplyCategory(ctx interface{}) *g
 }
 
 // ListNotice mocks base method.
-func (m *MockIRepository) ListNotice(ctx context.Context, arg model.ListNoticeParams) ([]model.Notice, error) {
+func (m *MockIRepository) ListNotice(ctx context.Context, arg model.ListNoticeParams) ([]model.ListNoticeRow, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListNotice", ctx, arg)
-	ret0, _ := ret[0].([]model.Notice)
+	ret0, _ := ret[0].([]model.ListNoticeRow)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

@@ -159,8 +159,8 @@ func (h *handler) GetFastReply(c *gin.Context) {
 }
 
 type ListFastReplyParams struct {
-	Title   string       `json:"title" binding:""`
-	Content string       `json:"content" binding:""`
+	Title   string       `form:"title" binding:""`
+	Content string       `form:"content" binding:""`
 	Status  types.Status `form:"status" binding:"min=0,max=2"`
 	types.Pagination
 }

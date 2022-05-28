@@ -12,8 +12,8 @@ type service struct {
 	repo iface.IRepository
 }
 
-func (s *service) ListNotice(ctx context.Context, params model.ListNoticeParams, filterParams types.FilterNoticeParams) (notices []model.Notice, count int64, err error) {
-	notices = make([]model.Notice, 0)
+func (s *service) ListNotice(ctx context.Context, params model.ListNoticeParams, filterParams types.FilterNoticeParams) (result []types.Notice, count int64, err error) {
+	notices := make([]model.ListNoticeRow, 0)
 	err = s.repo.Transaction(ctx, func(ctx context.Context, tx *sql.Tx) error {
 		var err2 error
 
@@ -39,6 +39,18 @@ func (s *service) ListNotice(ctx context.Context, params model.ListNoticeParams,
 
 		return nil
 	})
+
+	result = make([]types.Notice, 0, len(notices))
+	for _, notice := range notices {
+		result = append(result, types.Notice{
+			ID:      notice.ID,
+			Title:   notice.Title,
+			Content: notice.Content,
+			StartAt: types.JSONTime{Time: notice.StartAt},
+			EndAt:   types.JSONTime{Time: notice.EndAt},
+			Status:  notice.Status,
+		})
+	}
 
 	return
 }

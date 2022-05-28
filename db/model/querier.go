@@ -69,7 +69,7 @@ type Querier interface {
 	ListAvailableStaff(ctx context.Context, id int64) ([]ListAvailableStaffRow, error)
 	ListFastReply(ctx context.Context, arg ListFastReplyParams) ([]ListFastReplyRow, error)
 	ListFastReplyCategory(ctx context.Context) ([]Constant, error)
-	ListNotice(ctx context.Context, arg ListNoticeParams) ([]Notice, error)
+	ListNotice(ctx context.Context, arg ListNoticeParams) ([]ListNoticeRow, error)
 	ListRemind(ctx context.Context, arg ListRemindParams) ([]Remind, error)
 	ListReportDailyGuest(ctx context.Context, arg ListReportDailyGuestParams) ([]ReportDailyGuest, error)
 	ListReportDailyTag(ctx context.Context, arg ListReportDailyTagParams) ([]ReportDailyTag, error)

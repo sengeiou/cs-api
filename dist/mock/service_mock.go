@@ -335,10 +335,10 @@ func (mr *MockIRoomServiceMockRecorder) GetStaffRooms(ctx, staffId interface{}) 
 }
 
 // ListRoom mocks base method.
-func (m *MockIRoomService) ListRoom(ctx context.Context, params model.ListRoomParams, filterParams types.FilterRoomParams) ([]model.ListRoomRow, int64, error) {
+func (m *MockIRoomService) ListRoom(ctx context.Context, params model.ListRoomParams, filterParams types.FilterRoomParams) ([]types.Room, int64, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListRoom", ctx, params, filterParams)
-	ret0, _ := ret[0].([]model.ListRoomRow)
+	ret0, _ := ret[0].([]types.Room)
 	ret1, _ := ret[1].(int64)
 	ret2, _ := ret[2].(error)
 	return ret0, ret1, ret2
@@ -1050,10 +1050,10 @@ func (mr *MockINoticeServiceMockRecorder) GetNotice(ctx, noticeId interface{}) *
 }
 
 // ListNotice mocks base method.
-func (m *MockINoticeService) ListNotice(ctx context.Context, params model.ListNoticeParams, filterParams types.FilterNoticeParams) ([]model.Notice, int64, error) {
+func (m *MockINoticeService) ListNotice(ctx context.Context, params model.ListNoticeParams, filterParams types.FilterNoticeParams) ([]types.Notice, int64, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListNotice", ctx, params, filterParams)
-	ret0, _ := ret[0].([]model.Notice)
+	ret0, _ := ret[0].([]types.Notice)
 	ret1, _ := ret[1].(int64)
 	ret2, _ := ret[2].(error)
 	return ret0, ret1, ret2

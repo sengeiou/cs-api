@@ -157,7 +157,7 @@ func (s *service) UpdateRoomScore(ctx context.Context, roomId int64, score int32
 	})
 }
 
-func (s *service) ListRoom(ctx context.Context, params model.ListRoomParams, filterParams types.FilterRoomParams) (result []types.RoomList, count int64, err error) {
+func (s *service) ListRoom(ctx context.Context, params model.ListRoomParams, filterParams types.FilterRoomParams) (result []types.Room, count int64, err error) {
 	rooms := make([]model.ListRoomRow, 0)
 	err = s.repo.Transaction(ctx, func(ctx context.Context, tx *sql.Tx) error {
 		var err2 error
@@ -190,9 +190,9 @@ func (s *service) ListRoom(ctx context.Context, params model.ListRoomParams, fil
 		return nil
 	})
 
-	result = make([]types.RoomList, 0, len(rooms))
+	result = make([]types.Room, 0, len(rooms))
 	for _, room := range rooms {
-		tmp := types.RoomList{
+		tmp := types.Room{
 			ID:         room.ID,
 			Status:     room.Status,
 			CreatedAt:  types.JSONTime{Time: room.CreatedAt},

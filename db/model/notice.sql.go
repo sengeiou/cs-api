@@ -122,7 +122,7 @@ func (q *Queries) GetNotice(ctx context.Context, id int64) (Notice, error) {
 }
 
 const listNotice = `-- name: ListNotice :many
-select id, title, content, start_at, end_at, status, created_by, created_at, updated_by, updated_at
+select id, title, content, start_at, end_at, status
 from notice
 where IF(@content is null, 0, content) like IF(@content is null, 0, CONCAT('%', @content, '%'))
   and IF(@status is null, 0, status) = IF(@status is null, 0, @status) limit ?
@@ -134,15 +134,24 @@ type ListNoticeParams struct {
 	Offset int32 `db:"offset" json:"offset"`
 }
 
-func (q *Queries) ListNotice(ctx context.Context, arg ListNoticeParams) ([]Notice, error) {
+type ListNoticeRow struct {
+	ID      int64        `db:"id" json:"id"`
+	Title   string       `db:"title" json:"title"`
+	Content string       `db:"content" json:"content"`
+	StartAt time.Time    `db:"start_at" json:"start_at"`
+	EndAt   time.Time    `db:"end_at" json:"end_at"`
+	Status  types.Status `db:"status" json:"status"`
+}
+
+func (q *Queries) ListNotice(ctx context.Context, arg ListNoticeParams) ([]ListNoticeRow, error) {
 	rows, err := q.query(ctx, q.listNoticeStmt, listNotice, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Notice{}
+	items := []ListNoticeRow{}
 	for rows.Next() {
-		var i Notice
+		var i ListNoticeRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.Title,
@@ -150,10 +159,6 @@ func (q *Queries) ListNotice(ctx context.Context, arg ListNoticeParams) ([]Notic
 			&i.StartAt,
 			&i.EndAt,
 			&i.Status,
-			&i.CreatedBy,
-			&i.CreatedAt,
-			&i.UpdatedBy,
-			&i.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}

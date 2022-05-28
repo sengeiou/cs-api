@@ -19,7 +19,7 @@ type FilterStaffRoomParams struct {
 	StaffID *int64
 }
 
-type RoomList struct {
+type Room struct {
 	ID         int64      `json:"id"`
 	Status     RoomStatus `json:"status"`
 	CreatedAt  JSONTime   `json:"created_at"`

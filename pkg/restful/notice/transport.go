@@ -32,11 +32,6 @@ func InitTransport(p Params) {
 		p.H.CreateNotice,
 	)
 
-	routes.GET("/notice/latest",
-		p.R.Op("GetLatestNotice"),
-		p.H.GetLatestNotice,
-	)
-
 	routes.GET("/notice/:id",
 		p.AuthSvc.CheckPermission("GetNotice"),
 		p.R.Op("GetNotice"),
@@ -53,5 +48,11 @@ func InitTransport(p Params) {
 		p.AuthSvc.CheckPermission("DeleteNotice"),
 		p.R.Op("DeleteNotice"),
 		p.H.DeleteNotice,
+	)
+
+	p.Engine.GET("/api/notice/latest",
+		p.AuthSvc.SetClientInfo(pkg.ClientTypeMember),
+		p.R.Op("GetLatestNotice"),
+		p.H.GetLatestNotice,
 	)
 }

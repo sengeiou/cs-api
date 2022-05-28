@@ -36,7 +36,7 @@ type IRoomService interface {
 	TransferRoom(ctx context.Context, staffId, roomId, toStaffId int64) error
 	UpdateRoomScore(ctx context.Context, roomId int64, score int32) error
 	ListStaffRoom(ctx context.Context, params model.ListStaffRoomParams, filterParams types.FilterStaffRoomParams) ([]model.ListStaffRoomRow, int64, error)
-	ListRoom(ctx context.Context, params model.ListRoomParams, filterParams types.FilterRoomParams) ([]types.RoomList, int64, error)
+	ListRoom(ctx context.Context, params model.ListRoomParams, filterParams types.FilterRoomParams) ([]types.Room, int64, error)
 	GetStaffRooms(ctx context.Context, staffId int64) ([]int64, error)
 }
 
@@ -91,7 +91,7 @@ type IRoleService interface {
 
 // INoticeService 會員通知訊息
 type INoticeService interface {
-	ListNotice(ctx context.Context, params model.ListNoticeParams, filterParams types.FilterNoticeParams) ([]model.Notice, int64, error)
+	ListNotice(ctx context.Context, params model.ListNoticeParams, filterParams types.FilterNoticeParams) ([]types.Notice, int64, error)
 	GetNotice(ctx context.Context, noticeId int64) (model.Notice, error)
 	CreateNotice(ctx context.Context, params model.CreateNoticeParams) error
 	UpdateNotice(ctx context.Context, params model.UpdateNoticeParams) error
