@@ -77,7 +77,7 @@ func (n *Notifier) Broadcast(clientMessage ClientMessage, clients ...Client) {
 		RoomID:      clientMessage.RoomID,
 		SenderID:    clients[0].GetID(),
 		SenderName:  clients[0].GetName(),
-		ContentType: model.MessageContentTypeText,
+		ContentType: clientMessage.ContentType,
 		Content:     clientMessage.Content,
 		Timestamp:   time.Now().Unix(),
 		CreatedAt:   time.Now().UTC(),

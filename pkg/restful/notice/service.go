@@ -71,7 +71,7 @@ func (s *service) DeleteNotice(ctx context.Context, noticeId int64) error {
 	return s.repo.DeleteNotice(ctx, noticeId)
 }
 
-func (s *service) GetLatestNotice(ctx context.Context) (model.Notice, error) {
+func (s *service) GetLatestNotice(ctx context.Context) (model.GetLatestNoticeRow, error) {
 	return s.repo.GetLatestNotice(ctx)
 }
 

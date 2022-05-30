@@ -211,7 +211,7 @@ func Test_service_DeleteNotice(t *testing.T) {
 	}
 }
 
-func Test_service_GetAvailableNotice(t *testing.T) {
+func Test_service_GetLatestNotice(t *testing.T) {
 	type fields struct {
 		repo iface.IRepository
 	}
@@ -222,7 +222,7 @@ func Test_service_GetAvailableNotice(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    model.Notice
+		want    model.GetLatestNoticeRow
 		wantErr bool
 	}{
 		{
@@ -231,7 +231,7 @@ func Test_service_GetAvailableNotice(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 			},
-			want:    model.Notice{},
+			want:    model.GetLatestNoticeRow{},
 			wantErr: false,
 		},
 	}

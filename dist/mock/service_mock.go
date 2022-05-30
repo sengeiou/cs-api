@@ -1035,10 +1035,10 @@ func (mr *MockINoticeServiceMockRecorder) DeleteNotice(ctx, noticeId interface{}
 }
 
 // GetLatestNotice mocks base method.
-func (m *MockINoticeService) GetLatestNotice(ctx context.Context) (model.Notice, error) {
+func (m *MockINoticeService) GetLatestNotice(ctx context.Context) (model.GetLatestNoticeRow, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetLatestNotice", ctx)
-	ret0, _ := ret[0].(model.Notice)
+	ret0, _ := ret[0].(model.GetLatestNoticeRow)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

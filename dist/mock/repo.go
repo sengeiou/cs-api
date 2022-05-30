@@ -93,7 +93,7 @@ func NewRepository(t *testing.T) iface.IRepository {
 	mock.EXPECT().CreateNotice(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
 	mock.EXPECT().UpdateNotice(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
 	mock.EXPECT().DeleteNotice(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
-	mock.EXPECT().GetLatestNotice(gomock.Any()).AnyTimes().Return(model.Notice{}, nil)
+	mock.EXPECT().GetLatestNotice(gomock.Any()).AnyTimes().Return(model.GetLatestNoticeRow{}, nil)
 
 	// Remind
 	mock.EXPECT().GetRemind(gomock.Any(), gomock.Any()).AnyTimes().Return(model.Remind{}, nil)

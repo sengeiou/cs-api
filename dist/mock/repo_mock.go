@@ -620,10 +620,10 @@ func (mr *MockIRepositoryMockRecorder) GetGuestMember(ctx, deviceID interface{})
 }
 
 // GetLatestNotice mocks base method.
-func (m *MockIRepository) GetLatestNotice(ctx context.Context) (model.Notice, error) {
+func (m *MockIRepository) GetLatestNotice(ctx context.Context) (model.GetLatestNoticeRow, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetLatestNotice", ctx)
-	ret0, _ := ret[0].(model.Notice)
+	ret0, _ := ret[0].(model.GetLatestNoticeRow)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

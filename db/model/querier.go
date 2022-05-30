@@ -55,7 +55,7 @@ type Querier interface {
 	GetCsConfig(ctx context.Context) (Constant, error)
 	GetFastReply(ctx context.Context, id int64) (FastReply, error)
 	GetGuestMember(ctx context.Context, deviceID string) (Member, error)
-	GetLatestNotice(ctx context.Context) (Notice, error)
+	GetLatestNotice(ctx context.Context) (GetLatestNoticeRow, error)
 	// 獲取會員並未關閉的房間
 	GetMemberAvailableRoom(ctx context.Context, memberID int64) (Room, error)
 	GetNormalMember(ctx context.Context, name string) (Member, error)

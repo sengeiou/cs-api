@@ -70,7 +70,7 @@ func (q *Queries) DeleteNotice(ctx context.Context, id int64) error {
 }
 
 const getLatestNotice = `-- name: GetLatestNotice :one
-SELECT id, title, content, start_at, end_at, status, created_by, created_at, updated_by, updated_at
+SELECT title, content
 FROM notice
 WHERE now() >= start_at
   AND now() <= end_at
@@ -79,21 +79,15 @@ ORDER BY end_at
     LIMIT 1
 `
 
-func (q *Queries) GetLatestNotice(ctx context.Context) (Notice, error) {
+type GetLatestNoticeRow struct {
+	Title   string `db:"title" json:"title"`
+	Content string `db:"content" json:"content"`
+}
+
+func (q *Queries) GetLatestNotice(ctx context.Context) (GetLatestNoticeRow, error) {
 	row := q.queryRow(ctx, q.getLatestNoticeStmt, getLatestNotice)
-	var i Notice
-	err := row.Scan(
-		&i.ID,
-		&i.Title,
-		&i.Content,
-		&i.StartAt,
-		&i.EndAt,
-		&i.Status,
-		&i.CreatedBy,
-		&i.CreatedAt,
-		&i.UpdatedBy,
-		&i.UpdatedAt,
-	)
+	var i GetLatestNoticeRow
+	err := row.Scan(&i.Title, &i.Content)
 	return i, err
 }
 

@@ -97,7 +97,7 @@ type INoticeService interface {
 	CreateNotice(ctx context.Context, params model.CreateNoticeParams) error
 	UpdateNotice(ctx context.Context, params model.UpdateNoticeParams) error
 	DeleteNotice(ctx context.Context, noticeId int64) error
-	GetLatestNotice(ctx context.Context) (model.Notice, error)
+	GetLatestNotice(ctx context.Context) (model.GetLatestNoticeRow, error)
 }
 
 type IRemindService interface {

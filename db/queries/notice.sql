@@ -37,7 +37,7 @@ where IF(@content is null, 0, content) like IF(@content is null, 0, CONCAT('%', 
   and IF(@status is null, 0, status) = IF(@status is null, 0, @status);
 
 -- name: GetLatestNotice :one
-SELECT *
+SELECT title, content
 FROM notice
 WHERE now() >= start_at
   AND now() <= end_at

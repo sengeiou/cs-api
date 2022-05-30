@@ -79,6 +79,9 @@ func (mc *MemberClient) SocketRead() {
 		case model.MessageContentTypeText:
 			tmp.RoomID = mc.RoomID
 			mc.Notifier.Broadcast(tmp, mc, staff)
+		case model.MessageContentTypeImage:
+			tmp.RoomID = mc.RoomID
+			mc.Notifier.Broadcast(tmp, mc, staff)
 		case model.MessageContentTypeScore:
 			mc.Notifier.MemberScored(mc, staff)
 		}
