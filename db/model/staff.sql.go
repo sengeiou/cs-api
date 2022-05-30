@@ -8,6 +8,7 @@ package model
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"time"
 
 	"cs-api/pkg/types"
@@ -70,6 +71,38 @@ WHERE id = ?
 func (q *Queries) DeleteStaff(ctx context.Context, id int64) error {
 	_, err := q.exec(ctx, q.deleteStaffStmt, deleteStaff, id)
 	return err
+}
+
+const getAllStaffs = `-- name: GetAllStaffs :many
+SELECT id, name FROM staff
+`
+
+type GetAllStaffsRow struct {
+	ID   int64  `db:"id" json:"id"`
+	Name string `db:"name" json:"name"`
+}
+
+func (q *Queries) GetAllStaffs(ctx context.Context) ([]GetAllStaffsRow, error) {
+	rows, err := q.query(ctx, q.getAllStaffsStmt, getAllStaffs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetAllStaffsRow{}
+	for rows.Next() {
+		var i GetAllStaffsRow
+		if err := rows.Scan(&i.ID, &i.Name); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getStaff = `-- name: GetStaff :one
@@ -148,14 +181,14 @@ func (q *Queries) ListAvailableStaff(ctx context.Context, id int64) ([]ListAvail
 }
 
 const listStaff = `-- name: ListStaff :many
-select staff.id, staff.role_id, staff.name, staff.username, staff.password, staff.avatar, staff.status, staff.serving_status, staff.last_login_time, staff.created_by, staff.created_at, staff.updated_by, staff.updated_at, role.name AS role_name
+select staff.id, staff.name, staff.username, staff.status, staff.serving_status, role.name AS role_name
 from staff
          inner join role on role.id = staff.role_id
 where IF(@name is null, 0, staff.name) like IF(@name is null, 0, CONCAT('%', @name, '%'))
   and IF(@status is null, 0, status) = IF(@status is null, 0, @status)
   and IF(@servingStatus is null, 0, serving_status) = IF(@servingStatus is null, 0, @servingStatus)
-  and staff.id > 1
-limit ? offset ?
+  and staff.id > 1 limit ?
+offset ?
 `
 
 type ListStaffParams struct {
@@ -165,18 +198,10 @@ type ListStaffParams struct {
 
 type ListStaffRow struct {
 	ID            int64                    `db:"id" json:"id"`
-	RoleID        int64                    `db:"role_id" json:"role_id"`
 	Name          string                   `db:"name" json:"name"`
 	Username      string                   `db:"username" json:"username"`
-	Password      string                   `db:"password" json:"password"`
-	Avatar        string                   `db:"avatar" json:"avatar"`
 	Status        types.Status             `db:"status" json:"status"`
 	ServingStatus types.StaffServingStatus `db:"serving_status" json:"serving_status"`
-	LastLoginTime sql.NullTime             `db:"last_login_time" json:"last_login_time"`
-	CreatedBy     int64                    `db:"created_by" json:"created_by"`
-	CreatedAt     time.Time                `db:"created_at" json:"created_at"`
-	UpdatedBy     int64                    `db:"updated_by" json:"updated_by"`
-	UpdatedAt     time.Time                `db:"updated_at" json:"updated_at"`
 	RoleName      string                   `db:"role_name" json:"role_name"`
 }
 
@@ -191,18 +216,10 @@ func (q *Queries) ListStaff(ctx context.Context, arg ListStaffParams) ([]ListSta
 		var i ListStaffRow
 		if err := rows.Scan(
 			&i.ID,
-			&i.RoleID,
 			&i.Name,
 			&i.Username,
-			&i.Password,
-			&i.Avatar,
 			&i.Status,
 			&i.ServingStatus,
-			&i.LastLoginTime,
-			&i.CreatedBy,
-			&i.CreatedAt,
-			&i.UpdatedBy,
-			&i.UpdatedAt,
 			&i.RoleName,
 		); err != nil {
 			return nil, err
@@ -219,8 +236,9 @@ func (q *Queries) ListStaff(ctx context.Context, arg ListStaffParams) ([]ListSta
 }
 
 const staffLogin = `-- name: StaffLogin :one
-SELECT id, role_id, name, username, password, avatar, status, serving_status, last_login_time, created_by, created_at, updated_by, updated_at
+SELECT staff.id, staff.name, staff.username, staff.serving_status, role.permissions
 FROM staff
+         INNER JOIN role ON role.id = staff.role_id
 WHERE username = ?
   and password = ? LIMIT 1
 `
@@ -230,23 +248,23 @@ type StaffLoginParams struct {
 	Password string `db:"password" json:"password"`
 }
 
-func (q *Queries) StaffLogin(ctx context.Context, arg StaffLoginParams) (Staff, error) {
+type StaffLoginRow struct {
+	ID            int64                    `db:"id" json:"id"`
+	Name          string                   `db:"name" json:"name"`
+	Username      string                   `db:"username" json:"username"`
+	ServingStatus types.StaffServingStatus `db:"serving_status" json:"serving_status"`
+	Permissions   json.RawMessage          `db:"permissions" json:"permissions"`
+}
+
+func (q *Queries) StaffLogin(ctx context.Context, arg StaffLoginParams) (StaffLoginRow, error) {
 	row := q.queryRow(ctx, q.staffLoginStmt, staffLogin, arg.Username, arg.Password)
-	var i Staff
+	var i StaffLoginRow
 	err := row.Scan(
 		&i.ID,
-		&i.RoleID,
 		&i.Name,
 		&i.Username,
-		&i.Password,
-		&i.Avatar,
-		&i.Status,
 		&i.ServingStatus,
-		&i.LastLoginTime,
-		&i.CreatedBy,
-		&i.CreatedAt,
-		&i.UpdatedBy,
-		&i.UpdatedAt,
+		&i.Permissions,
 	)
 	return i, err
 }

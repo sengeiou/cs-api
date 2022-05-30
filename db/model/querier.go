@@ -50,6 +50,7 @@ type Querier interface {
 	DeleteTag(ctx context.Context, id int64) error
 	GetAllAvailableFastReply(ctx context.Context) ([]GetAllAvailableFastReplyRow, error)
 	GetAllRoles(ctx context.Context) ([]GetAllRolesRow, error)
+	GetAllStaffs(ctx context.Context) ([]GetAllStaffsRow, error)
 	GetAllTag(ctx context.Context) ([]Tag, error)
 	GetCsConfig(ctx context.Context) (Constant, error)
 	GetFastReply(ctx context.Context, id int64) (FastReply, error)
@@ -79,7 +80,7 @@ type Querier interface {
 	ListStaffRoom(ctx context.Context, arg ListStaffRoomParams) ([]ListStaffRoomRow, error)
 	ListTag(ctx context.Context, arg ListTagParams) ([]ListTagRow, error)
 	RoleSeeder(ctx context.Context) error
-	StaffLogin(ctx context.Context, arg StaffLoginParams) (Staff, error)
+	StaffLogin(ctx context.Context, arg StaffLoginParams) (StaffLoginRow, error)
 	StaffSeeder(ctx context.Context, password string) error
 	TagSeeder(ctx context.Context) error
 	UpdateCsConfig(ctx context.Context, arg UpdateCsConfigParams) error

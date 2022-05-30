@@ -178,6 +178,21 @@ func (mr *MockIStaffServiceMockRecorder) DeleteStaff(ctx, staffId interface{}) *
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteStaff", reflect.TypeOf((*MockIStaffService)(nil).DeleteStaff), ctx, staffId)
 }
 
+// GetAllStaffs mocks base method.
+func (m *MockIStaffService) GetAllStaffs(ctx context.Context) ([]model.GetAllStaffsRow, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAllStaffs", ctx)
+	ret0, _ := ret[0].([]model.GetAllStaffsRow)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetAllStaffs indicates an expected call of GetAllStaffs.
+func (mr *MockIStaffServiceMockRecorder) GetAllStaffs(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllStaffs", reflect.TypeOf((*MockIStaffService)(nil).GetAllStaffs), ctx)
+}
+
 // GetStaff mocks base method.
 func (m *MockIStaffService) GetStaff(ctx context.Context, staffId int64) (model.GetStaffRow, error) {
 	m.ctrl.T.Helper()

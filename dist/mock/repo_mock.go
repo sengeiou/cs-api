@@ -544,6 +544,21 @@ func (mr *MockIRepositoryMockRecorder) GetAllRoles(ctx interface{}) *gomock.Call
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllRoles", reflect.TypeOf((*MockIRepository)(nil).GetAllRoles), ctx)
 }
 
+// GetAllStaffs mocks base method.
+func (m *MockIRepository) GetAllStaffs(ctx context.Context) ([]model.GetAllStaffsRow, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAllStaffs", ctx)
+	ret0, _ := ret[0].([]model.GetAllStaffsRow)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetAllStaffs indicates an expected call of GetAllStaffs.
+func (mr *MockIRepositoryMockRecorder) GetAllStaffs(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllStaffs", reflect.TypeOf((*MockIRepository)(nil).GetAllStaffs), ctx)
+}
+
 // GetAllTag mocks base method.
 func (m *MockIRepository) GetAllTag(ctx context.Context) ([]model.Tag, error) {
 	m.ctrl.T.Helper()
@@ -964,10 +979,10 @@ func (mr *MockIRepositoryMockRecorder) RoleSeeder(ctx interface{}) *gomock.Call 
 }
 
 // StaffLogin mocks base method.
-func (m *MockIRepository) StaffLogin(ctx context.Context, arg model.StaffLoginParams) (model.Staff, error) {
+func (m *MockIRepository) StaffLogin(ctx context.Context, arg model.StaffLoginParams) (model.StaffLoginRow, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "StaffLogin", ctx, arg)
-	ret0, _ := ret[0].(model.Staff)
+	ret0, _ := ret[0].(model.StaffLoginRow)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

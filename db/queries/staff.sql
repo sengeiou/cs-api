@@ -46,14 +46,14 @@ FROM staff
 WHERE id = ?;
 
 -- name: ListStaff :many
-select staff.*, role.name AS role_name
+select staff.id, staff.name, staff.username, staff.status, staff.serving_status, role.name AS role_name
 from staff
          inner join role on role.id = staff.role_id
 where IF(@name is null, 0, staff.name) like IF(@name is null, 0, CONCAT('%', @name, '%'))
   and IF(@status is null, 0, status) = IF(@status is null, 0, @status)
   and IF(@servingStatus is null, 0, serving_status) = IF(@servingStatus is null, 0, @servingStatus)
-  and staff.id > 1
-limit ? offset ?;
+  and staff.id > 1 limit ?
+offset ?;
 
 -- name: CountListStaff :one
 select count(*)
@@ -64,8 +64,9 @@ where IF(@name is null, 0, name) like IF(@name is null, 0, CONCAT('%', @name, '%
   and staff.id > 1;
 
 -- name: StaffLogin :one
-SELECT *
+SELECT staff.id, staff.name, staff.username, staff.serving_status, role.permissions
 FROM staff
+         INNER JOIN role ON role.id = staff.role_id
 WHERE username = ?
   and password = ? LIMIT 1;
 
@@ -86,3 +87,6 @@ WHERE serving_status = 2
 SELECT COUNT(*)
 FROM staff
 WHERE role_id = ?;
+
+-- name: GetAllStaffs :many
+SELECT id, name FROM staff;

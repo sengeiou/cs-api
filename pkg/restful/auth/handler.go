@@ -34,9 +34,10 @@ func (h *handler) Login(c *gin.Context) {
 	}
 
 	ginTool.SuccessWithData(c, gin.H{
-		"staffID":  staffInfo.ID,
-		"username": staffInfo.Username,
-		"token":    staffInfo.Token,
+		"staffID":     staffInfo.ID,
+		"username":    staffInfo.Username,
+		"token":       staffInfo.Token,
+		"permissions": staffInfo.Permissions,
 	})
 }
 

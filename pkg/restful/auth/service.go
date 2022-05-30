@@ -48,6 +48,10 @@ func (s *service) Login(ctx context.Context, username, password string) (pkg.Cli
 	}
 
 	token := genToken()
+	var permissions []string
+	if err = json.Unmarshal(staff.Permissions, &permissions); err != nil {
+		return pkg.ClientInfo{}, err
+	}
 
 	staffInfo := pkg.ClientInfo{
 		ID:            staff.ID,
@@ -55,6 +59,7 @@ func (s *service) Login(ctx context.Context, username, password string) (pkg.Cli
 		Name:          staff.Name,
 		Username:      staff.Username,
 		ServingStatus: types.StaffServingStatusClosed,
+		Permissions:   permissions,
 		Token:         token,
 	}
 

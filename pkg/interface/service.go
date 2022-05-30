@@ -27,6 +27,7 @@ type IStaffService interface {
 	DeleteStaff(ctx context.Context, staffId int64) error
 	UpdateStaffServingStatus(ctx context.Context, staffInfo pkg.ClientInfo, status types.StaffServingStatus) error
 	ListAvailableStaff(ctx context.Context, staffId int64) ([]model.ListAvailableStaffRow, error)
+	GetAllStaffs(ctx context.Context) ([]model.GetAllStaffsRow, error)
 }
 
 type IRoomService interface {

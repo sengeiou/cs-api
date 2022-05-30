@@ -64,4 +64,9 @@ func InitTransport(p Params) {
 		p.R.Op("ListAvailableStaff"),
 		p.H.ListAvailableStaff,
 	)
+
+	routes.GET("/staffs/all",
+		p.R.Op("GetAllStaffs"),
+		p.H.GetAllStaffs,
+	)
 }

@@ -51,6 +51,7 @@ func Test_service_Login(t *testing.T) {
 				Name:          "user",
 				Username:      "user",
 				ServingStatus: 1,
+				Permissions:   []string{"*"},
 				Token:         "token",
 			},
 			wantErr: false,
@@ -75,6 +76,7 @@ func Test_service_Login(t *testing.T) {
 			assert.Equal(t, got.Name, tt.want.Name)
 			assert.Equal(t, got.Username, tt.want.Username)
 			assert.Equal(t, got.ServingStatus, tt.want.ServingStatus)
+			assert.Equal(t, got.Permissions, tt.want.Permissions)
 			assert.Matches(t, got.Token, "^[0-9a-z]{32}$")
 		})
 	}

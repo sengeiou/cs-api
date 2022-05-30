@@ -5,6 +5,7 @@ import (
 	iface "cs-api/pkg/interface"
 	"cs-api/pkg/types"
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"github.com/golang/mock/gomock"
 	"testing"
@@ -42,7 +43,7 @@ func NewRepository(t *testing.T) iface.IRepository {
 	mock.EXPECT().GetStaffCountByRoleId(gomock.Any(), gomock.Any()).AnyTimes().Return(int64(0), nil)
 	mock.EXPECT().UpdateStaffServingStatus(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
 	mock.EXPECT().ListAvailableStaff(gomock.Any(), gomock.Any()).AnyTimes().Return(make([]model.ListAvailableStaffRow, 0), nil)
-	mock.EXPECT().StaffLogin(gomock.Any(), gomock.Any()).AnyTimes().Return(model.Staff{ID: 1, Name: "user", Username: "user"}, nil)
+	mock.EXPECT().StaffLogin(gomock.Any(), gomock.Any()).AnyTimes().Return(model.StaffLoginRow{ID: 1, Name: "user", Username: "user", Permissions: json.RawMessage(`["*"]`)}, nil)
 	mock.EXPECT().UpdateStaffLogin(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
 
 	// Member

@@ -320,6 +320,21 @@ func (h *handler) ListAvailableStaff(c *gin.Context) {
 	ginTool.SuccessWithData(c, staffs)
 }
 
+func (h *handler) GetAllStaffs(c *gin.Context) {
+	var (
+		err error
+		ctx = c.Request.Context()
+	)
+
+	staffs, err := h.staffSvc.GetAllStaffs(ctx)
+	if err != nil {
+		ginTool.Error(c, err)
+		return
+	}
+
+	ginTool.SuccessWithData(c, staffs)
+}
+
 func NewHandler(authSvc iface.IAuthService, staffSvc iface.IStaffService, config *config.Config) *handler {
 	return &handler{
 		authSvc:  authSvc,

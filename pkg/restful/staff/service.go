@@ -135,6 +135,10 @@ func (s *service) ListAvailableStaff(ctx context.Context, staffId int64) ([]mode
 	return s.repo.ListAvailableStaff(ctx, staffId)
 }
 
+func (s *service) GetAllStaffs(ctx context.Context) ([]model.GetAllStaffsRow, error) {
+	return s.repo.GetAllStaffs(ctx)
+}
+
 func NewService(redis ifaceTool.IRedis, repo iface.IRepository) iface.IStaffService {
 	return &service{
 		redis: redis,
