@@ -7,10 +7,13 @@ import (
 	"cs-api/pkg/types"
 	"database/sql"
 	"errors"
+	"fmt"
+	ifaceTool "github.com/AndySu1021/go-util/interface"
 )
 
 type service struct {
-	repo iface.IRepository
+	repo  iface.IRepository
+	redis ifaceTool.IRedis
 }
 
 func (s *service) ListRole(ctx context.Context, params model.ListRoleParams, filterParams types.FilterRoleParams) (roles []model.Role, count int64, err error) {
@@ -52,7 +55,10 @@ func (s *service) CreateRole(ctx context.Context, params model.CreateRoleParams)
 }
 
 func (s *service) UpdateRole(ctx context.Context, params model.UpdateRoleParams) error {
-	return s.repo.UpdateRole(ctx, params)
+	if err := s.repo.UpdateRole(ctx, params); err != nil {
+		return err
+	}
+	return s.redis.Del(ctx, fmt.Sprintf("role:%d", params.ID))
 }
 
 func (s *service) DeleteRole(ctx context.Context, roleId int64) error {
@@ -67,8 +73,9 @@ func (s *service) DeleteRole(ctx context.Context, roleId int64) error {
 	return s.repo.DeleteRole(ctx, roleId)
 }
 
-func NewService(Repo iface.IRepository) iface.IRoleService {
+func NewService(repo iface.IRepository, redis ifaceTool.IRedis) iface.IRoleService {
 	return &service{
-		repo: Repo,
+		repo:  repo,
+		redis: redis,
 	}
 }

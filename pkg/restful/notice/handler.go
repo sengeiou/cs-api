@@ -5,6 +5,7 @@ import (
 	"cs-api/pkg"
 	iface "cs-api/pkg/interface"
 	"cs-api/pkg/types"
+	"database/sql"
 	"github.com/AndySu1021/go-util/errors"
 	ginTool "github.com/AndySu1021/go-util/gin"
 	"github.com/gin-gonic/gin"
@@ -222,6 +223,10 @@ func (h *handler) GetLatestNotice(c *gin.Context) {
 
 	notice, err := h.noticeSvc.GetLatestNotice(ctx)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			ginTool.Success(c)
+			return
+		}
 		ginTool.Error(c, err)
 		return
 	}

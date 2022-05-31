@@ -64,7 +64,7 @@ where IF(@name is null, 0, name) like IF(@name is null, 0, CONCAT('%', @name, '%
   and staff.id > 1;
 
 -- name: StaffLogin :one
-SELECT staff.id, staff.name, staff.username, staff.serving_status, role.permissions
+SELECT staff.id, staff.role_id, staff.name, staff.username, staff.serving_status, role.permissions
 FROM staff
          INNER JOIN role ON role.id = staff.role_id
 WHERE username = ?

@@ -6,13 +6,16 @@ import (
 	"cs-api/dist/mock"
 	iface "cs-api/pkg/interface"
 	"cs-api/pkg/types"
+	ifaceTool "github.com/AndySu1021/go-util/interface"
+	mockTool "github.com/AndySu1021/go-util/mock"
 	"reflect"
 	"testing"
 )
 
 func Test_service_ListRole(t *testing.T) {
 	type fields struct {
-		repo iface.IRepository
+		repo  iface.IRepository
+		redis ifaceTool.IRedis
 	}
 	type args struct {
 		ctx          context.Context
@@ -28,8 +31,11 @@ func Test_service_ListRole(t *testing.T) {
 		wantErr   bool
 	}{
 		{
-			name:   "normal test",
-			fields: fields{repo: mock.NewRepository(t)},
+			name: "normal test",
+			fields: fields{
+				repo:  mock.NewRepository(t),
+				redis: mockTool.NewRedis(t),
+			},
 			args: args{
 				ctx:          context.Background(),
 				params:       model.ListRoleParams{},
@@ -43,7 +49,8 @@ func Test_service_ListRole(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			s := &service{
-				repo: tt.fields.repo,
+				repo:  tt.fields.repo,
+				redis: tt.fields.redis,
 			}
 			gotRoles, gotCount, err := s.ListRole(tt.args.ctx, tt.args.params, tt.args.filterParams)
 			if (err != nil) != tt.wantErr {
@@ -62,7 +69,8 @@ func Test_service_ListRole(t *testing.T) {
 
 func Test_service_GetRole(t *testing.T) {
 	type fields struct {
-		repo iface.IRepository
+		repo  iface.IRepository
+		redis ifaceTool.IRedis
 	}
 	type args struct {
 		ctx    context.Context
@@ -76,8 +84,11 @@ func Test_service_GetRole(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name:   "normal test",
-			fields: fields{repo: mock.NewRepository(t)},
+			name: "normal test",
+			fields: fields{
+				repo:  mock.NewRepository(t),
+				redis: mockTool.NewRedis(t),
+			},
 			args: args{
 				ctx:    context.Background(),
 				roleId: 1,
@@ -89,7 +100,8 @@ func Test_service_GetRole(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			s := &service{
-				repo: tt.fields.repo,
+				repo:  tt.fields.repo,
+				redis: tt.fields.redis,
 			}
 			got, err := s.GetRole(tt.args.ctx, tt.args.roleId)
 			if (err != nil) != tt.wantErr {
@@ -105,7 +117,8 @@ func Test_service_GetRole(t *testing.T) {
 
 func Test_service_CreateRole(t *testing.T) {
 	type fields struct {
-		repo iface.IRepository
+		repo  iface.IRepository
+		redis ifaceTool.IRedis
 	}
 	type args struct {
 		ctx    context.Context
@@ -118,8 +131,11 @@ func Test_service_CreateRole(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name:   "normal test",
-			fields: fields{repo: mock.NewRepository(t)},
+			name: "normal test",
+			fields: fields{
+				repo:  mock.NewRepository(t),
+				redis: mockTool.NewRedis(t),
+			},
 			args: args{
 				ctx:    context.Background(),
 				params: model.CreateRoleParams{},
@@ -130,7 +146,8 @@ func Test_service_CreateRole(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			s := &service{
-				repo: tt.fields.repo,
+				repo:  tt.fields.repo,
+				redis: tt.fields.redis,
 			}
 			if err := s.CreateRole(tt.args.ctx, tt.args.params); (err != nil) != tt.wantErr {
 				t.Errorf("CreateRole() error = %v, wantErr %v", err, tt.wantErr)
@@ -141,7 +158,8 @@ func Test_service_CreateRole(t *testing.T) {
 
 func Test_service_UpdateRole(t *testing.T) {
 	type fields struct {
-		repo iface.IRepository
+		repo  iface.IRepository
+		redis ifaceTool.IRedis
 	}
 	type args struct {
 		ctx    context.Context
@@ -154,8 +172,11 @@ func Test_service_UpdateRole(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name:   "normal test",
-			fields: fields{repo: mock.NewRepository(t)},
+			name: "normal test",
+			fields: fields{
+				repo:  mock.NewRepository(t),
+				redis: mockTool.NewRedis(t),
+			},
 			args: args{
 				ctx:    context.Background(),
 				params: model.UpdateRoleParams{},
@@ -166,7 +187,8 @@ func Test_service_UpdateRole(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			s := &service{
-				repo: tt.fields.repo,
+				repo:  tt.fields.repo,
+				redis: tt.fields.redis,
 			}
 			if err := s.UpdateRole(tt.args.ctx, tt.args.params); (err != nil) != tt.wantErr {
 				t.Errorf("UpdateRole() error = %v, wantErr %v", err, tt.wantErr)
@@ -177,7 +199,8 @@ func Test_service_UpdateRole(t *testing.T) {
 
 func Test_service_DeleteRole(t *testing.T) {
 	type fields struct {
-		repo iface.IRepository
+		repo  iface.IRepository
+		redis ifaceTool.IRedis
 	}
 	type args struct {
 		ctx    context.Context
@@ -190,8 +213,11 @@ func Test_service_DeleteRole(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name:   "normal test",
-			fields: fields{repo: mock.NewRepository(t)},
+			name: "normal test",
+			fields: fields{
+				repo:  mock.NewRepository(t),
+				redis: mockTool.NewRedis(t),
+			},
 			args: args{
 				ctx:    context.Background(),
 				roleId: 2,
@@ -211,7 +237,8 @@ func Test_service_DeleteRole(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			s := &service{
-				repo: tt.fields.repo,
+				repo:  tt.fields.repo,
+				redis: tt.fields.redis,
 			}
 			if err := s.DeleteRole(tt.args.ctx, tt.args.roleId); (err != nil) != tt.wantErr {
 				t.Errorf("DeleteRole() error = %v, wantErr %v", err, tt.wantErr)

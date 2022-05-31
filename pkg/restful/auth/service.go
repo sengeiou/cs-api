@@ -59,6 +59,7 @@ func (s *service) Login(ctx context.Context, username, password string) (pkg.Cli
 		Name:          staff.Name,
 		Username:      staff.Username,
 		ServingStatus: types.StaffServingStatusClosed,
+		RoleID:        staff.RoleID,
 		Permissions:   permissions,
 		Token:         token,
 	}
@@ -150,8 +151,70 @@ func (s *service) GetClientInfo(ctx context.Context, clientType pkg.ClientType) 
 
 func (s *service) CheckPermission(permission string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// TODO: need to be implemented
-		c.Next()
+		ctx := c.Request.Context()
+		info, err := s.GetClientInfo(ctx, pkg.ClientTypeStaff)
+		if err != nil {
+			ginTool.Error(c, err)
+			c.Abort()
+			return
+		}
+
+		roleKey := fmt.Sprintf("role:%d", info.RoleID)
+		result, err := s.redis.Get(ctx, roleKey)
+		if err != nil {
+			ginTool.Error(c, err)
+			c.Abort()
+			return
+		}
+
+		var role model.Role
+		if result != "" {
+			if err = json.Unmarshal([]byte(result), &role); err != nil {
+				ginTool.Error(c, err)
+				c.Abort()
+				return
+			}
+		} else {
+			role, err = s.repo.GetRole(ctx, info.RoleID)
+			if err != nil {
+				ginTool.Error(c, err)
+				c.Abort()
+				return
+			}
+			roleBytes, err := json.Marshal(role)
+			if err != nil {
+				ginTool.Error(c, err)
+				c.Abort()
+				return
+			}
+			if err = s.redis.SetEX(ctx, roleKey, roleBytes, 24*time.Hour); err != nil {
+				ginTool.Error(c, err)
+				c.Abort()
+				return
+			}
+		}
+
+		if role.ID == 1 {
+			c.Next()
+			return
+		}
+
+		var permissions []string
+		if err = json.Unmarshal(role.Permissions, &permissions); err != nil {
+			ginTool.Error(c, err)
+			c.Abort()
+			return
+		}
+
+		for i := 0; i < len(permissions); i++ {
+			if permission == permissions[i] {
+				c.Next()
+				return
+			}
+		}
+
+		ginTool.ErrorPerm(c)
+		c.Abort()
 	}
 }
 

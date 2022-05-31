@@ -236,7 +236,7 @@ func (q *Queries) ListStaff(ctx context.Context, arg ListStaffParams) ([]ListSta
 }
 
 const staffLogin = `-- name: StaffLogin :one
-SELECT staff.id, staff.name, staff.username, staff.serving_status, role.permissions
+SELECT staff.id, staff.role_id, staff.name, staff.username, staff.serving_status, role.permissions
 FROM staff
          INNER JOIN role ON role.id = staff.role_id
 WHERE username = ?
@@ -250,6 +250,7 @@ type StaffLoginParams struct {
 
 type StaffLoginRow struct {
 	ID            int64                    `db:"id" json:"id"`
+	RoleID        int64                    `db:"role_id" json:"role_id"`
 	Name          string                   `db:"name" json:"name"`
 	Username      string                   `db:"username" json:"username"`
 	ServingStatus types.StaffServingStatus `db:"serving_status" json:"serving_status"`
@@ -261,6 +262,7 @@ func (q *Queries) StaffLogin(ctx context.Context, arg StaffLoginParams) (StaffLo
 	var i StaffLoginRow
 	err := row.Scan(
 		&i.ID,
+		&i.RoleID,
 		&i.Name,
 		&i.Username,
 		&i.ServingStatus,

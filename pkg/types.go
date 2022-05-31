@@ -19,6 +19,7 @@ type ClientInfo struct {
 	Name          string                   `json:"name"`
 	Username      string                   `json:"username"`       // staff only
 	ServingStatus types.StaffServingStatus `json:"serving_status"` // staff only
+	RoleID        int64                    `json:"role_id"`        // staff only
 	Permissions   []string                 `json:"permissions"`    // staff only
 	RoomID        int64                    `json:"room_id"`        // member only
 	StaffID       int64                    `json:"staff_id"`       // member only

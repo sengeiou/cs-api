@@ -72,6 +72,8 @@ func (sc *StaffClient) SocketRead() {
 		switch tmp.ContentType {
 		case model.MessageContentTypeText:
 			sc.Notifier.Broadcast(tmp, sc, member)
+		case model.MessageContentTypeImage:
+			sc.Notifier.Broadcast(tmp, sc, member)
 		case model.MessageContentTypeTyping:
 			sc.Notifier.Typing(sc.Name, member)
 		case model.MessageContentTypeScore:
