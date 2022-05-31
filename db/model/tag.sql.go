@@ -116,6 +116,40 @@ func (q *Queries) GetTag(ctx context.Context, id int64) (GetTagRow, error) {
 	return i, err
 }
 
+const listAvailableTag = `-- name: ListAvailableTag :many
+select id, name
+from tag
+where status = 1
+`
+
+type ListAvailableTagRow struct {
+	ID   int64  `db:"id" json:"id"`
+	Name string `db:"name" json:"name"`
+}
+
+func (q *Queries) ListAvailableTag(ctx context.Context) ([]ListAvailableTagRow, error) {
+	rows, err := q.query(ctx, q.listAvailableTagStmt, listAvailableTag)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []ListAvailableTagRow{}
+	for rows.Next() {
+		var i ListAvailableTagRow
+		if err := rows.Scan(&i.ID, &i.Name); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listTag = `-- name: ListTag :many
 select id, name, status
 from tag

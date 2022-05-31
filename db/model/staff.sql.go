@@ -74,12 +74,15 @@ func (q *Queries) DeleteStaff(ctx context.Context, id int64) error {
 }
 
 const getAllStaffs = `-- name: GetAllStaffs :many
-SELECT id, name FROM staff
+SELECT id, name, serving_status
+FROM staff
+WHERE id <> 1
 `
 
 type GetAllStaffsRow struct {
-	ID   int64  `db:"id" json:"id"`
-	Name string `db:"name" json:"name"`
+	ID            int64                    `db:"id" json:"id"`
+	Name          string                   `db:"name" json:"name"`
+	ServingStatus types.StaffServingStatus `db:"serving_status" json:"serving_status"`
 }
 
 func (q *Queries) GetAllStaffs(ctx context.Context) ([]GetAllStaffsRow, error) {
@@ -91,7 +94,7 @@ func (q *Queries) GetAllStaffs(ctx context.Context) ([]GetAllStaffsRow, error) {
 	items := []GetAllStaffsRow{}
 	for rows.Next() {
 		var i GetAllStaffsRow
-		if err := rows.Scan(&i.ID, &i.Name); err != nil {
+		if err := rows.Scan(&i.ID, &i.Name, &i.ServingStatus); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

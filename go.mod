@@ -92,4 +92,4 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
-require github.com/AndySu1021/go-util v1.0.9 // indirectm
+require github.com/AndySu1021/go-util v1.0.10 // indirectm

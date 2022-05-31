@@ -177,8 +177,14 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.getTagStmt, err = db.PrepareContext(ctx, getTag); err != nil {
 		return nil, fmt.Errorf("error preparing query GetTag: %w", err)
 	}
+	if q.listActiveRemindStmt, err = db.PrepareContext(ctx, listActiveRemind); err != nil {
+		return nil, fmt.Errorf("error preparing query ListActiveRemind: %w", err)
+	}
 	if q.listAvailableStaffStmt, err = db.PrepareContext(ctx, listAvailableStaff); err != nil {
 		return nil, fmt.Errorf("error preparing query ListAvailableStaff: %w", err)
+	}
+	if q.listAvailableTagStmt, err = db.PrepareContext(ctx, listAvailableTag); err != nil {
+		return nil, fmt.Errorf("error preparing query ListAvailableTag: %w", err)
 	}
 	if q.listFastReplyStmt, err = db.PrepareContext(ctx, listFastReply); err != nil {
 		return nil, fmt.Errorf("error preparing query ListFastReply: %w", err)
@@ -524,9 +530,19 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing getTagStmt: %w", cerr)
 		}
 	}
+	if q.listActiveRemindStmt != nil {
+		if cerr := q.listActiveRemindStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing listActiveRemindStmt: %w", cerr)
+		}
+	}
 	if q.listAvailableStaffStmt != nil {
 		if cerr := q.listAvailableStaffStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing listAvailableStaffStmt: %w", cerr)
+		}
+	}
+	if q.listAvailableTagStmt != nil {
+		if cerr := q.listAvailableTagStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing listAvailableTagStmt: %w", cerr)
 		}
 	}
 	if q.listFastReplyStmt != nil {
@@ -759,7 +775,9 @@ type Queries struct {
 	getStaffCountByRoleIdStmt    *sql.Stmt
 	getStaffRoomStmt             *sql.Stmt
 	getTagStmt                   *sql.Stmt
+	listActiveRemindStmt         *sql.Stmt
 	listAvailableStaffStmt       *sql.Stmt
+	listAvailableTagStmt         *sql.Stmt
 	listFastReplyStmt            *sql.Stmt
 	listFastReplyCategoryStmt    *sql.Stmt
 	listNoticeStmt               *sql.Stmt
@@ -845,7 +863,9 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		getStaffCountByRoleIdStmt:    q.getStaffCountByRoleIdStmt,
 		getStaffRoomStmt:             q.getStaffRoomStmt,
 		getTagStmt:                   q.getTagStmt,
+		listActiveRemindStmt:         q.listActiveRemindStmt,
 		listAvailableStaffStmt:       q.listAvailableStaffStmt,
+		listAvailableTagStmt:         q.listAvailableTagStmt,
 		listFastReplyStmt:            q.listFastReplyStmt,
 		listFastReplyCategoryStmt:    q.listFastReplyCategoryStmt,
 		listNoticeStmt:               q.listNoticeStmt,

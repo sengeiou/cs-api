@@ -22,6 +22,7 @@ func NewRepository(t *testing.T) iface.IRepository {
 	mock.EXPECT().CreateTag(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
 	mock.EXPECT().UpdateTag(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
 	mock.EXPECT().DeleteTag(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
+	mock.EXPECT().ListAvailableTag(gomock.Any()).AnyTimes().Return(make([]model.ListAvailableTagRow, 0), nil)
 
 	// Role
 	mock.EXPECT().GetRole(gomock.Any(), gomock.Any()).AnyTimes().Return(model.Role{}, nil)
@@ -100,6 +101,7 @@ func NewRepository(t *testing.T) iface.IRepository {
 	mock.EXPECT().CreateRemind(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
 	mock.EXPECT().UpdateRemind(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
 	mock.EXPECT().DeleteRemind(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
+	mock.EXPECT().ListActiveRemind(gomock.Any()).AnyTimes().Return(make([]model.ListActiveRemindRow, 0), nil)
 
 	return mock
 }

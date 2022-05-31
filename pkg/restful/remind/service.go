@@ -59,6 +59,10 @@ func (s *service) DeleteRemind(ctx context.Context, remindId int64) error {
 	return s.repo.DeleteRemind(ctx, remindId)
 }
 
+func (s *service) ListActiveRemind(ctx context.Context) ([]model.ListActiveRemindRow, error) {
+	return s.repo.ListActiveRemind(ctx)
+}
+
 func NewService(Repo iface.IRepository) iface.IRemindService {
 	return &service{
 		repo: Repo,

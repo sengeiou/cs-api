@@ -35,3 +35,8 @@ where IF(@name is null, 0, name) like IF(@name is null, 0, CONCAT('%', @name, '%
 
 -- name: GetAllTag :many
 select * from tag;
+
+-- name: ListAvailableTag :many
+select id, name
+from tag
+where status = 1

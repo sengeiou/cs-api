@@ -59,6 +59,10 @@ func (s *service) DeleteTag(ctx context.Context, tagId int64) error {
 	return s.repo.DeleteTag(ctx, tagId)
 }
 
+func (s *service) ListAvailableTag(ctx context.Context) ([]model.ListAvailableTagRow, error) {
+	return s.repo.ListAvailableTag(ctx)
+}
+
 func NewService(Repo iface.IRepository) iface.ITagService {
 	return &service{
 		repo: Repo,

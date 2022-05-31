@@ -543,6 +543,21 @@ func (mr *MockITagServiceMockRecorder) GetTag(ctx, tagId interface{}) *gomock.Ca
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTag", reflect.TypeOf((*MockITagService)(nil).GetTag), ctx, tagId)
 }
 
+// ListAvailableTag mocks base method.
+func (m *MockITagService) ListAvailableTag(ctx context.Context) ([]model.ListAvailableTagRow, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListAvailableTag", ctx)
+	ret0, _ := ret[0].([]model.ListAvailableTagRow)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListAvailableTag indicates an expected call of ListAvailableTag.
+func (mr *MockITagServiceMockRecorder) ListAvailableTag(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAvailableTag", reflect.TypeOf((*MockITagService)(nil).ListAvailableTag), ctx)
+}
+
 // ListTag mocks base method.
 func (m *MockITagService) ListTag(ctx context.Context, params model.ListTagParams, filterParams types.FilterTagParams) ([]model.ListTagRow, int64, error) {
 	m.ctrl.T.Helper()
@@ -1158,6 +1173,21 @@ func (m *MockIRemindService) GetRemind(ctx context.Context, remindId int64) (mod
 func (mr *MockIRemindServiceMockRecorder) GetRemind(ctx, remindId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetRemind", reflect.TypeOf((*MockIRemindService)(nil).GetRemind), ctx, remindId)
+}
+
+// ListActiveRemind mocks base method.
+func (m *MockIRemindService) ListActiveRemind(ctx context.Context) ([]model.ListActiveRemindRow, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListActiveRemind", ctx)
+	ret0, _ := ret[0].([]model.ListActiveRemindRow)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListActiveRemind indicates an expected call of ListActiveRemind.
+func (mr *MockIRemindServiceMockRecorder) ListActiveRemind(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListActiveRemind", reflect.TypeOf((*MockIRemindService)(nil).ListActiveRemind), ctx)
 }
 
 // ListRemind mocks base method.

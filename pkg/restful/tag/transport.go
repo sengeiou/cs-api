@@ -49,4 +49,9 @@ func InitTransport(p Params) {
 		p.R.Op("DeleteTag"),
 		p.H.DeleteTag,
 	)
+
+	routes.GET("/available-tags",
+		p.R.Op("ListAvailableTag"),
+		p.H.ListAvailableTag,
+	)
 }

@@ -205,6 +205,21 @@ func formatListRemindParams(requestParams ListRemindParams) (model.ListRemindPar
 	return params, filterParams
 }
 
+func (h *handler) ListActiveRemind(c *gin.Context) {
+	var (
+		err error
+		ctx = c.Request.Context()
+	)
+
+	reminds, err := h.remindSvc.ListActiveRemind(ctx)
+	if err != nil {
+		ginTool.Error(c, err)
+		return
+	}
+
+	ginTool.SuccessWithData(c, reminds)
+}
+
 func NewHandler(authSvc iface.IAuthService, remindSvc iface.IRemindService) *handler {
 	return &handler{
 		authSvc:   authSvc,

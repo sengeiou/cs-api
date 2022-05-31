@@ -34,3 +34,8 @@ select count(*)
 from remind
 where IF(@content is null, 0, content) like IF(@content is null, 0, CONCAT('%', @content, '%'))
   and IF(@status is null, 0, status) = IF(@status is null, 0, @status);
+
+-- name: ListActiveRemind :many
+SELECT title, content
+FROM remind
+WHERE status = 1

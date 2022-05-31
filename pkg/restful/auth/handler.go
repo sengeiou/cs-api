@@ -3,6 +3,8 @@ package auth
 import (
 	"cs-api/pkg"
 	iface "cs-api/pkg/interface"
+	"database/sql"
+	"fmt"
 	"github.com/AndySu1021/go-util/errors"
 	ginTool "github.com/AndySu1021/go-util/gin"
 	"github.com/gin-gonic/gin"
@@ -29,6 +31,10 @@ func (h *handler) Login(c *gin.Context) {
 	ctx := c.Request.Context()
 	staffInfo, err := h.authSvc.Login(ctx, params.Username, params.Password)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			ginTool.Error(c, fmt.Errorf("帳號或密碼錯誤"))
+			return
+		}
 		ginTool.Error(c, err)
 		return
 	}

@@ -89,4 +89,6 @@ FROM staff
 WHERE role_id = ?;
 
 -- name: GetAllStaffs :many
-SELECT id, name FROM staff;
+SELECT id, name, serving_status
+FROM staff
+WHERE id <> 1;

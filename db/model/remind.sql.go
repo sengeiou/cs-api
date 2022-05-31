@@ -87,6 +87,40 @@ func (q *Queries) GetRemind(ctx context.Context, id int64) (Remind, error) {
 	return i, err
 }
 
+const listActiveRemind = `-- name: ListActiveRemind :many
+SELECT title, content
+FROM remind
+WHERE status = 1
+`
+
+type ListActiveRemindRow struct {
+	Title   string `db:"title" json:"title"`
+	Content string `db:"content" json:"content"`
+}
+
+func (q *Queries) ListActiveRemind(ctx context.Context) ([]ListActiveRemindRow, error) {
+	rows, err := q.query(ctx, q.listActiveRemindStmt, listActiveRemind)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []ListActiveRemindRow{}
+	for rows.Next() {
+		var i ListActiveRemindRow
+		if err := rows.Scan(&i.Title, &i.Content); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listRemind = `-- name: ListRemind :many
 select id, title, content, status, created_by, created_at, updated_by, updated_at
 from remind

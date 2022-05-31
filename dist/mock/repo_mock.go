@@ -784,6 +784,21 @@ func (mr *MockIRepositoryMockRecorder) GetTag(ctx, id interface{}) *gomock.Call 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTag", reflect.TypeOf((*MockIRepository)(nil).GetTag), ctx, id)
 }
 
+// ListActiveRemind mocks base method.
+func (m *MockIRepository) ListActiveRemind(ctx context.Context) ([]model.ListActiveRemindRow, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListActiveRemind", ctx)
+	ret0, _ := ret[0].([]model.ListActiveRemindRow)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListActiveRemind indicates an expected call of ListActiveRemind.
+func (mr *MockIRepositoryMockRecorder) ListActiveRemind(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListActiveRemind", reflect.TypeOf((*MockIRepository)(nil).ListActiveRemind), ctx)
+}
+
 // ListAvailableStaff mocks base method.
 func (m *MockIRepository) ListAvailableStaff(ctx context.Context, id int64) ([]model.ListAvailableStaffRow, error) {
 	m.ctrl.T.Helper()
@@ -797,6 +812,21 @@ func (m *MockIRepository) ListAvailableStaff(ctx context.Context, id int64) ([]m
 func (mr *MockIRepositoryMockRecorder) ListAvailableStaff(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAvailableStaff", reflect.TypeOf((*MockIRepository)(nil).ListAvailableStaff), ctx, id)
+}
+
+// ListAvailableTag mocks base method.
+func (m *MockIRepository) ListAvailableTag(ctx context.Context) ([]model.ListAvailableTagRow, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListAvailableTag", ctx)
+	ret0, _ := ret[0].([]model.ListAvailableTagRow)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListAvailableTag indicates an expected call of ListAvailableTag.
+func (mr *MockIRepositoryMockRecorder) ListAvailableTag(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAvailableTag", reflect.TypeOf((*MockIRepository)(nil).ListAvailableTag), ctx)
 }
 
 // ListFastReply mocks base method.

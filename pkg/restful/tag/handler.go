@@ -123,6 +123,20 @@ func (h *handler) DeleteTag(c *gin.Context) {
 	ginTool.Success(c)
 }
 
+func (h *handler) ListAvailableTag(c *gin.Context) {
+	var (
+		ctx = c.Request.Context()
+	)
+
+	tags, err := h.tagSvc.ListAvailableTag(ctx)
+	if err != nil {
+		ginTool.Error(c, err)
+		return
+	}
+
+	ginTool.SuccessWithData(c, tags)
+}
+
 func (h *handler) GetTag(c *gin.Context) {
 	var (
 		err error

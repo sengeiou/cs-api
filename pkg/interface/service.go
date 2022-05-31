@@ -53,6 +53,7 @@ type ITagService interface {
 	CreateTag(ctx context.Context, params model.CreateTagParams) error
 	UpdateTag(ctx context.Context, params model.UpdateTagParams) error
 	DeleteTag(ctx context.Context, tagId int64) error
+	ListAvailableTag(ctx context.Context) ([]model.ListAvailableTagRow, error)
 }
 
 type IFastReplyService interface {
@@ -106,4 +107,5 @@ type IRemindService interface {
 	CreateRemind(ctx context.Context, params model.CreateRemindParams) error
 	UpdateRemind(ctx context.Context, params model.UpdateRemindParams) error
 	DeleteRemind(ctx context.Context, remindId int64) error
+	ListActiveRemind(ctx context.Context) ([]model.ListActiveRemindRow, error)
 }

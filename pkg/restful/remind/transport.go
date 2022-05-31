@@ -49,4 +49,9 @@ func InitTransport(p Params) {
 		p.R.Op("DeleteRemind"),
 		p.H.DeleteRemind,
 	)
+
+	routes.GET("/active-reminds",
+		p.R.Op("ListActiveRemind"),
+		p.H.ListActiveRemind,
+	)
 }

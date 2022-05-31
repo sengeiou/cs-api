@@ -210,3 +210,42 @@ func Test_service_DeleteRemind(t *testing.T) {
 		})
 	}
 }
+
+func Test_service_ListActiveRemind(t *testing.T) {
+	type fields struct {
+		repo iface.IRepository
+	}
+	type args struct {
+		ctx context.Context
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    []model.ListActiveRemindRow
+		wantErr bool
+	}{
+		{
+			name:    "normal test",
+			fields:  fields{repo: mock.NewRepository(t)},
+			args:    args{ctx: context.Background()},
+			want:    make([]model.ListActiveRemindRow, 0),
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &service{
+				repo: tt.fields.repo,
+			}
+			got, err := s.ListActiveRemind(tt.args.ctx)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ListActiveRemind() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ListActiveRemind() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
