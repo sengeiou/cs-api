@@ -78,9 +78,7 @@ func (s *service) AcceptRoom(ctx context.Context, staffId int64, roomId int64) e
 		return err
 	}
 
-	if room.Status == types.RoomStatusServing {
-		return nil
-	} else if room.Status != types.RoomStatusPending {
+	if room.Status == types.RoomStatusClosed {
 		return errors.New("wrong room status")
 	}
 
