@@ -58,11 +58,11 @@ func (w *ClientManager) Register(clientInfo pkg.ClientInfo) {
 		if staff == nil {
 			w.notifier.NoStaff(member)
 		} else {
+			member.StaffID = staff.ID
 			if err := w.roomSvc.AcceptRoom(context.Background(), staff.ID, member.RoomID); err != nil {
 				log.Error().Msgf("accept room error: %s", err.Error())
 				return
 			}
-			member.StaffID = staff.ID
 			w.dispatcher.assignRoom(staff.ID, member.RoomID)
 			w.notifier.Greeting(w.csConfig.GreetingText, member, staff)
 			w.notifier.MemberJoin(member, staff)

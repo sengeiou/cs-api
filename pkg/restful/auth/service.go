@@ -119,7 +119,7 @@ func (s *service) SetClientInfo(clientType pkg.ClientType) gin.HandlerFunc {
 
 		redisKey := getRedisKey(token, clientType)
 		result, err := s.redis.Get(c.Request.Context(), redisKey)
-		if err != nil {
+		if err != nil || result == "" {
 			ginTool.ErrorAuth(c)
 			c.Abort()
 			return

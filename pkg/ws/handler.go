@@ -25,8 +25,8 @@ func (h *Handler) ChatHandler(c *gin.Context) {
 
 	redisKey := fmt.Sprintf("token:%s:%s", req.Type, req.SID)
 	payload, err := h.redis.Get(c.Request.Context(), redisKey)
-	if err != nil {
-		ginTool.Error(c, err)
+	if err != nil || payload == "" {
+		ginTool.ErrorAuth(c)
 		return
 	}
 
