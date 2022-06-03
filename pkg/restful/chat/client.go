@@ -2,7 +2,7 @@ package chat
 
 import (
 	"cs-api/pkg"
-	"cs-api/pkg/model"
+	"cs-api/pkg/types"
 )
 
 type ClientStatus int8
@@ -13,16 +13,17 @@ const (
 )
 
 type ClientMessage struct {
-	RoomID      int64                    `json:"room_id"`
-	ContentType model.MessageContentType `json:"content_type"`
-	Content     string                   `json:"content"`
+	RoomID      int64             `json:"room_id"`
+	OpType      types.OpType      `json:"op_type"`
+	ContentType types.ContentType `json:"content_type"`
+	Content     string            `json:"content"`
 }
 
 type Client interface {
 	GetID() int64
 	GetName() string
 	GetType() pkg.ClientType
-	GetMessageType() model.MessageType
+	GetSenderType() types.SenderType
 	GetStatus() ClientStatus
 	GetSendChan() chan []byte
 	SocketRead()

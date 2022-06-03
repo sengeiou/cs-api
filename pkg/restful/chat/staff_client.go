@@ -4,7 +4,6 @@ import (
 	"context"
 	"cs-api/pkg"
 	iface2 "cs-api/pkg/interface"
-	"cs-api/pkg/model"
 	"cs-api/pkg/types"
 	"encoding/json"
 	"github.com/gorilla/websocket"
@@ -37,8 +36,8 @@ func (sc *StaffClient) GetType() pkg.ClientType {
 	return sc.Type
 }
 
-func (sc *StaffClient) GetMessageType() model.MessageType {
-	return model.MessageTypeStaff
+func (sc *StaffClient) GetSenderType() types.SenderType {
+	return types.SenderTypeStaff
 }
 
 func (sc *StaffClient) GetStatus() ClientStatus {
@@ -69,14 +68,12 @@ func (sc *StaffClient) SocketRead() {
 
 		member := sc.Manager.GetMember(tmp.RoomID)
 
-		switch tmp.ContentType {
-		case model.MessageContentTypeText:
+		switch tmp.OpType {
+		case types.OpTypeMessageReceived:
 			sc.Notifier.Broadcast(tmp, sc, member)
-		case model.MessageContentTypeImage:
-			sc.Notifier.Broadcast(tmp, sc, member)
-		case model.MessageContentTypeTyping:
-			sc.Notifier.Typing(sc.Name, member)
-		case model.MessageContentTypeScore:
+		case types.OpTypeStaffTyping:
+			sc.Notifier.StaffTyping(sc.Name, member)
+		case types.OpTypeSendScore:
 			sc.Notifier.SendScore(tmp.RoomID, sc, member)
 		}
 	}

@@ -145,8 +145,7 @@ func InitClientManager(manager *ClientManager) {
 				if err != nil {
 					log.Error().Msgf("handle unregister error: %s\n", err)
 				}
-				staff := manager.dispatcher.getStaff(member.StaffID)
-				manager.notifier.MemberLeave(member, staff)
+				// TODO: should update room status to closed
 				manager.memberClients.Delete(member.RoomID)
 				manager.memberPool.Put(member)
 			}

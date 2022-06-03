@@ -43,7 +43,7 @@ func (s *service) ListMessage(ctx context.Context, params types.ListMessageParam
 		filter["room_id"] = params.RoomID
 	}
 	if params.StaffID != 0 {
-		filter["type"] = model.MessageTypeStaff
+		filter["sender_type"] = types.SenderTypeStaff
 		filter["sender_id"] = params.StaffID
 	}
 	if params.Content != "" {

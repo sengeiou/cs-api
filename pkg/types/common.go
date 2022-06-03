@@ -27,6 +27,8 @@ const (
 	RequestLatencyHelp = "Total duration of request in microseconds"
 )
 
+type JSONField map[string]interface{}
+
 type JSONTime struct {
 	time.Time
 }

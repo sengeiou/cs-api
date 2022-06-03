@@ -4,6 +4,7 @@ import (
 	"context"
 	iface "cs-api/pkg/interface"
 	"cs-api/pkg/model"
+	"cs-api/pkg/types"
 	"encoding/json"
 	"github.com/rs/zerolog/log"
 	"reflect"
@@ -22,49 +23,32 @@ func NewNotifier(msgSvc iface.IMessageService) *Notifier {
 
 func (n *Notifier) MemberJoin(member *MemberClient, staff *StaffClient) {
 	message := model.Message{
-		Type:        model.MessageTypeSystem,
-		RoomID:      member.RoomID,
-		SenderName:  "系統",
-		ContentType: model.MessageContentTypeJoin,
-		Content:     member.Name + " 已進入房間",
-		ExtraInfo: &model.ExtraInfo{
-			ClientName: &member.Name,
+		OpType: types.OpTypeMemberJoin,
+		Payload: map[string]interface{}{
+			"room_id":     member.RoomID,
+			"member_name": member.Name,
 		},
 		Timestamp: time.Now().Unix(),
 		CreatedAt: time.Now().UTC(),
 	}
 
-	n.send(message, true, staff)
+	n.send(message, false, staff)
 }
 
-func (n *Notifier) MemberLeave(member *MemberClient, staff *StaffClient) {
-	message := model.Message{
-		Type:        model.MessageTypeSystem,
-		RoomID:      member.RoomID,
-		SenderName:  "系統",
-		ContentType: model.MessageContentTypeLeave,
-		Content:     member.Name + " 已離開房間",
-		Timestamp:   time.Now().Unix(),
-		CreatedAt:   time.Now().UTC(),
-	}
-
-	n.send(message, true, staff)
-}
-
-// Typing 通知用戶客服正在輸入
-func (n *Notifier) Typing(staffName string, member *MemberClient) {
+// StaffTyping 通知用戶客服正在輸入
+func (n *Notifier) StaffTyping(staffName string, member *MemberClient) {
 	if member == nil {
 		return
 	}
 
 	message := model.Message{
-		Type:        model.MessageTypeSystem,
-		RoomID:      member.RoomID,
-		SenderName:  "系統",
-		ContentType: model.MessageContentTypeTyping,
-		Content:     staffName + " 正在輸入",
-		Timestamp:   time.Now().Unix(),
-		CreatedAt:   time.Now().UTC(),
+		OpType: types.OpTypeStaffTyping,
+		Payload: map[string]interface{}{
+			"room_id":    member.RoomID,
+			"staff_name": staffName,
+		},
+		Timestamp: time.Now().Unix(),
+		CreatedAt: time.Now().UTC(),
 	}
 
 	n.send(message, false, member)
@@ -73,14 +57,17 @@ func (n *Notifier) Typing(staffName string, member *MemberClient) {
 // Broadcast 廣播消息
 func (n *Notifier) Broadcast(clientMessage ClientMessage, clients ...Client) {
 	message := model.Message{
-		Type:        clients[0].GetMessageType(),
-		RoomID:      clientMessage.RoomID,
-		SenderID:    clients[0].GetID(),
-		SenderName:  clients[0].GetName(),
-		ContentType: clientMessage.ContentType,
-		Content:     clientMessage.Content,
-		Timestamp:   time.Now().Unix(),
-		CreatedAt:   time.Now().UTC(),
+		OpType: types.OpTypeMessageReceived,
+		Payload: map[string]interface{}{
+			"room_id":      clientMessage.RoomID,
+			"sender_type":  clients[0].GetSenderType(),
+			"sender_id":    clients[0].GetID(),
+			"sender_name":  clients[0].GetName(),
+			"content_type": clientMessage.ContentType,
+			"content":      clientMessage.Content,
+		},
+		Timestamp: time.Now().Unix(),
+		CreatedAt: time.Now().UTC(),
 	}
 
 	n.send(message, true, clients...)
@@ -89,13 +76,12 @@ func (n *Notifier) Broadcast(clientMessage ClientMessage, clients ...Client) {
 // NoStaff 通知客戶當前沒有客服可以服務
 func (n *Notifier) NoStaff(member *MemberClient) {
 	message := model.Message{
-		Type:        model.MessageTypeSystem,
-		RoomID:      member.RoomID,
-		SenderName:  "系統",
-		ContentType: model.MessageContentTypeNoStaff,
-		Content:     "客服人員忙線中，請稍候在試",
-		Timestamp:   time.Now().Unix(),
-		CreatedAt:   time.Now().UTC(),
+		OpType: types.OpTypeNoStaff,
+		Payload: map[string]interface{}{
+			"room_id": member.RoomID,
+		},
+		Timestamp: time.Now().Unix(),
+		CreatedAt: time.Now().UTC(),
 	}
 
 	n.send(message, false, member)
@@ -104,28 +90,27 @@ func (n *Notifier) NoStaff(member *MemberClient) {
 // RoomClosed 通知客戶房間已關閉
 func (n *Notifier) RoomClosed(member *MemberClient) {
 	message := model.Message{
-		Type:        model.MessageTypeSystem,
-		RoomID:      member.RoomID,
-		SenderName:  "系統",
-		ContentType: model.MessageContentTypeRoomClosed,
-		Content:     "諮詢已結束",
-		Timestamp:   time.Now().Unix(),
-		CreatedAt:   time.Now().UTC(),
+		OpType: types.OpTypeRoomClosed,
+		Payload: map[string]interface{}{
+			"room_id": member.RoomID,
+		},
+		Timestamp: time.Now().Unix(),
+		CreatedAt: time.Now().UTC(),
 	}
 
-	n.send(message, true, member)
+	n.send(message, false, member)
 }
 
 // SendScore 通知用戶評分
 func (n *Notifier) SendScore(roomId int64, clients ...Client) {
 	message := model.Message{
-		Type:        model.MessageTypeSystem,
-		RoomID:      roomId,
-		SenderName:  "系統",
-		ContentType: model.MessageContentTypeScore,
-		Content:     "已發送評分請求",
-		Timestamp:   time.Now().Unix(),
-		CreatedAt:   time.Now().UTC(),
+		OpType: types.OpTypeSendScore,
+		Payload: map[string]interface{}{
+			"room_id":     roomId,
+			"sender_type": types.SenderTypeSystem,
+		},
+		Timestamp: time.Now().Unix(),
+		CreatedAt: time.Now().UTC(),
 	}
 
 	n.send(message, true, clients...)
@@ -134,13 +119,15 @@ func (n *Notifier) SendScore(roomId int64, clients ...Client) {
 // MemberScored 通知客服用戶已完成評分
 func (n *Notifier) MemberScored(member *MemberClient, staff *StaffClient) {
 	message := model.Message{
-		Type:        model.MessageTypeSystem,
-		RoomID:      member.RoomID,
-		SenderName:  "系統",
-		ContentType: model.MessageContentTypeScore,
-		Content:     member.Name + " 已完成評分",
-		Timestamp:   time.Now().Unix(),
-		CreatedAt:   time.Now().UTC(),
+		OpType: types.OpTypeSendScore,
+		Payload: map[string]interface{}{
+			"room_id":      member.RoomID,
+			"sender_type":  types.SenderTypeSystem,
+			"content_type": types.ContentTypeText,
+			"content":      member.Name + " 已完成評分",
+		},
+		Timestamp: time.Now().Unix(),
+		CreatedAt: time.Now().UTC(),
 	}
 
 	n.send(message, true, staff)
@@ -149,13 +136,12 @@ func (n *Notifier) MemberScored(member *MemberClient, staff *StaffClient) {
 // RoomAccepted 通知客戶客服已接受並進入房間
 func (n *Notifier) RoomAccepted(member *MemberClient) {
 	message := model.Message{
-		Type:        model.MessageTypeSystem,
-		RoomID:      member.RoomID,
-		SenderName:  "系統",
-		ContentType: model.MessageContentTypeRoomAccepted,
-		Content:     "",
-		Timestamp:   time.Now().Unix(),
-		CreatedAt:   time.Now().UTC(),
+		OpType: types.OpTypeRoomAccepted,
+		Payload: map[string]interface{}{
+			"room_id": member.RoomID,
+		},
+		Timestamp: time.Now().Unix(),
+		CreatedAt: time.Now().UTC(),
 	}
 
 	n.send(message, false, member)
@@ -168,14 +154,17 @@ func (n *Notifier) Greeting(content string, member *MemberClient, staff *StaffCl
 	}
 
 	message := model.Message{
-		Type:        model.MessageTypeStaff,
-		RoomID:      member.RoomID,
-		SenderID:    staff.ID,
-		SenderName:  staff.Name,
-		ContentType: model.MessageContentTypeText,
-		Content:     content,
-		Timestamp:   time.Now().Unix(),
-		CreatedAt:   time.Now().UTC(),
+		OpType: types.OpTypeMessageReceived,
+		Payload: map[string]interface{}{
+			"room_id":      member.RoomID,
+			"sender_type":  types.SenderTypeStaff,
+			"sender_id":    staff.ID,
+			"sender_name":  staff.Name,
+			"content_type": types.ContentTypeText,
+			"content":      content,
+		},
+		Timestamp: time.Now().Unix(),
+		CreatedAt: time.Now().UTC(),
 	}
 
 	n.send(message, false, member)
@@ -184,16 +173,15 @@ func (n *Notifier) Greeting(content string, member *MemberClient, staff *StaffCl
 // RoomTransferred 通知用戶已被轉接
 func (n *Notifier) RoomTransferred(member *MemberClient) {
 	message := model.Message{
-		Type:        model.MessageTypeSystem,
-		RoomID:      member.RoomID,
-		SenderName:  "系統",
-		ContentType: model.MessageContentTypeText,
-		Content:     "您已被轉接",
-		Timestamp:   time.Now().Unix(),
-		CreatedAt:   time.Now().UTC(),
+		OpType: types.OpTypeRoomTransferred,
+		Payload: map[string]interface{}{
+			"room_id": member.RoomID,
+		},
+		Timestamp: time.Now().Unix(),
+		CreatedAt: time.Now().UTC(),
 	}
 
-	n.send(message, true, member)
+	n.send(message, false, member)
 }
 
 func (n *Notifier) send(message model.Message, needStore bool, clients ...Client) {

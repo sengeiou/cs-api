@@ -3,7 +3,7 @@ package chat
 import (
 	"cs-api/pkg"
 	iface2 "cs-api/pkg/interface"
-	"cs-api/pkg/model"
+	"cs-api/pkg/types"
 	"encoding/json"
 	"github.com/gorilla/websocket"
 	"github.com/rs/zerolog/log"
@@ -38,8 +38,8 @@ func (mc *MemberClient) GetType() pkg.ClientType {
 	return mc.Type
 }
 
-func (mc *MemberClient) GetMessageType() model.MessageType {
-	return model.MessageTypeMember
+func (mc *MemberClient) GetSenderType() types.SenderType {
+	return types.SenderTypeMember
 }
 
 func (mc *MemberClient) GetStatus() ClientStatus {
@@ -75,14 +75,11 @@ func (mc *MemberClient) SocketRead() {
 
 		staff := mc.dispatcher.getStaff(mc.StaffID)
 
-		switch tmp.ContentType {
-		case model.MessageContentTypeText:
+		switch tmp.OpType {
+		case types.OpTypeMessageReceived:
 			tmp.RoomID = mc.RoomID
 			mc.Notifier.Broadcast(tmp, mc, staff)
-		case model.MessageContentTypeImage:
-			tmp.RoomID = mc.RoomID
-			mc.Notifier.Broadcast(tmp, mc, staff)
-		case model.MessageContentTypeScore:
+		case types.OpTypeSendScore:
 			mc.Notifier.MemberScored(mc, staff)
 		}
 	}
