@@ -15,7 +15,7 @@ import (
 const countListTag = `-- name: CountListTag :one
 select count(*)
 from tag
-where IF(@name is null, 0, name) like IF(@name is null, 0, CONCAT('%', @name, '%'))
+where IF(@name is null, 0, name) like IF(@name is null, 0, CONCAT('%', @name, '%')) COLLATE utf8mb4_general_ci
   and IF(@status is null, 0, status) = IF(@status is null, 0, @status)
 `
 
@@ -153,7 +153,7 @@ func (q *Queries) ListAvailableTag(ctx context.Context) ([]ListAvailableTagRow, 
 const listTag = `-- name: ListTag :many
 select id, name, status
 from tag
-where IF(@name is null, 0, name) like IF(@name is null, 0, CONCAT('%', @name, '%'))
+where IF(@name is null, 0, name) like IF(@name is null, 0, CONCAT('%', @name, '%')) COLLATE utf8mb4_general_ci
   and IF(@status is null, 0, status) = IF(@status is null, 0, @status) limit ?
 offset ?
 `

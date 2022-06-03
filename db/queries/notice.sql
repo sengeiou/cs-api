@@ -26,14 +26,14 @@ WHERE id = ?;
 -- name: ListNotice :many
 select id, title, content, start_at, end_at, status
 from notice
-where IF(@content is null, 0, content) like IF(@content is null, 0, CONCAT('%', @content, '%'))
+where IF(@content is null, 0, content) like IF(@content is null, 0, CONCAT('%', @content, '%')) COLLATE utf8mb4_general_ci
   and IF(@status is null, 0, status) = IF(@status is null, 0, @status) limit ?
 offset ?;
 
 -- name: CountListNotice :one
 select count(*)
 from notice
-where IF(@content is null, 0, content) like IF(@content is null, 0, CONCAT('%', @content, '%'))
+where IF(@content is null, 0, content) like IF(@content is null, 0, CONCAT('%', @content, '%')) COLLATE utf8mb4_general_ci
   and IF(@status is null, 0, status) = IF(@status is null, 0, @status);
 
 -- name: GetLatestNotice :one

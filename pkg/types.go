@@ -14,16 +14,16 @@ const (
 )
 
 type ClientInfo struct {
-	ID            int64                    `json:"id"`
-	Type          ClientType               `json:"type"`
-	Name          string                   `json:"name"`
-	Username      string                   `json:"username"`       // staff only
-	ServingStatus types.StaffServingStatus `json:"serving_status"` // staff only
-	RoleID        int64                    `json:"role_id"`        // staff only
-	Permissions   []string                 `json:"permissions"`    // staff only
-	RoomID        int64                    `json:"room_id"`        // member only
-	StaffID       int64                    `json:"staff_id"`       // member only
-	Token         string                   `json:"token"`
+	ID            int64                    `json:"id,omitempty"`
+	Type          ClientType               `json:"type,omitempty"`
+	Name          string                   `json:"name,omitempty"`
+	Username      string                   `json:"username,omitempty"`       // staff only
+	ServingStatus types.StaffServingStatus `json:"serving_status,omitempty"` // staff only
+	RoleID        int64                    `json:"role_id,omitempty"`        // staff only
+	Permissions   []string                 `json:"permissions,omitempty"`    // staff only
+	RoomID        int64                    `json:"room_id,omitempty"`        // member only
+	StaffID       int64                    `json:"staff_id,omitempty"`       // member only
+	Token         string                   `json:"token,omitempty"`
 	Conn          *websocket.Conn          `json:"conn,omitempty"`
 }
 

@@ -194,6 +194,7 @@ type Staff struct {
 	UpdatedAt time.Time `db:"updated_at" json:"updated_at"`
 }
 
+// 標籤資料表
 type Tag struct {
 	ID int64 `db:"id" json:"id"`
 	// 標籤名稱

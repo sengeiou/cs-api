@@ -10,4 +10,4 @@ CREATE TABLE IF NOT EXISTS notice
     created_at datetime          not null comment '創建時間',
     updated_by bigint unsigned   not null comment '更新管理員',
     updated_at datetime          not null comment '更新時間'
-) COMMENT ='系統公告資料表';
+) COMMENT ='系統公告資料表' COLLATE utf8mb4_general_ci;

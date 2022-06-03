@@ -21,16 +21,16 @@ WHERE id = ?;
 select fast_reply.*, constant.value AS category
 from fast_reply
          inner join constant on constant.id = fast_reply.category_id
-where IF(@title is null, 0, title) like IF(@title is null, 0, CONCAT('%', @title, '%'))
-  and IF(@content is null, 0, content) like IF(@content is null, 0, CONCAT('%', @content, '%'))
+where IF(@title is null, 0, title) like IF(@title is null, 0, CONCAT('%', @title, '%')) COLLATE utf8mb4_general_ci
+  and IF(@content is null, 0, content) like IF(@content is null, 0, CONCAT('%', @content, '%')) COLLATE utf8mb4_general_ci
   and IF(@status is null, 0, status) = IF(@status is null, 0, @status) limit ?
 offset ?;
 
 -- name: CountListFastReply :one
 select count(*)
 from fast_reply
-where IF(@title is null, 0, title) like IF(@title is null, 0, CONCAT('%', @title, '%'))
-  and IF(@content is null, 0, content) like IF(@content is null, 0, CONCAT('%', @content, '%'))
+where IF(@title is null, 0, title) like IF(@title is null, 0, CONCAT('%', @title, '%')) COLLATE utf8mb4_general_ci
+  and IF(@content is null, 0, content) like IF(@content is null, 0, CONCAT('%', @content, '%')) COLLATE utf8mb4_general_ci
   and IF(@status is null, 0, status) = IF(@status is null, 0, @status);
 
 -- name: GetFastReply :one

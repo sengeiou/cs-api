@@ -23,14 +23,14 @@ WHERE id = ?;
 -- name: ListRole :many
 select *
 from role
-where IF(@name is null, 0, name) like IF(@name is null, 0, CONCAT('%', @name, '%'))
+where IF(@name is null, 0, name) like IF(@name is null, 0, CONCAT('%', @name, '%')) COLLATE utf8mb4_general_ci
   and id > 1 limit ?
 offset ?;
 
 -- name: CountListRole :one
 select count(*)
 from role
-where IF(@name is null, 0, name) like IF(@name is null, 0, CONCAT('%', @name, '%'))
+where IF(@name is null, 0, name) like IF(@name is null, 0, CONCAT('%', @name, '%')) COLLATE utf8mb4_general_ci
   and id > 1;
 
 -- name: GetAllRoles :many

@@ -113,6 +113,7 @@ func (s *service) UpdateStaffServingStatus(ctx context.Context, staffInfo pkg.Cl
 		Name:          staffInfo.Name,
 		Username:      staffInfo.Username,
 		ServingStatus: status,
+		RoleID:        staffInfo.RoleID,
 		Token:         staffInfo.Token,
 	}
 

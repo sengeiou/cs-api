@@ -23,9 +23,9 @@ func (s *service) CreateMessage(ctx context.Context, message model.Message) erro
 func (s *service) ListRoomMessage(ctx context.Context, roomId int64, clientType pkg.ClientType) (messages []model.Message, err error) {
 	messages = make([]model.Message, 0)
 
-	filter := bson.M{"room_id": roomId}
+	filter := bson.M{"payload.room_id": roomId}
 	if clientType == pkg.ClientTypeMember {
-		filter["type"] = bson.M{"$ne": 1}
+		filter["payload.sender_type"] = bson.M{"$ne": 1}
 	}
 
 	if err = s.repo.ListAll(ctx, Collection, &messages, filter); err != nil {

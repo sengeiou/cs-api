@@ -92,7 +92,8 @@ func (n *Notifier) RoomClosed(member *MemberClient) {
 	message := model.Message{
 		OpType: types.OpTypeRoomClosed,
 		Payload: map[string]interface{}{
-			"room_id": member.RoomID,
+			"room_id":     member.RoomID,
+			"sender_type": types.SenderTypeSystem,
 		},
 		Timestamp: time.Now().Unix(),
 		CreatedAt: time.Now().UTC(),
@@ -119,12 +120,10 @@ func (n *Notifier) SendScore(roomId int64, clients ...Client) {
 // MemberScored 通知客服用戶已完成評分
 func (n *Notifier) MemberScored(member *MemberClient, staff *StaffClient) {
 	message := model.Message{
-		OpType: types.OpTypeSendScore,
+		OpType: types.OpTypeCompleteScore,
 		Payload: map[string]interface{}{
-			"room_id":      member.RoomID,
-			"sender_type":  types.SenderTypeSystem,
-			"content_type": types.ContentTypeText,
-			"content":      member.Name + " 已完成評分",
+			"room_id":     member.RoomID,
+			"sender_type": types.SenderTypeSystem,
 		},
 		Timestamp: time.Now().Unix(),
 		CreatedAt: time.Now().UTC(),

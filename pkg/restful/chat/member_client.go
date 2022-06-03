@@ -79,7 +79,7 @@ func (mc *MemberClient) SocketRead() {
 		case types.OpTypeMessageReceived:
 			tmp.RoomID = mc.RoomID
 			mc.Notifier.Broadcast(tmp, mc, staff)
-		case types.OpTypeSendScore:
+		case types.OpTypeCompleteScore:
 			mc.Notifier.MemberScored(mc, staff)
 		}
 	}

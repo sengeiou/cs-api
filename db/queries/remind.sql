@@ -24,7 +24,7 @@ WHERE id = ?;
 -- name: ListRemind :many
 select *
 from remind
-where IF(@content is null, 0, content) like IF(@content is null, 0, CONCAT('%', @content, '%'))
+where IF(@content is null, 0, content) like IF(@content is null, 0, CONCAT('%', @content, '%')) COLLATE utf8mb4_general_ci
   and IF(@status is null, 0, status) = IF(@status is null, 0, @status)
 order by updated_at desc limit ?
 offset ?;
@@ -32,7 +32,7 @@ offset ?;
 -- name: CountListRemind :one
 select count(*)
 from remind
-where IF(@content is null, 0, content) like IF(@content is null, 0, CONCAT('%', @content, '%'))
+where IF(@content is null, 0, content) like IF(@content is null, 0, CONCAT('%', @content, '%')) COLLATE utf8mb4_general_ci
   and IF(@status is null, 0, status) = IF(@status is null, 0, @status);
 
 -- name: ListActiveRemind :many

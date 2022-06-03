@@ -14,7 +14,7 @@ import (
 const countListRole = `-- name: CountListRole :one
 select count(*)
 from role
-where IF(@name is null, 0, name) like IF(@name is null, 0, CONCAT('%', @name, '%'))
+where IF(@name is null, 0, name) like IF(@name is null, 0, CONCAT('%', @name, '%')) COLLATE utf8mb4_general_ci
   and id > 1
 `
 
@@ -119,7 +119,7 @@ func (q *Queries) GetRole(ctx context.Context, id int64) (Role, error) {
 const listRole = `-- name: ListRole :many
 select id, name, permissions, created_by, created_at, updated_by, updated_at
 from role
-where IF(@name is null, 0, name) like IF(@name is null, 0, CONCAT('%', @name, '%'))
+where IF(@name is null, 0, name) like IF(@name is null, 0, CONCAT('%', @name, '%')) COLLATE utf8mb4_general_ci
   and id > 1 limit ?
 offset ?
 `

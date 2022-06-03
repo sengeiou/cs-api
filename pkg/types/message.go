@@ -9,6 +9,8 @@ const (
 	OpTypeMessageReceived
 	// OpTypeSendScore 發送評分請求
 	OpTypeSendScore
+	// OpTypeCompleteScore 用戶完成評分
+	OpTypeCompleteScore
 	// OpTypeMemberJoin 會員加入房間
 	OpTypeMemberJoin
 	// OpTypeNoStaff 無客服可以服務客戶

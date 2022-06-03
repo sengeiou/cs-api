@@ -49,7 +49,7 @@ WHERE id = ?;
 select staff.id, staff.name, staff.username, staff.status, staff.serving_status, role.name AS role_name
 from staff
          inner join role on role.id = staff.role_id
-where IF(@name is null, 0, staff.name) like IF(@name is null, 0, CONCAT('%', @name, '%'))
+where IF(@name is null, 0, staff.name) like IF(@name is null, 0, CONCAT('%', @name, '%')) COLLATE utf8mb4_general_ci
   and IF(@status is null, 0, status) = IF(@status is null, 0, @status)
   and IF(@servingStatus is null, 0, serving_status) = IF(@servingStatus is null, 0, @servingStatus)
   and staff.id > 1 limit ?
@@ -58,7 +58,7 @@ offset ?;
 -- name: CountListStaff :one
 select count(*)
 from staff
-where IF(@name is null, 0, name) like IF(@name is null, 0, CONCAT('%', @name, '%'))
+where IF(@name is null, 0, name) like IF(@name is null, 0, CONCAT('%', @name, '%')) COLLATE utf8mb4_general_ci
   and IF(@status is null, 0, status) = IF(@status is null, 0, @status)
   and IF(@servingStatus is null, 0, serving_status) = IF(@servingStatus is null, 0, @servingStatus)
   and staff.id > 1;
