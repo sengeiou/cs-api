@@ -5,6 +5,7 @@ import (
 	"cs-api/db/model"
 	"cs-api/dist/mock"
 	iface "cs-api/pkg/interface"
+	"cs-api/pkg/types"
 	"github.com/magiconair/properties/assert"
 	"testing"
 )
@@ -106,6 +107,85 @@ func Test_service_GetOrCreateMember(t *testing.T) {
 				assert.Matches(t, gotMember.Name, tt.wantMember.Name)
 			}
 			assert.Equal(t, gotMember.DeviceID, tt.wantMember.DeviceID)
+		})
+	}
+}
+
+func Test_service_GetMemberStatus(t *testing.T) {
+	type fields struct {
+		repo iface.IRepository
+	}
+	type args struct {
+		ctx      context.Context
+		memberId int64
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    types.MemberStatus
+		wantErr bool
+	}{
+		{
+			name:   "normal test",
+			fields: fields{repo: mock.NewRepository(t)},
+			args: args{
+				ctx:      context.Background(),
+				memberId: 1,
+			},
+			want:    types.MemberStatus(1),
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &service{
+				repo: tt.fields.repo,
+			}
+			got, err := s.GetMemberStatus(tt.args.ctx, tt.args.memberId)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("GetMemberStatus() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("GetMemberStatus() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_service_UpdateMemberStatus(t *testing.T) {
+	type fields struct {
+		repo iface.IRepository
+	}
+	type args struct {
+		ctx    context.Context
+		params model.UpdateMemberStatusParams
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		{
+			name:   "normal test",
+			fields: fields{repo: mock.NewRepository(t)},
+			args: args{
+				ctx:    context.Background(),
+				params: model.UpdateMemberStatusParams{},
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &service{
+				repo: tt.fields.repo,
+			}
+			if err := s.UpdateMemberStatus(tt.args.ctx, tt.args.params); (err != nil) != tt.wantErr {
+				t.Errorf("UpdateMemberStatus() error = %v, wantErr %v", err, tt.wantErr)
+			}
 		})
 	}
 }

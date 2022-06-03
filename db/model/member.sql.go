@@ -37,7 +37,7 @@ func (q *Queries) CreateMember(ctx context.Context, arg CreateMemberParams) (sql
 }
 
 const getGuestMember = `-- name: GetGuestMember :one
-select id, type, name, device_id, created_at, updated_at
+select id, type, name, device_id, status, created_at, updated_at
 from member
 where type = 2
   and device_id = ? LIMIT 1
@@ -51,14 +51,28 @@ func (q *Queries) GetGuestMember(ctx context.Context, deviceID string) (Member, 
 		&i.Type,
 		&i.Name,
 		&i.DeviceID,
+		&i.Status,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
 	return i, err
 }
 
+const getMemberStatus = `-- name: GetMemberStatus :one
+select status
+from member
+where id = ?
+`
+
+func (q *Queries) GetMemberStatus(ctx context.Context, id int64) (types.MemberStatus, error) {
+	row := q.queryRow(ctx, q.getMemberStatusStmt, getMemberStatus, id)
+	var status types.MemberStatus
+	err := row.Scan(&status)
+	return status, err
+}
+
 const getNormalMember = `-- name: GetNormalMember :one
-select id, type, name, device_id, created_at, updated_at
+select id, type, name, device_id, status, created_at, updated_at
 from member
 where type = 1
   and name = ? LIMIT 1
@@ -72,8 +86,25 @@ func (q *Queries) GetNormalMember(ctx context.Context, name string) (Member, err
 		&i.Type,
 		&i.Name,
 		&i.DeviceID,
+		&i.Status,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
 	return i, err
+}
+
+const updateMemberStatus = `-- name: UpdateMemberStatus :exec
+update member
+set status = ?
+where id = ?
+`
+
+type UpdateMemberStatusParams struct {
+	Status types.MemberStatus `db:"status" json:"status"`
+	ID     int64              `db:"id" json:"id"`
+}
+
+func (q *Queries) UpdateMemberStatus(ctx context.Context, arg UpdateMemberStatusParams) error {
+	_, err := q.exec(ctx, q.updateMemberStatusStmt, updateMemberStatus, arg.Status, arg.ID)
+	return err
 }

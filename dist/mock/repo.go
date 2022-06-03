@@ -53,6 +53,8 @@ func NewRepository(t *testing.T) iface.IRepository {
 	mock.EXPECT().GetNormalMember(gomock.Any(), "name").AnyTimes().Return(model.Member{ID: 1}, nil)
 	mock.EXPECT().GetNormalMember(gomock.Any(), gomock.Any()).AnyTimes().Return(model.Member{}, sql.ErrNoRows)
 	mock.EXPECT().CreateMember(gomock.Any(), gomock.Any()).AnyTimes().Return(MockSqlResult{}, nil)
+	mock.EXPECT().GetMemberStatus(gomock.Any(), gomock.Any()).AnyTimes().Return(types.MemberStatus(1), nil)
+	mock.EXPECT().UpdateMemberStatus(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
 
 	// Room
 	mock.EXPECT().GetMemberAvailableRoom(gomock.Any(), int64(1)).AnyTimes().Return(model.Room{ID: 1, MemberID: 1}, nil)

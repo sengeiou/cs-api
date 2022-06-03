@@ -150,6 +150,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.getMemberAvailableRoomStmt, err = db.PrepareContext(ctx, getMemberAvailableRoom); err != nil {
 		return nil, fmt.Errorf("error preparing query GetMemberAvailableRoom: %w", err)
 	}
+	if q.getMemberStatusStmt, err = db.PrepareContext(ctx, getMemberStatus); err != nil {
+		return nil, fmt.Errorf("error preparing query GetMemberStatus: %w", err)
+	}
 	if q.getNormalMemberStmt, err = db.PrepareContext(ctx, getNormalMember); err != nil {
 		return nil, fmt.Errorf("error preparing query GetNormalMember: %w", err)
 	}
@@ -236,6 +239,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	}
 	if q.updateFastReplyStmt, err = db.PrepareContext(ctx, updateFastReply); err != nil {
 		return nil, fmt.Errorf("error preparing query UpdateFastReply: %w", err)
+	}
+	if q.updateMemberStatusStmt, err = db.PrepareContext(ctx, updateMemberStatus); err != nil {
+		return nil, fmt.Errorf("error preparing query UpdateMemberStatus: %w", err)
 	}
 	if q.updateNoticeStmt, err = db.PrepareContext(ctx, updateNotice); err != nil {
 		return nil, fmt.Errorf("error preparing query UpdateNotice: %w", err)
@@ -485,6 +491,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing getMemberAvailableRoomStmt: %w", cerr)
 		}
 	}
+	if q.getMemberStatusStmt != nil {
+		if cerr := q.getMemberStatusStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getMemberStatusStmt: %w", cerr)
+		}
+	}
 	if q.getNormalMemberStmt != nil {
 		if cerr := q.getNormalMemberStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getNormalMemberStmt: %w", cerr)
@@ -630,6 +641,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing updateFastReplyStmt: %w", cerr)
 		}
 	}
+	if q.updateMemberStatusStmt != nil {
+		if cerr := q.updateMemberStatusStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing updateMemberStatusStmt: %w", cerr)
+		}
+	}
 	if q.updateNoticeStmt != nil {
 		if cerr := q.updateNoticeStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing updateNoticeStmt: %w", cerr)
@@ -766,6 +782,7 @@ type Queries struct {
 	getGuestMemberStmt           *sql.Stmt
 	getLatestNoticeStmt          *sql.Stmt
 	getMemberAvailableRoomStmt   *sql.Stmt
+	getMemberStatusStmt          *sql.Stmt
 	getNormalMemberStmt          *sql.Stmt
 	getNoticeStmt                *sql.Stmt
 	getRemindStmt                *sql.Stmt
@@ -795,6 +812,7 @@ type Queries struct {
 	tagSeederStmt                *sql.Stmt
 	updateCsConfigStmt           *sql.Stmt
 	updateFastReplyStmt          *sql.Stmt
+	updateMemberStatusStmt       *sql.Stmt
 	updateNoticeStmt             *sql.Stmt
 	updateRemindStmt             *sql.Stmt
 	updateRoleStmt               *sql.Stmt
@@ -854,6 +872,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		getGuestMemberStmt:           q.getGuestMemberStmt,
 		getLatestNoticeStmt:          q.getLatestNoticeStmt,
 		getMemberAvailableRoomStmt:   q.getMemberAvailableRoomStmt,
+		getMemberStatusStmt:          q.getMemberStatusStmt,
 		getNormalMemberStmt:          q.getNormalMemberStmt,
 		getNoticeStmt:                q.getNoticeStmt,
 		getRemindStmt:                q.getRemindStmt,
@@ -883,6 +902,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		tagSeederStmt:                q.tagSeederStmt,
 		updateCsConfigStmt:           q.updateCsConfigStmt,
 		updateFastReplyStmt:          q.updateFastReplyStmt,
+		updateMemberStatusStmt:       q.updateMemberStatusStmt,
 		updateNoticeStmt:             q.updateNoticeStmt,
 		updateRemindStmt:             q.updateRemindStmt,
 		updateRoleStmt:               q.updateRoleStmt,

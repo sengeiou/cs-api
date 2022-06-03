@@ -80,6 +80,8 @@ type ICsConfigService interface {
 
 type IMemberService interface {
 	GetOrCreateMember(ctx context.Context, name string, deviceId string) (model.Member, error)
+	GetMemberStatus(ctx context.Context, memberId int64) (types.MemberStatus, error)
+	UpdateMemberStatus(ctx context.Context, params model.UpdateMemberStatusParams) error
 }
 
 type IRoleService interface {

@@ -112,6 +112,14 @@ func (s *service) getOrCreateMemberByName(ctx context.Context, name string, devi
 	return result, nil
 }
 
+func (s *service) GetMemberStatus(ctx context.Context, memberId int64) (types.MemberStatus, error) {
+	return s.repo.GetMemberStatus(ctx, memberId)
+}
+
+func (s *service) UpdateMemberStatus(ctx context.Context, params model.UpdateMemberStatusParams) error {
+	return s.repo.UpdateMemberStatus(ctx, params)
+}
+
 func NewService(Repo iface.IRepository) iface.IMemberService {
 	return &service{
 		repo: Repo,

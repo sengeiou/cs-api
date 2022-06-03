@@ -58,6 +58,8 @@ type Member struct {
 	Name string `db:"name" json:"name"`
 	// 設備號
 	DeviceID string `db:"device_id" json:"device_id"`
+	// 會員狀態 1在線 2離線
+	Status types.MemberStatus `db:"status" json:"status"`
 	// 創建時間
 	CreatedAt time.Time `db:"created_at" json:"created_at"`
 	// 更新時間

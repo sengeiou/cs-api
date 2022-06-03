@@ -49,7 +49,7 @@ where IF(@roomId is null, 0, room.id) = IF(@roomId is null, 0, @roomId)
 select room.id, room.status, member.name as member_name
 from room
          inner join member on member.id = room.member_id
-where status = ?
+where room.status = ?
   and IF(@staffId is null, 0, staff_id) = IF(@staffId is null, 0, @staffId) limit ?
 offset ?;
 

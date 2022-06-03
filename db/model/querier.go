@@ -58,6 +58,7 @@ type Querier interface {
 	GetLatestNotice(ctx context.Context) (GetLatestNoticeRow, error)
 	// 獲取會員並未關閉的房間
 	GetMemberAvailableRoom(ctx context.Context, memberID int64) (Room, error)
+	GetMemberStatus(ctx context.Context, id int64) (types.MemberStatus, error)
 	GetNormalMember(ctx context.Context, name string) (Member, error)
 	GetNotice(ctx context.Context, id int64) (Notice, error)
 	GetRemind(ctx context.Context, id int64) (Remind, error)
@@ -87,6 +88,7 @@ type Querier interface {
 	TagSeeder(ctx context.Context) error
 	UpdateCsConfig(ctx context.Context, arg UpdateCsConfigParams) error
 	UpdateFastReply(ctx context.Context, arg UpdateFastReplyParams) error
+	UpdateMemberStatus(ctx context.Context, arg UpdateMemberStatusParams) error
 	UpdateNotice(ctx context.Context, arg UpdateNoticeParams) error
 	UpdateRemind(ctx context.Context, arg UpdateRemindParams) error
 	UpdateRole(ctx context.Context, arg UpdateRoleParams) error

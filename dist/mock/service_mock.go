@@ -872,6 +872,21 @@ func (m *MockIMemberService) EXPECT() *MockIMemberServiceMockRecorder {
 	return m.recorder
 }
 
+// GetMemberStatus mocks base method.
+func (m *MockIMemberService) GetMemberStatus(ctx context.Context, memberId int64) (types.MemberStatus, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetMemberStatus", ctx, memberId)
+	ret0, _ := ret[0].(types.MemberStatus)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetMemberStatus indicates an expected call of GetMemberStatus.
+func (mr *MockIMemberServiceMockRecorder) GetMemberStatus(ctx, memberId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMemberStatus", reflect.TypeOf((*MockIMemberService)(nil).GetMemberStatus), ctx, memberId)
+}
+
 // GetOrCreateMember mocks base method.
 func (m *MockIMemberService) GetOrCreateMember(ctx context.Context, name, deviceId string) (model.Member, error) {
 	m.ctrl.T.Helper()
@@ -885,6 +900,20 @@ func (m *MockIMemberService) GetOrCreateMember(ctx context.Context, name, device
 func (mr *MockIMemberServiceMockRecorder) GetOrCreateMember(ctx, name, deviceId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOrCreateMember", reflect.TypeOf((*MockIMemberService)(nil).GetOrCreateMember), ctx, name, deviceId)
+}
+
+// UpdateMemberStatus mocks base method.
+func (m *MockIMemberService) UpdateMemberStatus(ctx context.Context, params model.UpdateMemberStatusParams) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateMemberStatus", ctx, params)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateMemberStatus indicates an expected call of UpdateMemberStatus.
+func (mr *MockIMemberServiceMockRecorder) UpdateMemberStatus(ctx, params interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateMemberStatus", reflect.TypeOf((*MockIMemberService)(nil).UpdateMemberStatus), ctx, params)
 }
 
 // MockIRoleService is a mock of IRoleService interface.

@@ -7,5 +7,9 @@ import (
 var Module = fx.Options(
 	fx.Provide(
 		NewService,
+		NewHandler,
+	),
+	fx.Invoke(
+		InitTransport,
 	),
 )
