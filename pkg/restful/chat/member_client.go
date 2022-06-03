@@ -1,4 +1,4 @@
-package ws
+package chat
 
 import (
 	"cs-api/pkg"

@@ -1,4 +1,4 @@
-package ws
+package chat
 
 import (
 	"cs-api/pkg"
@@ -11,13 +11,18 @@ import (
 	"net/http"
 )
 
-type RequestParams struct {
+type handler struct {
+	redis   iface.IRedis
+	manager *ClientManager
+}
+
+type ChatParams struct {
 	Type pkg.ClientType `form:"type" binding:"required"`
 	SID  string         `form:"sid" binding:"required"`
 }
 
-func (h *Handler) ChatHandler(c *gin.Context) {
-	var req RequestParams
+func (h *handler) Chat(c *gin.Context) {
+	var req ChatParams
 	if err := c.BindQuery(&req); err != nil {
 		ginTool.Error(c, err)
 		return
@@ -51,13 +56,8 @@ func (h *Handler) ChatHandler(c *gin.Context) {
 	h.manager.Register(clientInfo)
 }
 
-type Handler struct {
-	redis   iface.IRedis
-	manager *ClientManager
-}
-
-func NewHandler(redis iface.IRedis, manager *ClientManager) *Handler {
-	return &Handler{
+func NewHandler(redis iface.IRedis, manager *ClientManager) *handler {
+	return &handler{
 		redis:   redis,
 		manager: manager,
 	}

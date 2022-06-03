@@ -1,7 +1,6 @@
-package ws
+package chat
 
 import (
-	"github.com/gin-gonic/gin"
 	"go.uber.org/fx"
 )
 
@@ -15,11 +14,7 @@ var Module = fx.Options(
 	),
 	fx.Invoke(
 		InitClientManager,
-		InitWebSocket,
+		InitTransport,
 		InitRedisSubscriber,
 	),
 )
-
-func InitWebSocket(engine *gin.Engine, h *Handler) {
-	engine.Any("/ws/chat", h.ChatHandler)
-}

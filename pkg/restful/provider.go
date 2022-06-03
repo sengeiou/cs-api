@@ -2,6 +2,7 @@ package restful
 
 import (
 	"cs-api/pkg/restful/auth"
+	"cs-api/pkg/restful/chat"
 	"cs-api/pkg/restful/common"
 	"cs-api/pkg/restful/cs_config"
 	"cs-api/pkg/restful/fast_reply"
@@ -35,4 +36,5 @@ var Module = fx.Options(
 	fast_reply.Module,
 	room.Module,
 	common.Module,
+	chat.Module,
 )
