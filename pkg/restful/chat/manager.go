@@ -16,7 +16,6 @@ type ClientManager struct {
 	memberClients *sync.Map     // roomId maps member client
 	dispatcher    *StaffDispatcher
 	notifier      *Notifier
-	unregister    chan Client
 	roomSvc       iface.IRoomService
 	msgSvc        iface.IMessageService
 	csConfig      types.CsConfig
@@ -38,7 +37,10 @@ func (w *ClientManager) Register(clientInfo pkg.ClientInfo) {
 	case pkg.ClientTypeMember:
 		// prevent duplicate member client connection
 		if old := w.GetMember(clientInfo.RoomID); old != nil {
-			w.unregister <- old
+			if err := w.Unregister(old); err != nil {
+				log.Error().Msgf("unregister member error: %s", err)
+				return
+			}
 		}
 
 		member := w.memberPool.Get().(*MemberClient)
@@ -70,6 +72,37 @@ func (w *ClientManager) Register(clientInfo pkg.ClientInfo) {
 	}
 }
 
+func (w *ClientManager) Unregister(client Client) error {
+	if client.GetStatus() == ClientStatusClosed {
+		return nil
+	}
+	if client.GetType() == pkg.ClientTypeStaff {
+		staff := client.(*StaffClient)
+		staff.Status = ClientStatusClosed
+		close(staff.SendChan)
+		if err := staff.Socket.Close(); err != nil {
+			log.Error().Msgf("close socket error: %s\n", err)
+			return err
+		}
+		w.dispatcher.unregister(staff)
+		w.staffPool.Put(staff)
+	} else if client.GetType() == pkg.ClientTypeMember {
+		member := client.(*MemberClient)
+		member.Status = ClientStatusClosed
+		close(member.SendChan)
+		close(member.Sending)
+		if err := member.Socket.Close(); err != nil {
+			log.Error().Msgf("handle unregister error: %s\n", err)
+			return err
+		}
+		// TODO: should update room status to closed
+		w.memberClients.Delete(member.RoomID)
+		w.memberPool.Put(member)
+	}
+
+	return nil
+}
+
 func (w *ClientManager) GetMember(roomId int64) *MemberClient {
 	if member, ok := w.memberClients.Load(roomId); ok {
 		return member.(*MemberClient)
@@ -85,7 +118,10 @@ func (w *ClientManager) CloseRoom(roomId int64) {
 	if client, ok := w.memberClients.Load(roomId); ok {
 		w.notifier.RoomClosed(client.(*MemberClient))
 		time.Sleep(100 * time.Millisecond)
-		w.unregister <- client.(*MemberClient)
+		if err := w.Unregister(client.(*MemberClient)); err != nil {
+			log.Error().Msgf("unregister staff client error: %s", err)
+			return
+		}
 	}
 }
 
@@ -110,47 +146,12 @@ func NewClientManager(p ClientManagerParams) *ClientManager {
 		memberClients: &sync.Map{},     // roomId maps member client
 		dispatcher:    p.Dispatcher,
 		notifier:      p.Notifier,
-		unregister:    make(chan Client, 32),
 		roomSvc:       p.RoomSvc,
 		msgSvc:        p.MsgSvc,
 		csConfig:      config,
 		memberPool:    &sync.Pool{New: func() any { return &MemberClient{} }},
 		staffPool:     &sync.Pool{New: func() any { return &StaffClient{} }},
 	}
-}
-
-func InitClientManager(manager *ClientManager) {
-	go func() {
-		for {
-			client := <-manager.unregister
-			if client.GetStatus() == ClientStatusClosed {
-				continue
-			}
-			if client.GetType() == pkg.ClientTypeStaff {
-				staff := client.(*StaffClient)
-				staff.Status = ClientStatusClosed
-				close(staff.SendChan)
-				err := staff.Socket.Close()
-				if err != nil {
-					log.Error().Msgf("close socket error: %s\n", err)
-				}
-				manager.dispatcher.unregister(staff)
-				manager.staffPool.Put(staff)
-			} else if client.GetType() == pkg.ClientTypeMember {
-				member := client.(*MemberClient)
-				member.Status = ClientStatusClosed
-				close(member.SendChan)
-				close(member.Sending)
-				err := member.Socket.Close()
-				if err != nil {
-					log.Error().Msgf("handle unregister error: %s\n", err)
-				}
-				// TODO: should update room status to closed
-				manager.memberClients.Delete(member.RoomID)
-				manager.memberPool.Put(member)
-			}
-		}
-	}()
 }
 
 func checkPendingTimeout(member *MemberClient) {
@@ -160,7 +161,10 @@ func checkPendingTimeout(member *MemberClient) {
 	case <-time.After(d):
 		manager.notifier.RoomClosed(member)
 		time.Sleep(1 * time.Second)
-		manager.unregister <- member
+		if err := manager.Unregister(member); err != nil {
+			log.Error().Msgf("unregister staff client error: %s", err)
+			return
+		}
 	case <-member.Sending:
 		return
 	}

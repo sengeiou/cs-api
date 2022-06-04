@@ -50,7 +50,10 @@ func (sc *StaffClient) GetSendChan() chan []byte {
 
 func (sc *StaffClient) SocketRead() {
 	defer func() {
-		sc.Manager.unregister <- sc
+		if err := sc.Manager.Unregister(sc); err != nil {
+			log.Error().Msgf("unregister staff client error: %s", err)
+			return
+		}
 	}()
 
 	for {
@@ -81,7 +84,10 @@ func (sc *StaffClient) SocketRead() {
 
 func (sc *StaffClient) SocketWrite() {
 	defer func() {
-		sc.Manager.unregister <- sc
+		if err := sc.Manager.Unregister(sc); err != nil {
+			log.Error().Msgf("unregister staff client error: %s", err)
+			return
+		}
 	}()
 
 	for {

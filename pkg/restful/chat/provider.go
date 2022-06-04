@@ -13,7 +13,6 @@ var Module = fx.Options(
 		NewRedisWorker,
 	),
 	fx.Invoke(
-		InitClientManager,
 		InitTransport,
 		InitRedisSubscriber,
 	),

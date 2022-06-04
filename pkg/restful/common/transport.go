@@ -1,7 +1,6 @@
 package common
 
 import (
-	"cs-api/pkg"
 	iface "cs-api/pkg/interface"
 	"cs-api/pkg/restful/tool"
 	"github.com/gin-gonic/gin"
@@ -23,14 +22,7 @@ func InitTransport(p Params) {
 	p.Engine.GET("/metrics", gin.WrapH(promhttp.Handler()))
 	p.Engine.GET("/health", func(c *gin.Context) { c.Status(http.StatusOK) })
 
-	p.Engine.POST("/api/upload/staff",
-		p.AuthSvc.SetClientInfo(pkg.ClientTypeStaff),
-		p.R.Op("UploadFile"),
-		p.H.UploadFile,
-	)
-
-	p.Engine.POST("/api/upload/member",
-		p.AuthSvc.SetClientInfo(pkg.ClientTypeMember),
+	p.Engine.POST("/api/upload",
 		p.R.Op("UploadFile"),
 		p.H.UploadFile,
 	)

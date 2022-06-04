@@ -52,7 +52,10 @@ func (mc *MemberClient) GetSendChan() chan []byte {
 
 func (mc *MemberClient) SocketRead() {
 	defer func() {
-		mc.Manager.unregister <- mc
+		if err := mc.Manager.Unregister(mc); err != nil {
+			log.Error().Msgf("unregister member client error: %s", err)
+			return
+		}
 	}()
 
 	for {
@@ -87,7 +90,10 @@ func (mc *MemberClient) SocketRead() {
 
 func (mc *MemberClient) SocketWrite() {
 	defer func() {
-		mc.Manager.unregister <- mc
+		if err := mc.Manager.Unregister(mc); err != nil {
+			log.Error().Msgf("unregister member client error: %s", err)
+			return
+		}
 	}()
 
 	for {
