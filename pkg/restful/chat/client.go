@@ -13,17 +13,17 @@ const (
 )
 
 type ClientMessage struct {
-	RoomID      int64             `json:"room_id"`
-	OpType      types.OpType      `json:"op_type"`
-	ContentType types.ContentType `json:"content_type"`
-	Content     string            `json:"content"`
+	RoomID      int64                    `json:"room_id"`
+	OpType      types.MessageOpType      `json:"op_type"`
+	ContentType types.MessageContentType `json:"content_type"`
+	Content     string                   `json:"content"`
 }
 
 type Client interface {
 	GetID() int64
 	GetName() string
 	GetType() pkg.ClientType
-	GetSenderType() types.SenderType
+	GetSenderType() types.MessageSenderType
 	GetStatus() ClientStatus
 	GetSendChan() chan []byte
 	SocketRead()

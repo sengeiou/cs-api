@@ -2,64 +2,73 @@ package message
 
 import (
 	"context"
-	"cs-api/pkg"
-	iface2 "cs-api/pkg/interface"
-	"cs-api/pkg/model"
+	"cs-api/db/model"
+	iface "cs-api/pkg/interface"
 	"cs-api/pkg/types"
-	iface "github.com/AndySu1021/go-util/interface"
-	"go.mongodb.org/mongo-driver/bson"
+	"database/sql"
+	"errors"
 )
 
-const Collection = "messages"
-
 type service struct {
-	repo iface.IMongoRepository
+	repo iface.IRepository
 }
 
-func (s *service) CreateMessage(ctx context.Context, message model.Message) error {
-	return s.repo.InsertOne(ctx, Collection, message)
+func (s *service) CreateMessage(ctx context.Context, params model.CreateMessageParams) error {
+	return s.repo.CreateMessage(ctx, params)
 }
 
-func (s *service) ListRoomMessage(ctx context.Context, roomId int64, clientType pkg.ClientType) (messages []model.Message, err error) {
+func (s *service) ListRoomMessage(ctx context.Context, params interface{}) (messages []model.Message, err error) {
 	messages = make([]model.Message, 0)
 
-	filter := bson.M{"payload.room_id": roomId}
-	if clientType == pkg.ClientTypeMember {
-		filter["payload.sender_type"] = bson.M{"$ne": 1}
+	switch data := params.(type) {
+	case model.ListMemberRoomMessageParams:
+		return s.repo.ListMemberRoomMessage(ctx, data)
+	case model.ListStaffRoomMessageParams:
+		return s.repo.ListStaffRoomMessage(ctx, data)
 	}
 
-	if err = s.repo.ListAll(ctx, Collection, &messages, filter); err != nil {
-		return
-	}
+	return make([]model.Message, 0), errors.New("wrong client type")
+}
+
+func (s *service) ListMessage(ctx context.Context, params model.ListMessageParams, filterParams types.FilterMessageParams) (messages []model.Message, count int64, err error) {
+	messages = make([]model.Message, 0)
+
+	err = s.repo.Transaction(ctx, func(ctx context.Context, tx *sql.Tx) error {
+		var err2 error
+
+		_, err2 = tx.Exec("SET @roomId = ?", filterParams.RoomID)
+		if err2 != nil {
+			return err2
+		}
+
+		_, err2 = tx.Exec("SET @staffId = ?", filterParams.StaffID)
+		if err2 != nil {
+			return err2
+		}
+
+		_, err2 = tx.Exec("SET @content = ?", filterParams.Content)
+		if err2 != nil {
+			return err2
+		}
+
+		messages, err2 = s.repo.WithTx(tx).ListMessage(ctx, params)
+		if err2 != nil {
+			return err2
+		}
+
+		count, err2 = s.repo.WithTx(tx).CountListMessage(ctx)
+		if err2 != nil {
+			return err2
+		}
+
+		return nil
+	})
 
 	return
 }
 
-func (s *service) ListMessage(ctx context.Context, params types.ListMessageParams) (messages []model.Message, count int64, err error) {
-	messages = make([]model.Message, 0)
-
-	filter := bson.M{}
-	if params.RoomID != 0 {
-		filter["room_id"] = params.RoomID
-	}
-	if params.StaffID != 0 {
-		filter["sender_type"] = types.SenderTypeStaff
-		filter["sender_id"] = params.StaffID
-	}
-	if params.Content != "" {
-		filter["content"] = bson.M{"$regex": params.Content}
-	}
-
-	count, err = s.repo.List(ctx, Collection, &messages, filter, params.Page, params.PageSize)
-	if err != nil {
-		return
-	}
-
-	return
-}
-
-func NewService(Repo iface.IMongoRepository) iface2.IMessageService {
+func NewService(repo iface.IRepository) iface.IMessageService {
 	return &service{
-		repo: Repo,
+		repo: repo,
 	}
 }

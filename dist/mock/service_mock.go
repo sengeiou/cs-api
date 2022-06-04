@@ -8,7 +8,6 @@ import (
 	context "context"
 	model "cs-api/db/model"
 	pkg "cs-api/pkg"
-	model0 "cs-api/pkg/model"
 	types "cs-api/pkg/types"
 	reflect "reflect"
 	time "time"
@@ -433,48 +432,48 @@ func (m *MockIMessageService) EXPECT() *MockIMessageServiceMockRecorder {
 }
 
 // CreateMessage mocks base method.
-func (m *MockIMessageService) CreateMessage(ctx context.Context, message model0.Message) error {
+func (m *MockIMessageService) CreateMessage(ctx context.Context, params model.CreateMessageParams) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateMessage", ctx, message)
+	ret := m.ctrl.Call(m, "CreateMessage", ctx, params)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // CreateMessage indicates an expected call of CreateMessage.
-func (mr *MockIMessageServiceMockRecorder) CreateMessage(ctx, message interface{}) *gomock.Call {
+func (mr *MockIMessageServiceMockRecorder) CreateMessage(ctx, params interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateMessage", reflect.TypeOf((*MockIMessageService)(nil).CreateMessage), ctx, message)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateMessage", reflect.TypeOf((*MockIMessageService)(nil).CreateMessage), ctx, params)
 }
 
 // ListMessage mocks base method.
-func (m *MockIMessageService) ListMessage(ctx context.Context, params types.ListMessageParams) ([]model0.Message, int64, error) {
+func (m *MockIMessageService) ListMessage(ctx context.Context, params model.ListMessageParams, filterParams types.FilterMessageParams) ([]model.Message, int64, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ListMessage", ctx, params)
-	ret0, _ := ret[0].([]model0.Message)
+	ret := m.ctrl.Call(m, "ListMessage", ctx, params, filterParams)
+	ret0, _ := ret[0].([]model.Message)
 	ret1, _ := ret[1].(int64)
 	ret2, _ := ret[2].(error)
 	return ret0, ret1, ret2
 }
 
 // ListMessage indicates an expected call of ListMessage.
-func (mr *MockIMessageServiceMockRecorder) ListMessage(ctx, params interface{}) *gomock.Call {
+func (mr *MockIMessageServiceMockRecorder) ListMessage(ctx, params, filterParams interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListMessage", reflect.TypeOf((*MockIMessageService)(nil).ListMessage), ctx, params)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListMessage", reflect.TypeOf((*MockIMessageService)(nil).ListMessage), ctx, params, filterParams)
 }
 
 // ListRoomMessage mocks base method.
-func (m *MockIMessageService) ListRoomMessage(ctx context.Context, roomId int64, clientType pkg.ClientType) ([]model0.Message, error) {
+func (m *MockIMessageService) ListRoomMessage(ctx context.Context, params interface{}) ([]model.Message, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ListRoomMessage", ctx, roomId, clientType)
-	ret0, _ := ret[0].([]model0.Message)
+	ret := m.ctrl.Call(m, "ListRoomMessage", ctx, params)
+	ret0, _ := ret[0].([]model.Message)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // ListRoomMessage indicates an expected call of ListRoomMessage.
-func (mr *MockIMessageServiceMockRecorder) ListRoomMessage(ctx, roomId, clientType interface{}) *gomock.Call {
+func (mr *MockIMessageServiceMockRecorder) ListRoomMessage(ctx, params interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListRoomMessage", reflect.TypeOf((*MockIMessageService)(nil).ListRoomMessage), ctx, roomId, clientType)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListRoomMessage", reflect.TypeOf((*MockIMessageService)(nil).ListRoomMessage), ctx, params)
 }
 
 // MockITagService is a mock of ITagService interface.
@@ -1287,32 +1286,32 @@ func (mr *MockIFAQServiceMockRecorder) CreateFAQ(ctx, params interface{}) *gomoc
 }
 
 // DeleteFAQ mocks base method.
-func (m *MockIFAQService) DeleteFAQ(ctx context.Context, tagId int64) error {
+func (m *MockIFAQService) DeleteFAQ(ctx context.Context, faqId int64) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteFAQ", ctx, tagId)
+	ret := m.ctrl.Call(m, "DeleteFAQ", ctx, faqId)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // DeleteFAQ indicates an expected call of DeleteFAQ.
-func (mr *MockIFAQServiceMockRecorder) DeleteFAQ(ctx, tagId interface{}) *gomock.Call {
+func (mr *MockIFAQServiceMockRecorder) DeleteFAQ(ctx, faqId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteFAQ", reflect.TypeOf((*MockIFAQService)(nil).DeleteFAQ), ctx, tagId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteFAQ", reflect.TypeOf((*MockIFAQService)(nil).DeleteFAQ), ctx, faqId)
 }
 
 // GetFAQ mocks base method.
-func (m *MockIFAQService) GetFAQ(ctx context.Context, tagId int64) (model.GetFAQRow, error) {
+func (m *MockIFAQService) GetFAQ(ctx context.Context, faqId int64) (model.GetFAQRow, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetFAQ", ctx, tagId)
+	ret := m.ctrl.Call(m, "GetFAQ", ctx, faqId)
 	ret0, _ := ret[0].(model.GetFAQRow)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetFAQ indicates an expected call of GetFAQ.
-func (mr *MockIFAQServiceMockRecorder) GetFAQ(ctx, tagId interface{}) *gomock.Call {
+func (mr *MockIFAQServiceMockRecorder) GetFAQ(ctx, faqId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFAQ", reflect.TypeOf((*MockIFAQService)(nil).GetFAQ), ctx, tagId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFAQ", reflect.TypeOf((*MockIFAQService)(nil).GetFAQ), ctx, faqId)
 }
 
 // ListAvailableFAQ mocks base method.

@@ -36,8 +36,8 @@ func (sc *StaffClient) GetType() pkg.ClientType {
 	return sc.Type
 }
 
-func (sc *StaffClient) GetSenderType() types.SenderType {
-	return types.SenderTypeStaff
+func (sc *StaffClient) GetSenderType() types.MessageSenderType {
+	return types.MessageSenderTypeStaff
 }
 
 func (sc *StaffClient) GetStatus() ClientStatus {
@@ -72,11 +72,11 @@ func (sc *StaffClient) SocketRead() {
 		member := sc.Manager.GetMember(tmp.RoomID)
 
 		switch tmp.OpType {
-		case types.OpTypeMessageReceived:
+		case types.MessageOpTypeMessageReceived:
 			sc.Notifier.Broadcast(tmp, sc, member)
-		case types.OpTypeStaffTyping:
+		case types.MessageOpTypeStaffTyping:
 			sc.Notifier.StaffTyping(sc.Name, member)
-		case types.OpTypeSendScore:
+		case types.MessageOpTypeSendScore:
 			sc.Notifier.SendScore(tmp.RoomID, sc, member)
 		}
 	}

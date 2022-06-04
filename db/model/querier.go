@@ -23,6 +23,7 @@ type Querier interface {
 	CountDailyRoomByMember(ctx context.Context, arg CountDailyRoomByMemberParams) (int64, error)
 	CountListFAQ(ctx context.Context) (int64, error)
 	CountListFastReply(ctx context.Context) (int64, error)
+	CountListMessage(ctx context.Context) (int64, error)
 	CountListNotice(ctx context.Context) (int64, error)
 	CountListRemind(ctx context.Context) (int64, error)
 	CountListRole(ctx context.Context) (int64, error)
@@ -34,6 +35,7 @@ type Querier interface {
 	CreateFastReply(ctx context.Context, arg CreateFastReplyParams) error
 	CreateFastReplyCategory(ctx context.Context, arg CreateFastReplyCategoryParams) error
 	CreateMember(ctx context.Context, arg CreateMemberParams) (sql.Result, error)
+	CreateMessage(ctx context.Context, arg CreateMessageParams) error
 	CreateNotice(ctx context.Context, arg CreateNoticeParams) error
 	CreateRemind(ctx context.Context, arg CreateRemindParams) error
 	CreateReportDailyGuest(ctx context.Context, arg CreateReportDailyGuestParams) error
@@ -79,6 +81,8 @@ type Querier interface {
 	ListFAQ(ctx context.Context, arg ListFAQParams) ([]ListFAQRow, error)
 	ListFastReply(ctx context.Context, arg ListFastReplyParams) ([]ListFastReplyRow, error)
 	ListFastReplyCategory(ctx context.Context) ([]Constant, error)
+	ListMemberRoomMessage(ctx context.Context, arg ListMemberRoomMessageParams) ([]Message, error)
+	ListMessage(ctx context.Context, arg ListMessageParams) ([]Message, error)
 	ListNotice(ctx context.Context, arg ListNoticeParams) ([]ListNoticeRow, error)
 	ListRemind(ctx context.Context, arg ListRemindParams) ([]Remind, error)
 	ListReportDailyGuest(ctx context.Context, arg ListReportDailyGuestParams) ([]ReportDailyGuest, error)
@@ -87,6 +91,7 @@ type Querier interface {
 	ListRoom(ctx context.Context, arg ListRoomParams) ([]ListRoomRow, error)
 	ListStaff(ctx context.Context, arg ListStaffParams) ([]ListStaffRow, error)
 	ListStaffRoom(ctx context.Context, arg ListStaffRoomParams) ([]ListStaffRoomRow, error)
+	ListStaffRoomMessage(ctx context.Context, arg ListStaffRoomMessageParams) ([]Message, error)
 	ListTag(ctx context.Context, arg ListTagParams) ([]ListTagRow, error)
 	RoleSeeder(ctx context.Context) error
 	StaffLogin(ctx context.Context, arg StaffLoginParams) (StaffLoginRow, error)

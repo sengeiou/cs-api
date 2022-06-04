@@ -1,6 +1,7 @@
 package message
 
 import (
+	"cs-api/db/model"
 	"cs-api/pkg"
 	iface "cs-api/pkg/interface"
 	"cs-api/pkg/types"
@@ -33,15 +34,9 @@ func (h *handler) ListMessage(c *gin.Context) {
 		return
 	}
 
-	params := types.ListMessageParams{
-		RoomID:   requestParams.RoomID,
-		StaffID:  requestParams.StaffID,
-		Content:  requestParams.Content,
-		Page:     int64(requestParams.Pagination.Page),
-		PageSize: int64(requestParams.Pagination.PageSize),
-	}
+	params, filterParams := formatListMessageParams(requestParams)
 
-	messages, count, err := h.messageSvc.ListMessage(ctx, params)
+	messages, count, err := h.messageSvc.ListMessage(ctx, params, filterParams)
 	if err != nil {
 		ginTool.Error(c, err)
 		return
@@ -52,8 +47,40 @@ func (h *handler) ListMessage(c *gin.Context) {
 	ginTool.SuccessWithPagination(c, messages, requestParams.Pagination)
 }
 
+func formatListMessageParams(requestParams ListMessageParams) (model.ListMessageParams, types.FilterMessageParams) {
+	params := model.ListMessageParams{
+		Limit:  requestParams.Pagination.PageSize,
+		Offset: 0,
+	}
+
+	filterParams := types.FilterMessageParams{
+		RoomID:  nil,
+		StaffID: nil,
+		Content: nil,
+	}
+
+	if requestParams.RoomID != 0 {
+		filterParams.RoomID = &requestParams.RoomID
+	}
+
+	if requestParams.StaffID != 0 {
+		filterParams.StaffID = &requestParams.StaffID
+	}
+
+	if requestParams.Content != "" {
+		filterParams.Content = &requestParams.Content
+	}
+
+	if requestParams.Pagination.Page > 0 {
+		params.Offset = (requestParams.Pagination.Page - 1) * requestParams.Pagination.PageSize
+	}
+
+	return params, filterParams
+}
+
 type ListStaffRoomMessageParams struct {
-	RoomID int64 `form:"room_id" binding:""`
+	RoomID int64 `form:"room_id" binding:"required,gte=1"`
+	types.Pagination
 }
 
 func (h *handler) ListStaffRoomMessage(c *gin.Context) {
@@ -68,7 +95,17 @@ func (h *handler) ListStaffRoomMessage(c *gin.Context) {
 		return
 	}
 
-	messages, err := h.messageSvc.ListRoomMessage(ctx, requestParams.RoomID, pkg.ClientTypeStaff)
+	params := model.ListStaffRoomMessageParams{
+		RoomID: requestParams.RoomID,
+		Limit:  requestParams.PageSize,
+		Offset: 0,
+	}
+
+	if requestParams.Pagination.Page > 0 {
+		params.Offset = (requestParams.Pagination.Page - 1) * requestParams.Pagination.PageSize
+	}
+
+	messages, err := h.messageSvc.ListRoomMessage(ctx, params)
 	if err != nil {
 		ginTool.Error(c, err)
 		return
@@ -77,11 +114,21 @@ func (h *handler) ListStaffRoomMessage(c *gin.Context) {
 	ginTool.SuccessWithData(c, messages)
 }
 
+type ListMemberRoomMessageParams struct {
+	types.Pagination
+}
+
 func (h *handler) ListMemberRoomMessage(c *gin.Context) {
 	var (
-		err error
-		ctx = c.Request.Context()
+		err           error
+		requestParams ListMemberRoomMessageParams
+		ctx           = c.Request.Context()
 	)
+
+	if err = c.ShouldBindQuery(&requestParams); err != nil {
+		ginTool.Error(c, errors.ErrorValidation)
+		return
+	}
 
 	clientInfo, err := h.authSvc.GetClientInfo(ctx, pkg.ClientTypeMember)
 	if err != nil {
@@ -89,7 +136,17 @@ func (h *handler) ListMemberRoomMessage(c *gin.Context) {
 		return
 	}
 
-	messages, err := h.messageSvc.ListRoomMessage(ctx, clientInfo.RoomID, pkg.ClientTypeMember)
+	params := model.ListMemberRoomMessageParams{
+		RoomID: clientInfo.RoomID,
+		Limit:  requestParams.PageSize,
+		Offset: 0,
+	}
+
+	if requestParams.Pagination.Page > 0 {
+		params.Offset = (requestParams.Pagination.Page - 1) * requestParams.Pagination.PageSize
+	}
+
+	messages, err := h.messageSvc.ListRoomMessage(ctx, params)
 	if err != nil {
 		ginTool.Error(c, err)
 		return

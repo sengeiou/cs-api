@@ -85,6 +85,31 @@ type Member struct {
 	UpdatedAt time.Time `db:"updated_at" json:"updated_at"`
 }
 
+// 歷史訊息紀錄表
+type Message struct {
+	ID int64 `db:"id" json:"id"`
+	// 房間ID
+	RoomID int64 `db:"room_id" json:"room_id"`
+	// 操作類型 0其他 1客服輸入中 2發送文字
+	OpType types.MessageOpType `db:"op_type" json:"op_type"`
+	// 發送人類型 0系統 1會員 2客服
+	SenderType types.MessageSenderType `db:"sender_type" json:"sender_type"`
+	// 發送人ID
+	SenderID int64 `db:"sender_id" json:"sender_id"`
+	// 發送人名稱
+	SenderName string `db:"sender_name" json:"sender_name"`
+	// 消息類型 0其他 1文字 2圖片
+	ContentType types.MessageContentType `db:"content_type" json:"content_type"`
+	// 訊息內容
+	Content string `db:"content" json:"content"`
+	// 額外資訊
+	Extra json.RawMessage `db:"extra" json:"extra"`
+	// 創建時間戳
+	Ts int64 `db:"ts" json:"ts"`
+	// 創建時間
+	CreatedAt time.Time `db:"created_at" json:"created_at"`
+}
+
 // 系統公告資料表
 type Notice struct {
 	ID int64 `db:"id" json:"id"`

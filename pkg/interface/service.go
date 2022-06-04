@@ -4,7 +4,6 @@ import (
 	"context"
 	"cs-api/db/model"
 	"cs-api/pkg"
-	model2 "cs-api/pkg/model"
 	"cs-api/pkg/types"
 	"github.com/gin-gonic/gin"
 	"time"
@@ -42,9 +41,9 @@ type IRoomService interface {
 }
 
 type IMessageService interface {
-	CreateMessage(ctx context.Context, message model2.Message) error
-	ListRoomMessage(ctx context.Context, roomId int64, clientType pkg.ClientType) ([]model2.Message, error)
-	ListMessage(ctx context.Context, params types.ListMessageParams) ([]model2.Message, int64, error)
+	CreateMessage(ctx context.Context, params model.CreateMessageParams) error
+	ListRoomMessage(ctx context.Context, params interface{}) ([]model.Message, error)
+	ListMessage(ctx context.Context, params model.ListMessageParams, filterParams types.FilterMessageParams) ([]model.Message, int64, error)
 }
 
 type ITagService interface {

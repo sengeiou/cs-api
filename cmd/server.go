@@ -12,7 +12,6 @@ import (
 	"github.com/AndySu1021/go-util/db"
 	"github.com/AndySu1021/go-util/gin"
 	"github.com/AndySu1021/go-util/helper"
-	"github.com/AndySu1021/go-util/mongo"
 	"github.com/AndySu1021/go-util/redis"
 	"github.com/AndySu1021/go-util/storage"
 	zlog "github.com/AndySu1021/go-util/zerolog"
@@ -43,11 +42,9 @@ func runServer(_ *cobra.Command, _ []string) {
 	commonModule := fx.Options(
 		fx.Provide(
 			config.NewConfig,
-			db.NewDatabase,
-			db.NewMongo,
-			mongo.New,
 			gin.NewGin,
 			lua.NewLua,
+			db.NewDatabase,
 			NewDBTX,
 			model.New,
 			repository.NewRepository,

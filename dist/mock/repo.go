@@ -112,5 +112,10 @@ func NewRepository(t *testing.T) iface.IRepository {
 	mock.EXPECT().DeleteFAQ(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
 	mock.EXPECT().ListAvailableFAQ(gomock.Any()).AnyTimes().Return(make([]model.ListAvailableFAQRow, 0), nil)
 
+	// Message
+	mock.EXPECT().CreateMessage(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
+	mock.EXPECT().ListMemberRoomMessage(gomock.Any(), gomock.Any()).AnyTimes().Return(make([]model.Message, 0), nil)
+	mock.EXPECT().ListStaffRoomMessage(gomock.Any(), gomock.Any()).AnyTimes().Return(make([]model.Message, 0), nil)
+
 	return mock
 }

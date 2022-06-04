@@ -156,6 +156,21 @@ func (mr *MockIRepositoryMockRecorder) CountListFastReply(ctx interface{}) *gomo
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountListFastReply", reflect.TypeOf((*MockIRepository)(nil).CountListFastReply), ctx)
 }
 
+// CountListMessage mocks base method.
+func (m *MockIRepository) CountListMessage(ctx context.Context) (int64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CountListMessage", ctx)
+	ret0, _ := ret[0].(int64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CountListMessage indicates an expected call of CountListMessage.
+func (mr *MockIRepositoryMockRecorder) CountListMessage(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountListMessage", reflect.TypeOf((*MockIRepository)(nil).CountListMessage), ctx)
+}
+
 // CountListNotice mocks base method.
 func (m *MockIRepository) CountListNotice(ctx context.Context) (int64, error) {
 	m.ctrl.T.Helper()
@@ -316,6 +331,20 @@ func (m *MockIRepository) CreateMember(ctx context.Context, arg model.CreateMemb
 func (mr *MockIRepositoryMockRecorder) CreateMember(ctx, arg interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateMember", reflect.TypeOf((*MockIRepository)(nil).CreateMember), ctx, arg)
+}
+
+// CreateMessage mocks base method.
+func (m *MockIRepository) CreateMessage(ctx context.Context, arg model.CreateMessageParams) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateMessage", ctx, arg)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateMessage indicates an expected call of CreateMessage.
+func (mr *MockIRepositoryMockRecorder) CreateMessage(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateMessage", reflect.TypeOf((*MockIRepository)(nil).CreateMessage), ctx, arg)
 }
 
 // CreateNotice mocks base method.
@@ -962,6 +991,36 @@ func (mr *MockIRepositoryMockRecorder) ListFastReplyCategory(ctx interface{}) *g
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListFastReplyCategory", reflect.TypeOf((*MockIRepository)(nil).ListFastReplyCategory), ctx)
 }
 
+// ListMemberRoomMessage mocks base method.
+func (m *MockIRepository) ListMemberRoomMessage(ctx context.Context, arg model.ListMemberRoomMessageParams) ([]model.Message, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListMemberRoomMessage", ctx, arg)
+	ret0, _ := ret[0].([]model.Message)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListMemberRoomMessage indicates an expected call of ListMemberRoomMessage.
+func (mr *MockIRepositoryMockRecorder) ListMemberRoomMessage(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListMemberRoomMessage", reflect.TypeOf((*MockIRepository)(nil).ListMemberRoomMessage), ctx, arg)
+}
+
+// ListMessage mocks base method.
+func (m *MockIRepository) ListMessage(ctx context.Context, arg model.ListMessageParams) ([]model.Message, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListMessage", ctx, arg)
+	ret0, _ := ret[0].([]model.Message)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListMessage indicates an expected call of ListMessage.
+func (mr *MockIRepositoryMockRecorder) ListMessage(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListMessage", reflect.TypeOf((*MockIRepository)(nil).ListMessage), ctx, arg)
+}
+
 // ListNotice mocks base method.
 func (m *MockIRepository) ListNotice(ctx context.Context, arg model.ListNoticeParams) ([]model.ListNoticeRow, error) {
 	m.ctrl.T.Helper()
@@ -1080,6 +1139,21 @@ func (m *MockIRepository) ListStaffRoom(ctx context.Context, arg model.ListStaff
 func (mr *MockIRepositoryMockRecorder) ListStaffRoom(ctx, arg interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListStaffRoom", reflect.TypeOf((*MockIRepository)(nil).ListStaffRoom), ctx, arg)
+}
+
+// ListStaffRoomMessage mocks base method.
+func (m *MockIRepository) ListStaffRoomMessage(ctx context.Context, arg model.ListStaffRoomMessageParams) ([]model.Message, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListStaffRoomMessage", ctx, arg)
+	ret0, _ := ret[0].([]model.Message)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListStaffRoomMessage indicates an expected call of ListStaffRoomMessage.
+func (mr *MockIRepositoryMockRecorder) ListStaffRoomMessage(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListStaffRoomMessage", reflect.TypeOf((*MockIRepository)(nil).ListStaffRoomMessage), ctx, arg)
 }
 
 // ListTag mocks base method.
