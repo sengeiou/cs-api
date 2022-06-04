@@ -34,3 +34,5 @@ overrides:
     go_type: "cs-api/pkg/types.Status"
   - column: "remind.status"
     go_type: "cs-api/pkg/types.Status"
+  - column: "faq.status"
+    go_type: "cs-api/pkg/types.Status"

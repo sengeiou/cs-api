@@ -30,6 +30,25 @@ type Constant struct {
 	UpdatedAt time.Time `db:"updated_at" json:"updated_at"`
 }
 
+// 常見問題資料表
+type Faq struct {
+	ID int64 `db:"id" json:"id"`
+	// 問題
+	Question string `db:"question" json:"question"`
+	// 答案
+	Answer string `db:"answer" json:"answer"`
+	// 狀態 1開啟 2關閉
+	Status types.Status `db:"status" json:"status"`
+	// 創建管理員
+	CreatedBy int64 `db:"created_by" json:"created_by"`
+	// 創建時間
+	CreatedAt time.Time `db:"created_at" json:"created_at"`
+	// 更新管理員
+	UpdatedBy int64 `db:"updated_by" json:"updated_by"`
+	// 更新時間
+	UpdatedAt time.Time `db:"updated_at" json:"updated_at"`
+}
+
 type FastReply struct {
 	ID int64 `db:"id" json:"id"`
 	// 分類ID(constantID)

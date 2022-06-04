@@ -126,6 +126,21 @@ func (mr *MockIRepositoryMockRecorder) CountDailyRoomByMember(ctx, arg interface
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountDailyRoomByMember", reflect.TypeOf((*MockIRepository)(nil).CountDailyRoomByMember), ctx, arg)
 }
 
+// CountListFAQ mocks base method.
+func (m *MockIRepository) CountListFAQ(ctx context.Context) (int64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CountListFAQ", ctx)
+	ret0, _ := ret[0].(int64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CountListFAQ indicates an expected call of CountListFAQ.
+func (mr *MockIRepositoryMockRecorder) CountListFAQ(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountListFAQ", reflect.TypeOf((*MockIRepository)(nil).CountListFAQ), ctx)
+}
+
 // CountListFastReply mocks base method.
 func (m *MockIRepository) CountListFastReply(ctx context.Context) (int64, error) {
 	m.ctrl.T.Helper()
@@ -244,6 +259,20 @@ func (m *MockIRepository) CountListTag(ctx context.Context) (int64, error) {
 func (mr *MockIRepositoryMockRecorder) CountListTag(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountListTag", reflect.TypeOf((*MockIRepository)(nil).CountListTag), ctx)
+}
+
+// CreateFAQ mocks base method.
+func (m *MockIRepository) CreateFAQ(ctx context.Context, arg model.CreateFAQParams) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateFAQ", ctx, arg)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateFAQ indicates an expected call of CreateFAQ.
+func (mr *MockIRepositoryMockRecorder) CreateFAQ(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateFAQ", reflect.TypeOf((*MockIRepository)(nil).CreateFAQ), ctx, arg)
 }
 
 // CreateFastReply mocks base method.
@@ -400,6 +429,20 @@ func (m *MockIRepository) CreateTag(ctx context.Context, arg model.CreateTagPara
 func (mr *MockIRepositoryMockRecorder) CreateTag(ctx, arg interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTag", reflect.TypeOf((*MockIRepository)(nil).CreateTag), ctx, arg)
+}
+
+// DeleteFAQ mocks base method.
+func (m *MockIRepository) DeleteFAQ(ctx context.Context, id int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteFAQ", ctx, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteFAQ indicates an expected call of DeleteFAQ.
+func (mr *MockIRepositoryMockRecorder) DeleteFAQ(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteFAQ", reflect.TypeOf((*MockIRepository)(nil).DeleteFAQ), ctx, id)
 }
 
 // DeleteFastReply mocks base method.
@@ -587,6 +630,21 @@ func (m *MockIRepository) GetCsConfig(ctx context.Context) (model.Constant, erro
 func (mr *MockIRepositoryMockRecorder) GetCsConfig(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCsConfig", reflect.TypeOf((*MockIRepository)(nil).GetCsConfig), ctx)
+}
+
+// GetFAQ mocks base method.
+func (m *MockIRepository) GetFAQ(ctx context.Context, id int64) (model.GetFAQRow, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetFAQ", ctx, id)
+	ret0, _ := ret[0].(model.GetFAQRow)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetFAQ indicates an expected call of GetFAQ.
+func (mr *MockIRepositoryMockRecorder) GetFAQ(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFAQ", reflect.TypeOf((*MockIRepository)(nil).GetFAQ), ctx, id)
 }
 
 // GetFastReply mocks base method.
@@ -814,6 +872,21 @@ func (mr *MockIRepositoryMockRecorder) ListActiveRemind(ctx interface{}) *gomock
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListActiveRemind", reflect.TypeOf((*MockIRepository)(nil).ListActiveRemind), ctx)
 }
 
+// ListAvailableFAQ mocks base method.
+func (m *MockIRepository) ListAvailableFAQ(ctx context.Context) ([]model.ListAvailableFAQRow, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListAvailableFAQ", ctx)
+	ret0, _ := ret[0].([]model.ListAvailableFAQRow)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListAvailableFAQ indicates an expected call of ListAvailableFAQ.
+func (mr *MockIRepositoryMockRecorder) ListAvailableFAQ(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAvailableFAQ", reflect.TypeOf((*MockIRepository)(nil).ListAvailableFAQ), ctx)
+}
+
 // ListAvailableStaff mocks base method.
 func (m *MockIRepository) ListAvailableStaff(ctx context.Context, id int64) ([]model.ListAvailableStaffRow, error) {
 	m.ctrl.T.Helper()
@@ -842,6 +915,21 @@ func (m *MockIRepository) ListAvailableTag(ctx context.Context) ([]model.ListAva
 func (mr *MockIRepositoryMockRecorder) ListAvailableTag(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAvailableTag", reflect.TypeOf((*MockIRepository)(nil).ListAvailableTag), ctx)
+}
+
+// ListFAQ mocks base method.
+func (m *MockIRepository) ListFAQ(ctx context.Context, arg model.ListFAQParams) ([]model.ListFAQRow, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListFAQ", ctx, arg)
+	ret0, _ := ret[0].([]model.ListFAQRow)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListFAQ indicates an expected call of ListFAQ.
+func (mr *MockIRepositoryMockRecorder) ListFAQ(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListFAQ", reflect.TypeOf((*MockIRepository)(nil).ListFAQ), ctx, arg)
 }
 
 // ListFastReply mocks base method.
@@ -1092,6 +1180,20 @@ func (m *MockIRepository) UpdateCsConfig(ctx context.Context, arg model.UpdateCs
 func (mr *MockIRepositoryMockRecorder) UpdateCsConfig(ctx, arg interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateCsConfig", reflect.TypeOf((*MockIRepository)(nil).UpdateCsConfig), ctx, arg)
+}
+
+// UpdateFAQ mocks base method.
+func (m *MockIRepository) UpdateFAQ(ctx context.Context, arg model.UpdateFAQParams) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateFAQ", ctx, arg)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateFAQ indicates an expected call of UpdateFAQ.
+func (mr *MockIRepositoryMockRecorder) UpdateFAQ(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateFAQ", reflect.TypeOf((*MockIRepository)(nil).UpdateFAQ), ctx, arg)
 }
 
 // UpdateFastReply mocks base method.

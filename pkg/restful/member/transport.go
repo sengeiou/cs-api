@@ -25,9 +25,4 @@ func InitTransport(p Params) {
 		p.R.Op("GetMemberStatus"),
 		p.H.GetMemberStatus,
 	)
-
-	routes.PATCH("/member/:id/status",
-		p.R.Op("UpdateMemberStatus"),
-		p.H.UpdateMemberStatus,
-	)
 }

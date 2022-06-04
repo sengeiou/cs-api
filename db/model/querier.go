@@ -21,6 +21,7 @@ type Querier interface {
 	CountClosedRoomByTag(ctx context.Context, arg CountClosedRoomByTagParams) ([]CountClosedRoomByTagRow, error)
 	// 計算每日訪客數
 	CountDailyRoomByMember(ctx context.Context, arg CountDailyRoomByMemberParams) (int64, error)
+	CountListFAQ(ctx context.Context) (int64, error)
 	CountListFastReply(ctx context.Context) (int64, error)
 	CountListNotice(ctx context.Context) (int64, error)
 	CountListRemind(ctx context.Context) (int64, error)
@@ -29,6 +30,7 @@ type Querier interface {
 	CountListStaff(ctx context.Context) (int64, error)
 	CountListStaffRoom(ctx context.Context, status types.RoomStatus) (int64, error)
 	CountListTag(ctx context.Context) (int64, error)
+	CreateFAQ(ctx context.Context, arg CreateFAQParams) error
 	CreateFastReply(ctx context.Context, arg CreateFastReplyParams) error
 	CreateFastReplyCategory(ctx context.Context, arg CreateFastReplyCategoryParams) error
 	CreateMember(ctx context.Context, arg CreateMemberParams) (sql.Result, error)
@@ -40,6 +42,7 @@ type Querier interface {
 	CreateRoom(ctx context.Context, arg CreateRoomParams) (sql.Result, error)
 	CreateStaff(ctx context.Context, arg CreateStaffParams) error
 	CreateTag(ctx context.Context, arg CreateTagParams) error
+	DeleteFAQ(ctx context.Context, id int64) error
 	DeleteFastReply(ctx context.Context, id int64) error
 	DeleteNotice(ctx context.Context, id int64) error
 	DeleteRemind(ctx context.Context, id int64) error
@@ -53,6 +56,7 @@ type Querier interface {
 	GetAllStaffs(ctx context.Context) ([]GetAllStaffsRow, error)
 	GetAllTag(ctx context.Context) ([]Tag, error)
 	GetCsConfig(ctx context.Context) (Constant, error)
+	GetFAQ(ctx context.Context, id int64) (GetFAQRow, error)
 	GetFastReply(ctx context.Context, id int64) (FastReply, error)
 	GetGuestMember(ctx context.Context, deviceID string) (Member, error)
 	GetLatestNotice(ctx context.Context) (GetLatestNoticeRow, error)
@@ -69,8 +73,10 @@ type Querier interface {
 	GetStaffRoom(ctx context.Context, staffID int64) ([]int64, error)
 	GetTag(ctx context.Context, id int64) (GetTagRow, error)
 	ListActiveRemind(ctx context.Context) ([]ListActiveRemindRow, error)
+	ListAvailableFAQ(ctx context.Context) ([]ListAvailableFAQRow, error)
 	ListAvailableStaff(ctx context.Context, id int64) ([]ListAvailableStaffRow, error)
 	ListAvailableTag(ctx context.Context) ([]ListAvailableTagRow, error)
+	ListFAQ(ctx context.Context, arg ListFAQParams) ([]ListFAQRow, error)
 	ListFastReply(ctx context.Context, arg ListFastReplyParams) ([]ListFastReplyRow, error)
 	ListFastReplyCategory(ctx context.Context) ([]Constant, error)
 	ListNotice(ctx context.Context, arg ListNoticeParams) ([]ListNoticeRow, error)
@@ -87,6 +93,7 @@ type Querier interface {
 	StaffSeeder(ctx context.Context, password string) error
 	TagSeeder(ctx context.Context) error
 	UpdateCsConfig(ctx context.Context, arg UpdateCsConfigParams) error
+	UpdateFAQ(ctx context.Context, arg UpdateFAQParams) error
 	UpdateFastReply(ctx context.Context, arg UpdateFastReplyParams) error
 	UpdateMemberStatus(ctx context.Context, arg UpdateMemberStatusParams) error
 	UpdateNotice(ctx context.Context, arg UpdateNoticeParams) error

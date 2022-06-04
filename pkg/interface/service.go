@@ -111,3 +111,12 @@ type IRemindService interface {
 	DeleteRemind(ctx context.Context, remindId int64) error
 	ListActiveRemind(ctx context.Context) ([]model.ListActiveRemindRow, error)
 }
+
+type IFAQService interface {
+	ListFAQ(ctx context.Context, params model.ListFAQParams, filterParams types.FilterFAQParams) ([]model.ListFAQRow, int64, error)
+	GetFAQ(ctx context.Context, faqId int64) (model.GetFAQRow, error)
+	CreateFAQ(ctx context.Context, params model.CreateFAQParams) error
+	UpdateFAQ(ctx context.Context, params model.UpdateFAQParams) error
+	DeleteFAQ(ctx context.Context, faqId int64) error
+	ListAvailableFAQ(ctx context.Context) ([]model.ListAvailableFAQRow, error)
+}

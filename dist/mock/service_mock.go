@@ -1248,3 +1248,114 @@ func (mr *MockIRemindServiceMockRecorder) UpdateRemind(ctx, params interface{}) 
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateRemind", reflect.TypeOf((*MockIRemindService)(nil).UpdateRemind), ctx, params)
 }
+
+// MockIFAQService is a mock of IFAQService interface.
+type MockIFAQService struct {
+	ctrl     *gomock.Controller
+	recorder *MockIFAQServiceMockRecorder
+}
+
+// MockIFAQServiceMockRecorder is the mock recorder for MockIFAQService.
+type MockIFAQServiceMockRecorder struct {
+	mock *MockIFAQService
+}
+
+// NewMockIFAQService creates a new mock instance.
+func NewMockIFAQService(ctrl *gomock.Controller) *MockIFAQService {
+	mock := &MockIFAQService{ctrl: ctrl}
+	mock.recorder = &MockIFAQServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockIFAQService) EXPECT() *MockIFAQServiceMockRecorder {
+	return m.recorder
+}
+
+// CreateFAQ mocks base method.
+func (m *MockIFAQService) CreateFAQ(ctx context.Context, params model.CreateFAQParams) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateFAQ", ctx, params)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateFAQ indicates an expected call of CreateFAQ.
+func (mr *MockIFAQServiceMockRecorder) CreateFAQ(ctx, params interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateFAQ", reflect.TypeOf((*MockIFAQService)(nil).CreateFAQ), ctx, params)
+}
+
+// DeleteFAQ mocks base method.
+func (m *MockIFAQService) DeleteFAQ(ctx context.Context, tagId int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteFAQ", ctx, tagId)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteFAQ indicates an expected call of DeleteFAQ.
+func (mr *MockIFAQServiceMockRecorder) DeleteFAQ(ctx, tagId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteFAQ", reflect.TypeOf((*MockIFAQService)(nil).DeleteFAQ), ctx, tagId)
+}
+
+// GetFAQ mocks base method.
+func (m *MockIFAQService) GetFAQ(ctx context.Context, tagId int64) (model.GetFAQRow, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetFAQ", ctx, tagId)
+	ret0, _ := ret[0].(model.GetFAQRow)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetFAQ indicates an expected call of GetFAQ.
+func (mr *MockIFAQServiceMockRecorder) GetFAQ(ctx, tagId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFAQ", reflect.TypeOf((*MockIFAQService)(nil).GetFAQ), ctx, tagId)
+}
+
+// ListAvailableFAQ mocks base method.
+func (m *MockIFAQService) ListAvailableFAQ(ctx context.Context) ([]model.ListAvailableFAQRow, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListAvailableFAQ", ctx)
+	ret0, _ := ret[0].([]model.ListAvailableFAQRow)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListAvailableFAQ indicates an expected call of ListAvailableFAQ.
+func (mr *MockIFAQServiceMockRecorder) ListAvailableFAQ(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAvailableFAQ", reflect.TypeOf((*MockIFAQService)(nil).ListAvailableFAQ), ctx)
+}
+
+// ListFAQ mocks base method.
+func (m *MockIFAQService) ListFAQ(ctx context.Context, params model.ListFAQParams, filterParams types.FilterFAQParams) ([]model.ListFAQRow, int64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListFAQ", ctx, params, filterParams)
+	ret0, _ := ret[0].([]model.ListFAQRow)
+	ret1, _ := ret[1].(int64)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
+}
+
+// ListFAQ indicates an expected call of ListFAQ.
+func (mr *MockIFAQServiceMockRecorder) ListFAQ(ctx, params, filterParams interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListFAQ", reflect.TypeOf((*MockIFAQService)(nil).ListFAQ), ctx, params, filterParams)
+}
+
+// UpdateFAQ mocks base method.
+func (m *MockIFAQService) UpdateFAQ(ctx context.Context, params model.UpdateFAQParams) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateFAQ", ctx, params)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateFAQ indicates an expected call of UpdateFAQ.
+func (mr *MockIFAQServiceMockRecorder) UpdateFAQ(ctx, params interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateFAQ", reflect.TypeOf((*MockIFAQService)(nil).UpdateFAQ), ctx, params)
+}

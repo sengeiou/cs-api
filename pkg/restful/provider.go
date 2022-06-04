@@ -5,6 +5,7 @@ import (
 	"cs-api/pkg/restful/chat"
 	"cs-api/pkg/restful/common"
 	"cs-api/pkg/restful/cs_config"
+	"cs-api/pkg/restful/faq"
 	"cs-api/pkg/restful/fast_reply"
 	"cs-api/pkg/restful/member"
 	"cs-api/pkg/restful/message"
@@ -37,4 +38,5 @@ var Module = fx.Options(
 	room.Module,
 	common.Module,
 	chat.Module,
+	faq.Module,
 )
