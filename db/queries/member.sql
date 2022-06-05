@@ -14,12 +14,12 @@ where type = 1
 INSERT INTO member (type, name, device_id, created_at, updated_at)
 VALUES (?, ?, ?, ?, ?);
 
--- name: GetMemberStatus :one
-select status
+-- name: GetOnlineStatus :one
+select online_status
 from member
 where id = ?;
 
--- name: UpdateMemberStatus :exec
+-- name: UpdateOnlineStatus :exec
 update member
-set status = ?
+set online_status = ?
 where id = ?;

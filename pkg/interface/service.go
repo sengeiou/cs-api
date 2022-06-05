@@ -79,8 +79,8 @@ type ICsConfigService interface {
 
 type IMemberService interface {
 	GetOrCreateMember(ctx context.Context, name string, deviceId string) (model.Member, error)
-	GetMemberStatus(ctx context.Context, memberId int64) (types.MemberStatus, error)
-	UpdateMemberStatus(ctx context.Context, params model.UpdateMemberStatusParams) error
+	GetOnlineStatus(ctx context.Context, memberId int64) (types.MemberOnlineStatus, error)
+	UpdateOnlineStatus(ctx context.Context, params model.UpdateOnlineStatusParams) error
 }
 
 type IRoleService interface {

@@ -168,14 +168,14 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.getMemberAvailableRoomStmt, err = db.PrepareContext(ctx, getMemberAvailableRoom); err != nil {
 		return nil, fmt.Errorf("error preparing query GetMemberAvailableRoom: %w", err)
 	}
-	if q.getMemberStatusStmt, err = db.PrepareContext(ctx, getMemberStatus); err != nil {
-		return nil, fmt.Errorf("error preparing query GetMemberStatus: %w", err)
-	}
 	if q.getNormalMemberStmt, err = db.PrepareContext(ctx, getNormalMember); err != nil {
 		return nil, fmt.Errorf("error preparing query GetNormalMember: %w", err)
 	}
 	if q.getNoticeStmt, err = db.PrepareContext(ctx, getNotice); err != nil {
 		return nil, fmt.Errorf("error preparing query GetNotice: %w", err)
+	}
+	if q.getOnlineStatusStmt, err = db.PrepareContext(ctx, getOnlineStatus); err != nil {
+		return nil, fmt.Errorf("error preparing query GetOnlineStatus: %w", err)
 	}
 	if q.getRemindStmt, err = db.PrepareContext(ctx, getRemind); err != nil {
 		return nil, fmt.Errorf("error preparing query GetRemind: %w", err)
@@ -276,11 +276,11 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.updateFastReplyStmt, err = db.PrepareContext(ctx, updateFastReply); err != nil {
 		return nil, fmt.Errorf("error preparing query UpdateFastReply: %w", err)
 	}
-	if q.updateMemberStatusStmt, err = db.PrepareContext(ctx, updateMemberStatus); err != nil {
-		return nil, fmt.Errorf("error preparing query UpdateMemberStatus: %w", err)
-	}
 	if q.updateNoticeStmt, err = db.PrepareContext(ctx, updateNotice); err != nil {
 		return nil, fmt.Errorf("error preparing query UpdateNotice: %w", err)
+	}
+	if q.updateOnlineStatusStmt, err = db.PrepareContext(ctx, updateOnlineStatus); err != nil {
+		return nil, fmt.Errorf("error preparing query UpdateOnlineStatus: %w", err)
 	}
 	if q.updateRemindStmt, err = db.PrepareContext(ctx, updateRemind); err != nil {
 		return nil, fmt.Errorf("error preparing query UpdateRemind: %w", err)
@@ -557,11 +557,6 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing getMemberAvailableRoomStmt: %w", cerr)
 		}
 	}
-	if q.getMemberStatusStmt != nil {
-		if cerr := q.getMemberStatusStmt.Close(); cerr != nil {
-			err = fmt.Errorf("error closing getMemberStatusStmt: %w", cerr)
-		}
-	}
 	if q.getNormalMemberStmt != nil {
 		if cerr := q.getNormalMemberStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getNormalMemberStmt: %w", cerr)
@@ -570,6 +565,11 @@ func (q *Queries) Close() error {
 	if q.getNoticeStmt != nil {
 		if cerr := q.getNoticeStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getNoticeStmt: %w", cerr)
+		}
+	}
+	if q.getOnlineStatusStmt != nil {
+		if cerr := q.getOnlineStatusStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getOnlineStatusStmt: %w", cerr)
 		}
 	}
 	if q.getRemindStmt != nil {
@@ -737,14 +737,14 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing updateFastReplyStmt: %w", cerr)
 		}
 	}
-	if q.updateMemberStatusStmt != nil {
-		if cerr := q.updateMemberStatusStmt.Close(); cerr != nil {
-			err = fmt.Errorf("error closing updateMemberStatusStmt: %w", cerr)
-		}
-	}
 	if q.updateNoticeStmt != nil {
 		if cerr := q.updateNoticeStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing updateNoticeStmt: %w", cerr)
+		}
+	}
+	if q.updateOnlineStatusStmt != nil {
+		if cerr := q.updateOnlineStatusStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing updateOnlineStatusStmt: %w", cerr)
 		}
 	}
 	if q.updateRemindStmt != nil {
@@ -884,9 +884,9 @@ type Queries struct {
 	getGuestMemberStmt           *sql.Stmt
 	getLatestNoticeStmt          *sql.Stmt
 	getMemberAvailableRoomStmt   *sql.Stmt
-	getMemberStatusStmt          *sql.Stmt
 	getNormalMemberStmt          *sql.Stmt
 	getNoticeStmt                *sql.Stmt
+	getOnlineStatusStmt          *sql.Stmt
 	getRemindStmt                *sql.Stmt
 	getRoleStmt                  *sql.Stmt
 	getRoomStmt                  *sql.Stmt
@@ -920,8 +920,8 @@ type Queries struct {
 	updateCsConfigStmt           *sql.Stmt
 	updateFAQStmt                *sql.Stmt
 	updateFastReplyStmt          *sql.Stmt
-	updateMemberStatusStmt       *sql.Stmt
 	updateNoticeStmt             *sql.Stmt
+	updateOnlineStatusStmt       *sql.Stmt
 	updateRemindStmt             *sql.Stmt
 	updateRoleStmt               *sql.Stmt
 	updateRoomScoreStmt          *sql.Stmt
@@ -986,9 +986,9 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		getGuestMemberStmt:           q.getGuestMemberStmt,
 		getLatestNoticeStmt:          q.getLatestNoticeStmt,
 		getMemberAvailableRoomStmt:   q.getMemberAvailableRoomStmt,
-		getMemberStatusStmt:          q.getMemberStatusStmt,
 		getNormalMemberStmt:          q.getNormalMemberStmt,
 		getNoticeStmt:                q.getNoticeStmt,
+		getOnlineStatusStmt:          q.getOnlineStatusStmt,
 		getRemindStmt:                q.getRemindStmt,
 		getRoleStmt:                  q.getRoleStmt,
 		getRoomStmt:                  q.getRoomStmt,
@@ -1022,8 +1022,8 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		updateCsConfigStmt:           q.updateCsConfigStmt,
 		updateFAQStmt:                q.updateFAQStmt,
 		updateFastReplyStmt:          q.updateFastReplyStmt,
-		updateMemberStatusStmt:       q.updateMemberStatusStmt,
 		updateNoticeStmt:             q.updateNoticeStmt,
+		updateOnlineStatusStmt:       q.updateOnlineStatusStmt,
 		updateRemindStmt:             q.updateRemindStmt,
 		updateRoleStmt:               q.updateRoleStmt,
 		updateRoomScoreStmt:          q.updateRoomScoreStmt,

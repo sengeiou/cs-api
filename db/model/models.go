@@ -77,8 +77,14 @@ type Member struct {
 	Name string `db:"name" json:"name"`
 	// 設備號
 	DeviceID string `db:"device_id" json:"device_id"`
+	// 真實姓名
+	RealName string `db:"real_name" json:"real_name"`
+	// 手機號
+	Mobile string `db:"mobile" json:"mobile"`
+	// 電子信箱
+	Email string `db:"email" json:"email"`
 	// 會員狀態 1在線 2離線
-	Status types.MemberStatus `db:"status" json:"status"`
+	OnlineStatus types.MemberOnlineStatus `db:"online_status" json:"online_status"`
 	// 創建時間
 	CreatedAt time.Time `db:"created_at" json:"created_at"`
 	// 更新時間

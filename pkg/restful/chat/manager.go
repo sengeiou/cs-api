@@ -2,6 +2,7 @@ package chat
 
 import (
 	"context"
+	"cs-api/db/model"
 	"cs-api/pkg"
 	iface "cs-api/pkg/interface"
 	"cs-api/pkg/types"
@@ -18,6 +19,7 @@ type ClientManager struct {
 	notifier      *Notifier
 	roomSvc       iface.IRoomService
 	msgSvc        iface.IMessageService
+	memberSvc     iface.IMemberService
 	csConfig      types.CsConfig
 	memberPool    *sync.Pool
 	staffPool     *sync.Pool
@@ -48,6 +50,15 @@ func (w *ClientManager) Register(clientInfo pkg.ClientInfo) {
 			log.Error().Msgf("reset member error: %s", err)
 			return
 		}
+
+		if err := w.memberSvc.UpdateOnlineStatus(context.Background(), model.UpdateOnlineStatusParams{
+			OnlineStatus: types.MemberOnlineStatusOnline,
+			ID:           member.ID,
+		}); err != nil {
+			log.Error().Msgf("update member online status error: %s", err)
+			return
+		}
+
 		w.JoinRoom(member)
 
 		// 檢查用戶是否超過閒置時間
@@ -92,10 +103,16 @@ func (w *ClientManager) Unregister(client Client) error {
 		close(member.SendChan)
 		close(member.Sending)
 		if err := member.Socket.Close(); err != nil {
-			log.Error().Msgf("handle unregister error: %s\n", err)
+			log.Error().Msgf("handle unregister error: %s", err)
 			return err
 		}
-		// TODO: should update room status to closed
+		if err := w.memberSvc.UpdateOnlineStatus(context.Background(), model.UpdateOnlineStatusParams{
+			OnlineStatus: types.MemberOnlineStatusOffline,
+			ID:           member.ID,
+		}); err != nil {
+			log.Error().Msgf("update member online status error: %s", err)
+			return err
+		}
 		w.memberClients.Delete(member.RoomID)
 		w.memberPool.Put(member)
 	}
@@ -130,6 +147,7 @@ type ClientManagerParams struct {
 
 	RoomSvc     iface.IRoomService
 	MsgSvc      iface.IMessageService
+	MemberSvc   iface.IMemberService
 	CsConfigSvc iface.ICsConfigService
 	Dispatcher  *StaffDispatcher
 	Notifier    *Notifier
@@ -148,6 +166,7 @@ func NewClientManager(p ClientManagerParams) *ClientManager {
 		notifier:      p.Notifier,
 		roomSvc:       p.RoomSvc,
 		msgSvc:        p.MsgSvc,
+		memberSvc:     p.MemberSvc,
 		csConfig:      config,
 		memberPool:    &sync.Pool{New: func() any { return &MemberClient{} }},
 		staffPool:     &sync.Pool{New: func() any { return &StaffClient{} }},

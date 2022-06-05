@@ -736,21 +736,6 @@ func (mr *MockIRepositoryMockRecorder) GetMemberAvailableRoom(ctx, memberID inte
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMemberAvailableRoom", reflect.TypeOf((*MockIRepository)(nil).GetMemberAvailableRoom), ctx, memberID)
 }
 
-// GetMemberStatus mocks base method.
-func (m *MockIRepository) GetMemberStatus(ctx context.Context, id int64) (types.MemberStatus, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetMemberStatus", ctx, id)
-	ret0, _ := ret[0].(types.MemberStatus)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetMemberStatus indicates an expected call of GetMemberStatus.
-func (mr *MockIRepositoryMockRecorder) GetMemberStatus(ctx, id interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMemberStatus", reflect.TypeOf((*MockIRepository)(nil).GetMemberStatus), ctx, id)
-}
-
 // GetNormalMember mocks base method.
 func (m *MockIRepository) GetNormalMember(ctx context.Context, name string) (model.Member, error) {
 	m.ctrl.T.Helper()
@@ -779,6 +764,21 @@ func (m *MockIRepository) GetNotice(ctx context.Context, id int64) (model.Notice
 func (mr *MockIRepositoryMockRecorder) GetNotice(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetNotice", reflect.TypeOf((*MockIRepository)(nil).GetNotice), ctx, id)
+}
+
+// GetOnlineStatus mocks base method.
+func (m *MockIRepository) GetOnlineStatus(ctx context.Context, id int64) (types.MemberOnlineStatus, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetOnlineStatus", ctx, id)
+	ret0, _ := ret[0].(types.MemberOnlineStatus)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetOnlineStatus indicates an expected call of GetOnlineStatus.
+func (mr *MockIRepositoryMockRecorder) GetOnlineStatus(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOnlineStatus", reflect.TypeOf((*MockIRepository)(nil).GetOnlineStatus), ctx, id)
 }
 
 // GetRemind mocks base method.
@@ -1284,20 +1284,6 @@ func (mr *MockIRepositoryMockRecorder) UpdateFastReply(ctx, arg interface{}) *go
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateFastReply", reflect.TypeOf((*MockIRepository)(nil).UpdateFastReply), ctx, arg)
 }
 
-// UpdateMemberStatus mocks base method.
-func (m *MockIRepository) UpdateMemberStatus(ctx context.Context, arg model.UpdateMemberStatusParams) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateMemberStatus", ctx, arg)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// UpdateMemberStatus indicates an expected call of UpdateMemberStatus.
-func (mr *MockIRepositoryMockRecorder) UpdateMemberStatus(ctx, arg interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateMemberStatus", reflect.TypeOf((*MockIRepository)(nil).UpdateMemberStatus), ctx, arg)
-}
-
 // UpdateNotice mocks base method.
 func (m *MockIRepository) UpdateNotice(ctx context.Context, arg model.UpdateNoticeParams) error {
 	m.ctrl.T.Helper()
@@ -1310,6 +1296,20 @@ func (m *MockIRepository) UpdateNotice(ctx context.Context, arg model.UpdateNoti
 func (mr *MockIRepositoryMockRecorder) UpdateNotice(ctx, arg interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateNotice", reflect.TypeOf((*MockIRepository)(nil).UpdateNotice), ctx, arg)
+}
+
+// UpdateOnlineStatus mocks base method.
+func (m *MockIRepository) UpdateOnlineStatus(ctx context.Context, arg model.UpdateOnlineStatusParams) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateOnlineStatus", ctx, arg)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateOnlineStatus indicates an expected call of UpdateOnlineStatus.
+func (mr *MockIRepositoryMockRecorder) UpdateOnlineStatus(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateOnlineStatus", reflect.TypeOf((*MockIRepository)(nil).UpdateOnlineStatus), ctx, arg)
 }
 
 // UpdateRemind mocks base method.

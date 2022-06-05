@@ -7,9 +7,9 @@ const (
 	MemberTypeGuest
 )
 
-type MemberStatus int8
+type MemberOnlineStatus int8
 
 const (
-	MemberStatusOnline MemberStatus = iota + 1
-	MemberStatusOffline
+	MemberOnlineStatusOnline MemberOnlineStatus = iota + 1
+	MemberOnlineStatusOffline
 )

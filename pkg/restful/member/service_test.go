@@ -111,7 +111,7 @@ func Test_service_GetOrCreateMember(t *testing.T) {
 	}
 }
 
-func Test_service_GetMemberStatus(t *testing.T) {
+func Test_service_GetOnlineStatus(t *testing.T) {
 	type fields struct {
 		repo iface.IRepository
 	}
@@ -123,7 +123,7 @@ func Test_service_GetMemberStatus(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    types.MemberStatus
+		want    types.MemberOnlineStatus
 		wantErr bool
 	}{
 		{
@@ -133,7 +133,7 @@ func Test_service_GetMemberStatus(t *testing.T) {
 				ctx:      context.Background(),
 				memberId: 1,
 			},
-			want:    types.MemberStatus(1),
+			want:    types.MemberOnlineStatus(1),
 			wantErr: false,
 		},
 	}
@@ -142,7 +142,7 @@ func Test_service_GetMemberStatus(t *testing.T) {
 			s := &service{
 				repo: tt.fields.repo,
 			}
-			got, err := s.GetMemberStatus(tt.args.ctx, tt.args.memberId)
+			got, err := s.GetOnlineStatus(tt.args.ctx, tt.args.memberId)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetMemberStatus() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -154,13 +154,13 @@ func Test_service_GetMemberStatus(t *testing.T) {
 	}
 }
 
-func Test_service_UpdateMemberStatus(t *testing.T) {
+func Test_service_UpdateOnlineStatus(t *testing.T) {
 	type fields struct {
 		repo iface.IRepository
 	}
 	type args struct {
 		ctx    context.Context
-		params model.UpdateMemberStatusParams
+		params model.UpdateOnlineStatusParams
 	}
 	tests := []struct {
 		name    string
@@ -173,7 +173,7 @@ func Test_service_UpdateMemberStatus(t *testing.T) {
 			fields: fields{repo: mock.NewRepository(t)},
 			args: args{
 				ctx:    context.Background(),
-				params: model.UpdateMemberStatusParams{},
+				params: model.UpdateOnlineStatusParams{},
 			},
 			wantErr: false,
 		},
@@ -183,7 +183,7 @@ func Test_service_UpdateMemberStatus(t *testing.T) {
 			s := &service{
 				repo: tt.fields.repo,
 			}
-			if err := s.UpdateMemberStatus(tt.args.ctx, tt.args.params); (err != nil) != tt.wantErr {
+			if err := s.UpdateOnlineStatus(tt.args.ctx, tt.args.params); (err != nil) != tt.wantErr {
 				t.Errorf("UpdateMemberStatus() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

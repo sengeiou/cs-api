@@ -24,7 +24,7 @@ func (h *handler) GetMemberStatus(c *gin.Context) {
 		return
 	}
 
-	status, err := h.memberSvc.GetMemberStatus(ctx, id)
+	status, err := h.memberSvc.GetOnlineStatus(ctx, id)
 	if err != nil {
 		ginTool.Error(c, err)
 		return
