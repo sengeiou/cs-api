@@ -18,11 +18,16 @@ type Params struct {
 }
 
 func InitTransport(p Params) {
-	routes := p.Engine.Group("/api")
+	routes := p.Engine.Group("/api", p.AuthSvc.SetClientInfo(pkg.ClientTypeStaff))
 
-	routes.GET("/member/:id/status",
-		p.AuthSvc.SetClientInfo(pkg.ClientTypeStaff),
-		p.R.Op("GetMemberStatus"),
-		p.H.GetMemberStatus,
+	routes.GET("/members",
+		p.AuthSvc.CheckPermission("ListMember"),
+		p.R.Op("ListMember"),
+		p.H.ListMember,
+	)
+
+	routes.GET("/member/:id/online-status",
+		p.R.Op("GetOnlineStatus"),
+		p.H.GetOnlineStatus,
 	)
 }

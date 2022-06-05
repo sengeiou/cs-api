@@ -78,6 +78,7 @@ type ICsConfigService interface {
 }
 
 type IMemberService interface {
+	ListMember(ctx context.Context, params model.ListMemberParams, filterParams types.FilterMemberParams) ([]model.Member, int64, error)
 	GetOrCreateMember(ctx context.Context, name string, deviceId string) (model.Member, error)
 	GetOnlineStatus(ctx context.Context, memberId int64) (types.MemberOnlineStatus, error)
 	UpdateOnlineStatus(ctx context.Context, params model.UpdateOnlineStatusParams) error

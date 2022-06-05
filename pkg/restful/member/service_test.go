@@ -7,6 +7,7 @@ import (
 	iface "cs-api/pkg/interface"
 	"cs-api/pkg/types"
 	"github.com/magiconair/properties/assert"
+	"reflect"
 	"testing"
 )
 
@@ -185,6 +186,56 @@ func Test_service_UpdateOnlineStatus(t *testing.T) {
 			}
 			if err := s.UpdateOnlineStatus(tt.args.ctx, tt.args.params); (err != nil) != tt.wantErr {
 				t.Errorf("UpdateMemberStatus() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func Test_service_ListMember(t *testing.T) {
+	type fields struct {
+		repo iface.IRepository
+	}
+	type args struct {
+		ctx          context.Context
+		params       model.ListMemberParams
+		filterParams types.FilterMemberParams
+	}
+	tests := []struct {
+		name        string
+		fields      fields
+		args        args
+		wantMembers []model.Member
+		wantCount   int64
+		wantErr     bool
+	}{
+		{
+			name:   "normal test",
+			fields: fields{repo: mock.NewRepository(t)},
+			args: args{
+				ctx:          context.Background(),
+				params:       model.ListMemberParams{},
+				filterParams: types.FilterMemberParams{},
+			},
+			wantMembers: make([]model.Member, 0),
+			wantCount:   0,
+			wantErr:     false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &service{
+				repo: tt.fields.repo,
+			}
+			gotMembers, gotCount, err := s.ListMember(tt.args.ctx, tt.args.params, tt.args.filterParams)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ListMember() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotMembers, tt.wantMembers) {
+				t.Errorf("ListMember() gotMembers = %v, want %v", gotMembers, tt.wantMembers)
+			}
+			if gotCount != tt.wantCount {
+				t.Errorf("ListMember() gotCount = %v, want %v", gotCount, tt.wantCount)
 			}
 		})
 	}

@@ -120,6 +120,37 @@ func (s *service) UpdateOnlineStatus(ctx context.Context, params model.UpdateOnl
 	return s.repo.UpdateOnlineStatus(ctx, params)
 }
 
+func (s *service) ListMember(ctx context.Context, params model.ListMemberParams, filterParams types.FilterMemberParams) (members []model.Member, count int64, err error) {
+	members = make([]model.Member, 0)
+	err = s.repo.Transaction(ctx, func(ctx context.Context, tx *sql.Tx) error {
+		var err2 error
+
+		_, err2 = tx.Exec("SET @mobile = ?", filterParams.Mobile)
+		if err2 != nil {
+			return err2
+		}
+
+		_, err2 = tx.Exec("SET @email = ?", filterParams.Email)
+		if err2 != nil {
+			return err2
+		}
+
+		members, err2 = s.repo.WithTx(tx).ListMember(ctx, params)
+		if err2 != nil {
+			return err2
+		}
+
+		count, err2 = s.repo.WithTx(tx).CountListMember(ctx)
+		if err2 != nil {
+			return err2
+		}
+
+		return nil
+	})
+
+	return
+}
+
 func NewService(Repo iface.IRepository) iface.IMemberService {
 	return &service{
 		repo: Repo,

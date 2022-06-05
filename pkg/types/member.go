@@ -13,3 +13,8 @@ const (
 	MemberOnlineStatusOnline MemberOnlineStatus = iota + 1
 	MemberOnlineStatusOffline
 )
+
+type FilterMemberParams struct {
+	Mobile *string
+	Email  *string
+}

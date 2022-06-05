@@ -13,6 +13,20 @@ import (
 	"cs-api/pkg/types"
 )
 
+const countListMember = `-- name: CountListMember :one
+select count(*)
+from member
+where IF(@mobile is null, 0, mobile) like IF(@mobile is null, 0, CONCAT(@mobile, '%')) COLLATE utf8mb4_general_ci
+  and IF(@email is null, 0, email) like IF(@email is null, 0, CONCAT(@email, '%')) COLLATE utf8mb4_general_ci
+`
+
+func (q *Queries) CountListMember(ctx context.Context) (int64, error) {
+	row := q.queryRow(ctx, q.countListMemberStmt, countListMember)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const createMember = `-- name: CreateMember :execresult
 INSERT INTO member (type, name, device_id, created_at, updated_at)
 VALUES (?, ?, ?, ?, ?)
@@ -97,6 +111,53 @@ func (q *Queries) GetOnlineStatus(ctx context.Context, id int64) (types.MemberOn
 	var online_status types.MemberOnlineStatus
 	err := row.Scan(&online_status)
 	return online_status, err
+}
+
+const listMember = `-- name: ListMember :many
+select id, type, name, device_id, real_name, mobile, email, online_status, created_at, updated_at
+from member
+where IF(@mobile is null, 0, mobile) like IF(@mobile is null, 0, CONCAT(@mobile, '%')) COLLATE utf8mb4_general_ci
+  and IF(@email is null, 0, email) like IF(@email is null, 0, CONCAT(@email, '%')) COLLATE utf8mb4_general_ci limit ?
+offset ?
+`
+
+type ListMemberParams struct {
+	Limit  int32 `db:"limit" json:"limit"`
+	Offset int32 `db:"offset" json:"offset"`
+}
+
+func (q *Queries) ListMember(ctx context.Context, arg ListMemberParams) ([]Member, error) {
+	rows, err := q.query(ctx, q.listMemberStmt, listMember, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Member{}
+	for rows.Next() {
+		var i Member
+		if err := rows.Scan(
+			&i.ID,
+			&i.Type,
+			&i.Name,
+			&i.DeviceID,
+			&i.RealName,
+			&i.Mobile,
+			&i.Email,
+			&i.OnlineStatus,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const updateOnlineStatus = `-- name: UpdateOnlineStatus :exec

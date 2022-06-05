@@ -156,6 +156,21 @@ func (mr *MockIRepositoryMockRecorder) CountListFastReply(ctx interface{}) *gomo
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountListFastReply", reflect.TypeOf((*MockIRepository)(nil).CountListFastReply), ctx)
 }
 
+// CountListMember mocks base method.
+func (m *MockIRepository) CountListMember(ctx context.Context) (int64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CountListMember", ctx)
+	ret0, _ := ret[0].(int64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CountListMember indicates an expected call of CountListMember.
+func (mr *MockIRepositoryMockRecorder) CountListMember(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountListMember", reflect.TypeOf((*MockIRepository)(nil).CountListMember), ctx)
+}
+
 // CountListMessage mocks base method.
 func (m *MockIRepository) CountListMessage(ctx context.Context) (int64, error) {
 	m.ctrl.T.Helper()
@@ -989,6 +1004,21 @@ func (m *MockIRepository) ListFastReplyCategory(ctx context.Context) ([]model.Co
 func (mr *MockIRepositoryMockRecorder) ListFastReplyCategory(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListFastReplyCategory", reflect.TypeOf((*MockIRepository)(nil).ListFastReplyCategory), ctx)
+}
+
+// ListMember mocks base method.
+func (m *MockIRepository) ListMember(ctx context.Context, arg model.ListMemberParams) ([]model.Member, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListMember", ctx, arg)
+	ret0, _ := ret[0].([]model.Member)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListMember indicates an expected call of ListMember.
+func (mr *MockIRepositoryMockRecorder) ListMember(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListMember", reflect.TypeOf((*MockIRepository)(nil).ListMember), ctx, arg)
 }
 
 // ListMemberRoomMessage mocks base method.

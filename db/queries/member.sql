@@ -23,3 +23,16 @@ where id = ?;
 update member
 set online_status = ?
 where id = ?;
+
+-- name: ListMember :many
+select *
+from member
+where IF(@mobile is null, 0, mobile) like IF(@mobile is null, 0, CONCAT(@mobile, '%')) COLLATE utf8mb4_general_ci
+  and IF(@email is null, 0, email) like IF(@email is null, 0, CONCAT(@email, '%')) COLLATE utf8mb4_general_ci limit ?
+offset ?;
+
+-- name: CountListMember :one
+select count(*)
+from member
+where IF(@mobile is null, 0, mobile) like IF(@mobile is null, 0, CONCAT(@mobile, '%')) COLLATE utf8mb4_general_ci
+  and IF(@email is null, 0, email) like IF(@email is null, 0, CONCAT(@email, '%')) COLLATE utf8mb4_general_ci;

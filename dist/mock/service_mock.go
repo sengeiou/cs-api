@@ -901,6 +901,22 @@ func (mr *MockIMemberServiceMockRecorder) GetOrCreateMember(ctx, name, deviceId 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOrCreateMember", reflect.TypeOf((*MockIMemberService)(nil).GetOrCreateMember), ctx, name, deviceId)
 }
 
+// ListMember mocks base method.
+func (m *MockIMemberService) ListMember(ctx context.Context, params model.ListMemberParams, filterParams types.FilterMemberParams) ([]model.Member, int64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListMember", ctx, params, filterParams)
+	ret0, _ := ret[0].([]model.Member)
+	ret1, _ := ret[1].(int64)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
+}
+
+// ListMember indicates an expected call of ListMember.
+func (mr *MockIMemberServiceMockRecorder) ListMember(ctx, params, filterParams interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListMember", reflect.TypeOf((*MockIMemberService)(nil).ListMember), ctx, params, filterParams)
+}
+
 // UpdateOnlineStatus mocks base method.
 func (m *MockIMemberService) UpdateOnlineStatus(ctx context.Context, params model.UpdateOnlineStatusParams) error {
 	m.ctrl.T.Helper()

@@ -48,6 +48,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.countListFastReplyStmt, err = db.PrepareContext(ctx, countListFastReply); err != nil {
 		return nil, fmt.Errorf("error preparing query CountListFastReply: %w", err)
 	}
+	if q.countListMemberStmt, err = db.PrepareContext(ctx, countListMember); err != nil {
+		return nil, fmt.Errorf("error preparing query CountListMember: %w", err)
+	}
 	if q.countListMessageStmt, err = db.PrepareContext(ctx, countListMessage); err != nil {
 		return nil, fmt.Errorf("error preparing query CountListMessage: %w", err)
 	}
@@ -219,6 +222,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.listFastReplyCategoryStmt, err = db.PrepareContext(ctx, listFastReplyCategory); err != nil {
 		return nil, fmt.Errorf("error preparing query ListFastReplyCategory: %w", err)
 	}
+	if q.listMemberStmt, err = db.PrepareContext(ctx, listMember); err != nil {
+		return nil, fmt.Errorf("error preparing query ListMember: %w", err)
+	}
 	if q.listMemberRoomMessageStmt, err = db.PrepareContext(ctx, listMemberRoomMessage); err != nil {
 		return nil, fmt.Errorf("error preparing query ListMemberRoomMessage: %w", err)
 	}
@@ -355,6 +361,11 @@ func (q *Queries) Close() error {
 	if q.countListFastReplyStmt != nil {
 		if cerr := q.countListFastReplyStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing countListFastReplyStmt: %w", cerr)
+		}
+	}
+	if q.countListMemberStmt != nil {
+		if cerr := q.countListMemberStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing countListMemberStmt: %w", cerr)
 		}
 	}
 	if q.countListMessageStmt != nil {
@@ -642,6 +653,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing listFastReplyCategoryStmt: %w", cerr)
 		}
 	}
+	if q.listMemberStmt != nil {
+		if cerr := q.listMemberStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing listMemberStmt: %w", cerr)
+		}
+	}
 	if q.listMemberRoomMessageStmt != nil {
 		if cerr := q.listMemberRoomMessageStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing listMemberRoomMessageStmt: %w", cerr)
@@ -844,6 +860,7 @@ type Queries struct {
 	countDailyRoomByMemberStmt   *sql.Stmt
 	countListFAQStmt             *sql.Stmt
 	countListFastReplyStmt       *sql.Stmt
+	countListMemberStmt          *sql.Stmt
 	countListMessageStmt         *sql.Stmt
 	countListNoticeStmt          *sql.Stmt
 	countListRemindStmt          *sql.Stmt
@@ -901,6 +918,7 @@ type Queries struct {
 	listFAQStmt                  *sql.Stmt
 	listFastReplyStmt            *sql.Stmt
 	listFastReplyCategoryStmt    *sql.Stmt
+	listMemberStmt               *sql.Stmt
 	listMemberRoomMessageStmt    *sql.Stmt
 	listMessageStmt              *sql.Stmt
 	listNoticeStmt               *sql.Stmt
@@ -946,6 +964,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		countDailyRoomByMemberStmt:   q.countDailyRoomByMemberStmt,
 		countListFAQStmt:             q.countListFAQStmt,
 		countListFastReplyStmt:       q.countListFastReplyStmt,
+		countListMemberStmt:          q.countListMemberStmt,
 		countListMessageStmt:         q.countListMessageStmt,
 		countListNoticeStmt:          q.countListNoticeStmt,
 		countListRemindStmt:          q.countListRemindStmt,
@@ -1003,6 +1022,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		listFAQStmt:                  q.listFAQStmt,
 		listFastReplyStmt:            q.listFastReplyStmt,
 		listFastReplyCategoryStmt:    q.listFastReplyCategoryStmt,
+		listMemberStmt:               q.listMemberStmt,
 		listMemberRoomMessageStmt:    q.listMemberRoomMessageStmt,
 		listMessageStmt:              q.listMessageStmt,
 		listNoticeStmt:               q.listNoticeStmt,
