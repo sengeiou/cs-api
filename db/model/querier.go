@@ -15,6 +15,7 @@ import (
 type Querier interface {
 	AcceptRoom(ctx context.Context, arg AcceptRoomParams) error
 	CheckFastReplyCategory(ctx context.Context, id int64) (interface{}, error)
+	CheckMerchantKey(ctx context.Context, key string) (int64, error)
 	CloseRoom(ctx context.Context, arg CloseRoomParams) error
 	ConstantSeeder(ctx context.Context) error
 	// 計算每日分類諮詢數
@@ -24,6 +25,7 @@ type Querier interface {
 	CountListFAQ(ctx context.Context) (int64, error)
 	CountListFastReply(ctx context.Context) (int64, error)
 	CountListMember(ctx context.Context) (int64, error)
+	CountListMerchant(ctx context.Context) (int64, error)
 	CountListMessage(ctx context.Context) (int64, error)
 	CountListNotice(ctx context.Context) (int64, error)
 	CountListRemind(ctx context.Context) (int64, error)
@@ -36,6 +38,7 @@ type Querier interface {
 	CreateFastReply(ctx context.Context, arg CreateFastReplyParams) error
 	CreateFastReplyCategory(ctx context.Context, arg CreateFastReplyCategoryParams) error
 	CreateMember(ctx context.Context, arg CreateMemberParams) (sql.Result, error)
+	CreateMerchant(ctx context.Context, arg CreateMerchantParams) error
 	CreateMessage(ctx context.Context, arg CreateMessageParams) error
 	CreateNotice(ctx context.Context, arg CreateNoticeParams) error
 	CreateRemind(ctx context.Context, arg CreateRemindParams) error
@@ -47,6 +50,7 @@ type Querier interface {
 	CreateTag(ctx context.Context, arg CreateTagParams) error
 	DeleteFAQ(ctx context.Context, id int64) error
 	DeleteFastReply(ctx context.Context, id int64) error
+	DeleteMerchant(ctx context.Context, id int64) error
 	DeleteNotice(ctx context.Context, id int64) error
 	DeleteRemind(ctx context.Context, id int64) error
 	DeleteReportDailyGuest(ctx context.Context, date time.Time) error
@@ -65,6 +69,7 @@ type Querier interface {
 	GetLatestNotice(ctx context.Context) (GetLatestNoticeRow, error)
 	// 獲取會員並未關閉的房間
 	GetMemberAvailableRoom(ctx context.Context, memberID int64) (Room, error)
+	GetMerchant(ctx context.Context, id int64) (GetMerchantRow, error)
 	GetNormalMember(ctx context.Context, name string) (Member, error)
 	GetNotice(ctx context.Context, id int64) (Notice, error)
 	GetOnlineStatus(ctx context.Context, id int64) (types.MemberOnlineStatus, error)
@@ -77,6 +82,7 @@ type Querier interface {
 	GetTag(ctx context.Context, id int64) (GetTagRow, error)
 	ListActiveRemind(ctx context.Context) ([]ListActiveRemindRow, error)
 	ListAvailableFAQ(ctx context.Context) ([]ListAvailableFAQRow, error)
+	ListAvailableMerchant(ctx context.Context) ([]ListAvailableMerchantRow, error)
 	ListAvailableStaff(ctx context.Context, id int64) ([]ListAvailableStaffRow, error)
 	ListAvailableTag(ctx context.Context) ([]ListAvailableTagRow, error)
 	ListFAQ(ctx context.Context, arg ListFAQParams) ([]ListFAQRow, error)
@@ -84,6 +90,7 @@ type Querier interface {
 	ListFastReplyCategory(ctx context.Context) ([]Constant, error)
 	ListMember(ctx context.Context, arg ListMemberParams) ([]Member, error)
 	ListMemberRoomMessage(ctx context.Context, arg ListMemberRoomMessageParams) ([]Message, error)
+	ListMerchant(ctx context.Context, arg ListMerchantParams) ([]ListMerchantRow, error)
 	ListMessage(ctx context.Context, arg ListMessageParams) ([]Message, error)
 	ListNotice(ctx context.Context, arg ListNoticeParams) ([]ListNoticeRow, error)
 	ListRemind(ctx context.Context, arg ListRemindParams) ([]Remind, error)
@@ -102,6 +109,7 @@ type Querier interface {
 	UpdateCsConfig(ctx context.Context, arg UpdateCsConfigParams) error
 	UpdateFAQ(ctx context.Context, arg UpdateFAQParams) error
 	UpdateFastReply(ctx context.Context, arg UpdateFastReplyParams) error
+	UpdateMerchant(ctx context.Context, arg UpdateMerchantParams) error
 	UpdateNotice(ctx context.Context, arg UpdateNoticeParams) error
 	UpdateOnlineStatus(ctx context.Context, arg UpdateOnlineStatusParams) error
 	UpdateRemind(ctx context.Context, arg UpdateRemindParams) error

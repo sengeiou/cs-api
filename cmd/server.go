@@ -12,15 +12,13 @@ import (
 	"github.com/AndySu1021/go-util/db"
 	"github.com/AndySu1021/go-util/gin"
 	"github.com/AndySu1021/go-util/helper"
+	"github.com/AndySu1021/go-util/log"
 	"github.com/AndySu1021/go-util/redis"
 	"github.com/AndySu1021/go-util/storage"
-	zlog "github.com/AndySu1021/go-util/zerolog"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/golang-migrate/migrate"
 	"github.com/golang-migrate/migrate/database/mysql"
 	_ "github.com/golang-migrate/migrate/source/file"
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"go.uber.org/fx"
 	"os"
@@ -37,8 +35,6 @@ var ServerCmd = &cobra.Command{
 func runServer(_ *cobra.Command, _ []string) {
 	defer helper.Recover(context.Background())
 
-	logger := log.Level(zerolog.InfoLevel)
-
 	commonModule := fx.Options(
 		fx.Provide(
 			config.NewConfig,
@@ -52,14 +48,14 @@ func runServer(_ *cobra.Command, _ []string) {
 			NewContext,
 		),
 		fx.Invoke(
-			zlog.InitZeroLog,
+			log.InitLogger,
 			Migrate,
 			Seed,
 		),
 	)
 
 	app := fx.New(
-		fx.Logger(&logger),
+		fx.NopLogger,
 		commonModule,
 		redis.Module,
 		restful.Module,
@@ -67,7 +63,7 @@ func runServer(_ *cobra.Command, _ []string) {
 
 	exitCode := 0
 	if err := app.Start(context.Background()); err != nil {
-		log.Err(err).Msg("app start err")
+		log.Logger.Errorf("app start error: %s", err)
 		os.Exit(exitCode)
 		return
 	}
@@ -75,12 +71,12 @@ func runServer(_ *cobra.Command, _ []string) {
 	stopChan := make(chan os.Signal, 1)
 	signal.Notify(stopChan, syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
 	<-stopChan
-	log.Info().Msgf("main: shutting down server...")
+	log.Logger.Info("main: shutting down server...")
 
 	stopCtx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 	if err := app.Stop(stopCtx); err != nil {
-		log.Err(err).Msg("app stop err")
+		log.Logger.Error("app stop err")
 	}
 
 	os.Exit(exitCode)

@@ -8,6 +8,7 @@ import (
 	"cs-api/pkg/restful/faq"
 	"cs-api/pkg/restful/fast_reply"
 	"cs-api/pkg/restful/member"
+	"cs-api/pkg/restful/merchant"
 	"cs-api/pkg/restful/message"
 	"cs-api/pkg/restful/notice"
 	"cs-api/pkg/restful/remind"
@@ -39,4 +40,5 @@ var Module = fx.Options(
 	common.Module,
 	chat.Module,
 	faq.Module,
+	merchant.Module,
 )

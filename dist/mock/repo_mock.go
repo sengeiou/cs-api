@@ -68,6 +68,21 @@ func (mr *MockIRepositoryMockRecorder) CheckFastReplyCategory(ctx, id interface{
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckFastReplyCategory", reflect.TypeOf((*MockIRepository)(nil).CheckFastReplyCategory), ctx, id)
 }
 
+// CheckMerchantKey mocks base method.
+func (m *MockIRepository) CheckMerchantKey(ctx context.Context, key string) (int64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CheckMerchantKey", ctx, key)
+	ret0, _ := ret[0].(int64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CheckMerchantKey indicates an expected call of CheckMerchantKey.
+func (mr *MockIRepositoryMockRecorder) CheckMerchantKey(ctx, key interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckMerchantKey", reflect.TypeOf((*MockIRepository)(nil).CheckMerchantKey), ctx, key)
+}
+
 // CloseRoom mocks base method.
 func (m *MockIRepository) CloseRoom(ctx context.Context, arg model.CloseRoomParams) error {
 	m.ctrl.T.Helper()
@@ -169,6 +184,21 @@ func (m *MockIRepository) CountListMember(ctx context.Context) (int64, error) {
 func (mr *MockIRepositoryMockRecorder) CountListMember(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountListMember", reflect.TypeOf((*MockIRepository)(nil).CountListMember), ctx)
+}
+
+// CountListMerchant mocks base method.
+func (m *MockIRepository) CountListMerchant(ctx context.Context) (int64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CountListMerchant", ctx)
+	ret0, _ := ret[0].(int64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CountListMerchant indicates an expected call of CountListMerchant.
+func (mr *MockIRepositoryMockRecorder) CountListMerchant(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountListMerchant", reflect.TypeOf((*MockIRepository)(nil).CountListMerchant), ctx)
 }
 
 // CountListMessage mocks base method.
@@ -348,6 +378,20 @@ func (mr *MockIRepositoryMockRecorder) CreateMember(ctx, arg interface{}) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateMember", reflect.TypeOf((*MockIRepository)(nil).CreateMember), ctx, arg)
 }
 
+// CreateMerchant mocks base method.
+func (m *MockIRepository) CreateMerchant(ctx context.Context, arg model.CreateMerchantParams) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateMerchant", ctx, arg)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateMerchant indicates an expected call of CreateMerchant.
+func (mr *MockIRepositoryMockRecorder) CreateMerchant(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateMerchant", reflect.TypeOf((*MockIRepository)(nil).CreateMerchant), ctx, arg)
+}
+
 // CreateMessage mocks base method.
 func (m *MockIRepository) CreateMessage(ctx context.Context, arg model.CreateMessageParams) error {
 	m.ctrl.T.Helper()
@@ -501,6 +545,20 @@ func (m *MockIRepository) DeleteFastReply(ctx context.Context, id int64) error {
 func (mr *MockIRepositoryMockRecorder) DeleteFastReply(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteFastReply", reflect.TypeOf((*MockIRepository)(nil).DeleteFastReply), ctx, id)
+}
+
+// DeleteMerchant mocks base method.
+func (m *MockIRepository) DeleteMerchant(ctx context.Context, id int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteMerchant", ctx, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteMerchant indicates an expected call of DeleteMerchant.
+func (mr *MockIRepositoryMockRecorder) DeleteMerchant(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteMerchant", reflect.TypeOf((*MockIRepository)(nil).DeleteMerchant), ctx, id)
 }
 
 // DeleteNotice mocks base method.
@@ -751,6 +809,21 @@ func (mr *MockIRepositoryMockRecorder) GetMemberAvailableRoom(ctx, memberID inte
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMemberAvailableRoom", reflect.TypeOf((*MockIRepository)(nil).GetMemberAvailableRoom), ctx, memberID)
 }
 
+// GetMerchant mocks base method.
+func (m *MockIRepository) GetMerchant(ctx context.Context, id int64) (model.GetMerchantRow, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetMerchant", ctx, id)
+	ret0, _ := ret[0].(model.GetMerchantRow)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetMerchant indicates an expected call of GetMerchant.
+func (mr *MockIRepositoryMockRecorder) GetMerchant(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMerchant", reflect.TypeOf((*MockIRepository)(nil).GetMerchant), ctx, id)
+}
+
 // GetNormalMember mocks base method.
 func (m *MockIRepository) GetNormalMember(ctx context.Context, name string) (model.Member, error) {
 	m.ctrl.T.Helper()
@@ -931,6 +1004,21 @@ func (mr *MockIRepositoryMockRecorder) ListAvailableFAQ(ctx interface{}) *gomock
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAvailableFAQ", reflect.TypeOf((*MockIRepository)(nil).ListAvailableFAQ), ctx)
 }
 
+// ListAvailableMerchant mocks base method.
+func (m *MockIRepository) ListAvailableMerchant(ctx context.Context) ([]model.ListAvailableMerchantRow, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListAvailableMerchant", ctx)
+	ret0, _ := ret[0].([]model.ListAvailableMerchantRow)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListAvailableMerchant indicates an expected call of ListAvailableMerchant.
+func (mr *MockIRepositoryMockRecorder) ListAvailableMerchant(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAvailableMerchant", reflect.TypeOf((*MockIRepository)(nil).ListAvailableMerchant), ctx)
+}
+
 // ListAvailableStaff mocks base method.
 func (m *MockIRepository) ListAvailableStaff(ctx context.Context, id int64) ([]model.ListAvailableStaffRow, error) {
 	m.ctrl.T.Helper()
@@ -1034,6 +1122,21 @@ func (m *MockIRepository) ListMemberRoomMessage(ctx context.Context, arg model.L
 func (mr *MockIRepositoryMockRecorder) ListMemberRoomMessage(ctx, arg interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListMemberRoomMessage", reflect.TypeOf((*MockIRepository)(nil).ListMemberRoomMessage), ctx, arg)
+}
+
+// ListMerchant mocks base method.
+func (m *MockIRepository) ListMerchant(ctx context.Context, arg model.ListMerchantParams) ([]model.ListMerchantRow, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListMerchant", ctx, arg)
+	ret0, _ := ret[0].([]model.ListMerchantRow)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListMerchant indicates an expected call of ListMerchant.
+func (mr *MockIRepositoryMockRecorder) ListMerchant(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListMerchant", reflect.TypeOf((*MockIRepository)(nil).ListMerchant), ctx, arg)
 }
 
 // ListMessage mocks base method.
@@ -1312,6 +1415,20 @@ func (m *MockIRepository) UpdateFastReply(ctx context.Context, arg model.UpdateF
 func (mr *MockIRepositoryMockRecorder) UpdateFastReply(ctx, arg interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateFastReply", reflect.TypeOf((*MockIRepository)(nil).UpdateFastReply), ctx, arg)
+}
+
+// UpdateMerchant mocks base method.
+func (m *MockIRepository) UpdateMerchant(ctx context.Context, arg model.UpdateMerchantParams) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateMerchant", ctx, arg)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateMerchant indicates an expected call of UpdateMerchant.
+func (mr *MockIRepositoryMockRecorder) UpdateMerchant(ctx, arg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateMerchant", reflect.TypeOf((*MockIRepository)(nil).UpdateMerchant), ctx, arg)
 }
 
 // UpdateNotice mocks base method.

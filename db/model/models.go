@@ -91,6 +91,27 @@ type Member struct {
 	UpdatedAt time.Time `db:"updated_at" json:"updated_at"`
 }
 
+// 商家資料表
+type Merchant struct {
+	ID int64 `db:"id" json:"id"`
+	// 商戶名稱
+	Name string `db:"name" json:"name"`
+	// 商戶號
+	Code string `db:"code" json:"code"`
+	// 商戶金鑰
+	Key string `db:"key" json:"key"`
+	// 狀態 1開啟 2關閉
+	Status types.Status `db:"status" json:"status"`
+	// 創建管理員
+	CreatedBy int64 `db:"created_by" json:"created_by"`
+	// 創建時間
+	CreatedAt time.Time `db:"created_at" json:"created_at"`
+	// 更新管理員
+	UpdatedBy int64 `db:"updated_by" json:"updated_by"`
+	// 更新時間
+	UpdatedAt time.Time `db:"updated_at" json:"updated_at"`
+}
+
 // 歷史訊息紀錄表
 type Message struct {
 	ID int64 `db:"id" json:"id"`

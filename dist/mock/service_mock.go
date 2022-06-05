@@ -1374,3 +1374,114 @@ func (mr *MockIFAQServiceMockRecorder) UpdateFAQ(ctx, params interface{}) *gomoc
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateFAQ", reflect.TypeOf((*MockIFAQService)(nil).UpdateFAQ), ctx, params)
 }
+
+// MockIMerchantService is a mock of IMerchantService interface.
+type MockIMerchantService struct {
+	ctrl     *gomock.Controller
+	recorder *MockIMerchantServiceMockRecorder
+}
+
+// MockIMerchantServiceMockRecorder is the mock recorder for MockIMerchantService.
+type MockIMerchantServiceMockRecorder struct {
+	mock *MockIMerchantService
+}
+
+// NewMockIMerchantService creates a new mock instance.
+func NewMockIMerchantService(ctrl *gomock.Controller) *MockIMerchantService {
+	mock := &MockIMerchantService{ctrl: ctrl}
+	mock.recorder = &MockIMerchantServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockIMerchantService) EXPECT() *MockIMerchantServiceMockRecorder {
+	return m.recorder
+}
+
+// CreateMerchant mocks base method.
+func (m *MockIMerchantService) CreateMerchant(ctx context.Context, params model.CreateMerchantParams) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateMerchant", ctx, params)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateMerchant indicates an expected call of CreateMerchant.
+func (mr *MockIMerchantServiceMockRecorder) CreateMerchant(ctx, params interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateMerchant", reflect.TypeOf((*MockIMerchantService)(nil).CreateMerchant), ctx, params)
+}
+
+// DeleteMerchant mocks base method.
+func (m *MockIMerchantService) DeleteMerchant(ctx context.Context, merchantId int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteMerchant", ctx, merchantId)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteMerchant indicates an expected call of DeleteMerchant.
+func (mr *MockIMerchantServiceMockRecorder) DeleteMerchant(ctx, merchantId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteMerchant", reflect.TypeOf((*MockIMerchantService)(nil).DeleteMerchant), ctx, merchantId)
+}
+
+// GetMerchant mocks base method.
+func (m *MockIMerchantService) GetMerchant(ctx context.Context, merchantId int64) (model.GetMerchantRow, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetMerchant", ctx, merchantId)
+	ret0, _ := ret[0].(model.GetMerchantRow)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetMerchant indicates an expected call of GetMerchant.
+func (mr *MockIMerchantServiceMockRecorder) GetMerchant(ctx, merchantId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMerchant", reflect.TypeOf((*MockIMerchantService)(nil).GetMerchant), ctx, merchantId)
+}
+
+// ListAvailableMerchant mocks base method.
+func (m *MockIMerchantService) ListAvailableMerchant(ctx context.Context) ([]model.ListAvailableMerchantRow, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListAvailableMerchant", ctx)
+	ret0, _ := ret[0].([]model.ListAvailableMerchantRow)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListAvailableMerchant indicates an expected call of ListAvailableMerchant.
+func (mr *MockIMerchantServiceMockRecorder) ListAvailableMerchant(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAvailableMerchant", reflect.TypeOf((*MockIMerchantService)(nil).ListAvailableMerchant), ctx)
+}
+
+// ListMerchant mocks base method.
+func (m *MockIMerchantService) ListMerchant(ctx context.Context, params model.ListMerchantParams, filterParams types.FilterMerchantParams) ([]model.ListMerchantRow, int64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListMerchant", ctx, params, filterParams)
+	ret0, _ := ret[0].([]model.ListMerchantRow)
+	ret1, _ := ret[1].(int64)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
+}
+
+// ListMerchant indicates an expected call of ListMerchant.
+func (mr *MockIMerchantServiceMockRecorder) ListMerchant(ctx, params, filterParams interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListMerchant", reflect.TypeOf((*MockIMerchantService)(nil).ListMerchant), ctx, params, filterParams)
+}
+
+// UpdateMerchant mocks base method.
+func (m *MockIMerchantService) UpdateMerchant(ctx context.Context, params model.UpdateMerchantParams) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateMerchant", ctx, params)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateMerchant indicates an expected call of UpdateMerchant.
+func (mr *MockIMerchantServiceMockRecorder) UpdateMerchant(ctx, params interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateMerchant", reflect.TypeOf((*MockIMerchantService)(nil).UpdateMerchant), ctx, params)
+}

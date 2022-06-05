@@ -120,3 +120,12 @@ type IFAQService interface {
 	DeleteFAQ(ctx context.Context, faqId int64) error
 	ListAvailableFAQ(ctx context.Context) ([]model.ListAvailableFAQRow, error)
 }
+
+type IMerchantService interface {
+	ListMerchant(ctx context.Context, params model.ListMerchantParams, filterParams types.FilterMerchantParams) ([]model.ListMerchantRow, int64, error)
+	GetMerchant(ctx context.Context, merchantId int64) (model.GetMerchantRow, error)
+	CreateMerchant(ctx context.Context, params model.CreateMerchantParams) error
+	UpdateMerchant(ctx context.Context, params model.UpdateMerchantParams) error
+	DeleteMerchant(ctx context.Context, merchantId int64) error
+	ListAvailableMerchant(ctx context.Context) ([]model.ListAvailableMerchantRow, error)
+}

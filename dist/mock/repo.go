@@ -117,5 +117,13 @@ func NewRepository(t *testing.T) iface.IRepository {
 	mock.EXPECT().ListMemberRoomMessage(gomock.Any(), gomock.Any()).AnyTimes().Return(make([]model.Message, 0), nil)
 	mock.EXPECT().ListStaffRoomMessage(gomock.Any(), gomock.Any()).AnyTimes().Return(make([]model.Message, 0), nil)
 
+	// Merchant
+	mock.EXPECT().GetMerchant(gomock.Any(), gomock.Any()).AnyTimes().Return(model.GetMerchantRow{}, nil)
+	mock.EXPECT().CreateMerchant(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
+	mock.EXPECT().UpdateMerchant(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
+	mock.EXPECT().DeleteMerchant(gomock.Any(), gomock.Any()).AnyTimes().Return(nil)
+	mock.EXPECT().ListAvailableMerchant(gomock.Any()).AnyTimes().Return(make([]model.ListAvailableMerchantRow, 0), nil)
+	mock.EXPECT().CheckMerchantKey(gomock.Any(), gomock.Any()).AnyTimes().Return(int64(0), nil)
+
 	return mock
 }

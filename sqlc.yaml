@@ -42,3 +42,5 @@ overrides:
     go_type: "cs-api/pkg/types.MessageSenderType"
   - column: "message.content_type"
     go_type: "cs-api/pkg/types.MessageContentType"
+  - column: "merchant.status"
+    go_type: "cs-api/pkg/types.Status"
